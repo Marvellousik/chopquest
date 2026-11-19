@@ -1,0 +1,39 @@
+food,local_name,dex_group,type,protein_g_per_100g,basis,amino_note,pet_trait,price_ngn_per_kg,source
+"Cowpea / brown beans, dried",Ewa,Beans,Plant,23,Dry seed,"Rich in lysine, low in methionine: complete when paired with a grain",Strength,1850,FAO
+"Beans, boiled",Ewa agoyin,Beans,Plant,8,Cooked,"Rich in lysine, low in methionine: complete when paired with a grain",Strength,,Approx
+Moi moi,Moin moin,Beans,Plant,8,Steamed,"Rich in lysine, low in methionine: complete when paired with a grain",Strength,,Approx
+Akara,Akara,Beans,Plant,9,Fried,"Rich in lysine, low in methionine: complete when paired with a grain",Strength,,Approx
+Beans porridge,Ewa riro,Beans,Plant,6,Cooked,"Rich in lysine, low in methionine: complete when paired with a grain",Strength,,Approx
+"Soybeans, dried",Soya,Soy,Alternative,34,Dry seed,Near-complete protein on its own,Defense,714,FAO
+Soy chunks (textured soy protein),Soya chunks,Soy,Alternative,50,Dry,Near-complete protein on its own,Defense,,Approx
+Soy milk,Soya milk,Soy,Alternative,3,As drunk,Near-complete protein on its own,Defense,,Approx
+Soy cheese / Nigerian tofu,Awara,Soy,Alternative,10,As eaten,Near-complete protein on its own,Defense,,Approx
+"Bambara groundnut, dried",Okpa,Bambara,Plant,19,Dry seed,"Rich in lysine, low in methionine: complete when paired with a grain",Stamina,,FAO
+Okpa (steamed bambara pudding),Okpa,Bambara,Plant,8,Steamed,"Rich in lysine, low in methionine: complete when paired with a grain",Stamina,,Approx
+"Groundnuts, dry",Epa / gyada,Groundnut,Plant,23,Dry,Lower in lysine and methionine: pair with beans or a grain,Energy,,FAO
+Groundnut paste,Groundnut butter,Groundnut,Plant,24,As eaten,Lower in lysine and methionine: pair with beans or a grain,Energy,,Approx
+Kuli-kuli (groundnut cake),Kuli-kuli,Groundnut,Plant,30,As eaten,Lower in lysine and methionine: pair with beans or a grain,Energy,,Approx
+"Melon seed, shelled",Egusi,Egusi,Plant,26,Dry seed,"Good methionine, low lysine: pair with beans",Recovery,,FAO
+Egusi soup (no meat),Egusi soup,Egusi,Plant,6,As eaten,"Good methionine, low lysine: pair with beans",Recovery,,Approx
+Fermented locust bean,Iru / dawadawa,Iru,Plant,35,As sold,"Condiment: used in small amounts, adds little protein per meal",Wisdom,,Approx
+"Oyster mushroom, fresh",Mushroom,Mushroom,Alternative,3,Raw,Low protein per serving: a texture / meat-swap ingredient,Focus,,Approx
+"Tigernut, dried",Aya / ofio,Tigernut,Plant,5,Dry,"Low protein: counts for variety, not volume",Speed,,Approx
+Tigernut drink,Kunun aya,Tigernut,Plant,1,As drunk,"Low protein: counts for variety, not volume",Speed,,Approx
+"Pigeon pea, dried",Fiofio,Pigeon pea,Plant,20,Dry seed,"Rich in lysine, low in methionine: complete when paired with a grain",Agility,,FAO
+"Rice, milled",Rice,Staple,Staple,7,Dry,Low in lysine: pair with a legume,,,FAO
+"Maize, dried",Agbado / masara,Staple,Staple,9.4,Dry,Low in lysine: pair with a legume,,,FAO
+Sorghum,Guinea corn / dawa,Staple,Staple,11,Dry,Low in lysine: pair with a legume,,,FAO
+Millet,Gero,Staple,Staple,10,Dry,Low in lysine: pair with a legume,,,FAO
+Wheat flour (bread),Bread,Staple,Staple,11,Flour,Low in lysine: pair with a legume,,,FAO
+Cassava meal,Garri,Staple,Staple,1.6,Dry,Very low protein: pair with a legume,,,FAO
+"Yam, fresh",Isu / doya,Staple,Staple,1.9,Raw,Very low protein: pair with a legume,,,FAO
+"Plantain, ripe",Dodo,Staple,Staple,1.2,Raw,Very low protein: pair with a legume,,,FAO
+"Instant noodles, dry",Indomie,Staple,Staple,9,Dry,Low in lysine: pair with a legume or egg,,,Approx
+Chicken,Chicken,Animal,Animal,20,Raw,Complete protein,Base stats,,FAO
+Beef (incl. suya),Beef,Animal,Animal,18,Raw,Complete protein,Base stats,,FAO
+Goat meat,Goat meat,Animal,Animal,18,Raw,Complete protein,Base stats,,FAO
+"Egg, hen",Egg,Animal,Animal,12,Raw,Complete protein,Base stats,,FAO
+Fish fillet,Fish,Animal,Animal,22,Raw,Complete protein,Base stats,,FAO
+Dried fish / crayfish,Eja kika / crayfish,Animal,Animal,47,Dried,Complete protein,Base stats,,FAO
+"Milk, cow",Milk,Animal,Animal,3.8,Liquid,Complete protein,Base stats,,FAO
+Milk powder,Powdered milk,Animal,Animal,26,Powder,Complete protein,Base stats,,FAO

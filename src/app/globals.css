@@ -1,0 +1,16 @@
+@import "tailwindcss";
+
+@theme inline {
+  --font-sans: var(--font-nunito);
+  --color-leaf: #16a34a;
+  --color-leaf-dark: #15803d;
+  --color-pepper: #ea580c;
+  --color-palm: #facc15;
+  --color-cream: #fffbeb;
+  --color-ink: #1c1917;
+}
+
+body {
+  background: var(--color-cream);
+  color: var(--color-ink);
+}
