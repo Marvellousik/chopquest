@@ -2,7 +2,8 @@ import type { SVGProps } from "react";
 
 // ChopQuest's own icon set: one stroke style (24px grid, 2px rounded strokes, currentColor).
 // The app uses no emoji. Add new icons here in the same style rather than pulling in a library.
-type IconProps = SVGProps<SVGSVGElement> & { size?: number; title?: string };
+export type IconProps = SVGProps<SVGSVGElement> & { size?: number; title?: string };
+export type IconComponent = (p: IconProps) => React.JSX.Element;
 
 function Svg({ size = 24, title, children, ...rest }: IconProps) {
   return (
@@ -103,5 +104,56 @@ export const ArrowLeftIcon = (p: IconProps) => (
 export const SparkIcon = (p: IconProps) => (
   <Svg {...p}>
     <path d="M12 3v4M12 17v4M3 12h4M17 12h4M6 6l2.5 2.5M15.5 15.5 18 18M18 6l-2.5 2.5M8.5 15.5 6 18" />
+  </Svg>
+);
+
+export const LeafIcon = (p: IconProps) => (
+  <Svg {...p}>
+    <path d="M5 19c0-8 5-14 15-15-1 10-7 15-15 15z" />
+    <path d="M5 19 13 11" />
+  </Svg>
+);
+
+export const PodiumIcon = (p: IconProps) => (
+  <Svg {...p}>
+    <path d="M9 20V9h6v11M3 20v-7h6M15 20v-5h6v5M2 20h20" />
+    <path d="m12 3 .9 1.8 2 .3-1.4 1.4.3 2L12 7.6l-1.8.9.3-2-1.4-1.4 2-.3z" />
+  </Svg>
+);
+
+export const StoreIcon = (p: IconProps) => (
+  <Svg {...p}>
+    <path d="M4 10v9a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-9" />
+    <path d="M3 7.5 5 4h14l2 3.5a2.5 2.5 0 0 1-4.5 1.5 2.5 2.5 0 0 1-4.5 0 2.5 2.5 0 0 1-4.5 0A2.5 2.5 0 0 1 3 7.5z" />
+    <path d="M10 20v-5h4v5" />
+  </Svg>
+);
+
+export const ChefIcon = (p: IconProps) => (
+  <Svg {...p}>
+    <path d="M7 14v5a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1v-5" />
+    <path d="M7 14a4 4 0 0 1-.6-7.9A5 5 0 0 1 12 3a5 5 0 0 1 5.6 3.1A4 4 0 0 1 17 14z" />
+    <path d="M7 17h10" />
+  </Svg>
+);
+
+export const StarIcon = (p: IconProps & { filled?: boolean }) => {
+  const { filled, ...rest } = p;
+  return (
+    <Svg {...rest} fill={filled ? "currentColor" : "none"}>
+      <path d="m12 3.5 2.6 5.3 5.9.9-4.3 4.1 1 5.8L12 16.9l-5.2 2.7 1-5.8L3.5 9.7l5.9-.9z" />
+    </Svg>
+  );
+};
+
+export const ArrowRightIcon = (p: IconProps) => (
+  <Svg {...p}>
+    <path d="M5 12h14M13 6l6 6-6 6" />
+  </Svg>
+);
+
+export const SwapIcon = (p: IconProps) => (
+  <Svg {...p}>
+    <path d="M4 8h13l-3-3M20 16H7l3 3" />
   </Svg>
 );
