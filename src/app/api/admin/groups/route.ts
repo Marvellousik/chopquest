@@ -56,6 +56,8 @@ export async function POST(req: Request) {
         { sql: `DELETE FROM scans WHERE user_id IN (${inIds})`, args: ids },
         { sql: `DELETE FROM quests WHERE user_id IN (${inIds})`, args: ids },
         { sql: `DELETE FROM dex_progress WHERE user_id IN (${inIds})`, args: ids },
+        { sql: `DELETE FROM user_sessions WHERE user_id IN (${inIds})`, args: ids },
+        { sql: `DELETE FROM user_bound WHERE user_id IN (${inIds})`, args: ids },
         { sql: `DELETE FROM users WHERE id IN (${inIds})`, args: ids },
       ],
       "write",
