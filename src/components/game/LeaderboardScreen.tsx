@@ -100,6 +100,9 @@ function Board({ data, myGroup }: { data: Data; myGroup: string | null }) {
             {me && <> You: <b>{me.diversity}</b>.</>}
           </p>
           {myRow.rank === 0 && <p className="mt-1 text-sm text-white/85">Groups join the ranking at 3 members. Invite friends from your group.</p>}
+          <Link href={`/leaderboard/${encodeURIComponent(myRow.group)}`} className="mt-3 flex min-h-12 w-fit items-center rounded-full bg-white px-5 font-black text-green-900 active:scale-95">
+            See who leads {myRow.group}
+          </Link>
         </div>
       )}
 
@@ -144,9 +147,11 @@ function Board({ data, myGroup }: { data: Data; myGroup: string | null }) {
 function Row({ row, top, mine }: { row: GroupRow; top: number; mine: boolean }) {
   const podium = row.rank >= 1 && row.rank <= 3 ? PODIUM[row.rank - 1] : null;
   return (
-    <li
-      className={`flex min-h-16 items-center gap-3 rounded-3xl p-3 shadow-sm ${mine ? "bg-palm/30 ring-2 ring-leaf" : "bg-white"}`}
-      aria-current={mine ? "true" : undefined}
+    <li aria-current={mine ? "true" : undefined}>
+     <Link
+      href={`/leaderboard/${encodeURIComponent(row.group)}`}
+      aria-label={`${row.group}: see members ranked`}
+      className={`flex min-h-16 items-center gap-3 rounded-3xl p-3 shadow-sm transition hover:-translate-y-0.5 ${mine ? "bg-palm/30 ring-2 ring-leaf" : "bg-white"}`}
     >
       <span
         className="flex size-11 shrink-0 items-center justify-center rounded-full text-lg font-black"
@@ -171,6 +176,7 @@ function Row({ row, top, mine }: { row: GroupRow; top: number; mine: boolean }) 
         <span className="block text-2xl font-black tabular-nums">{fmt(row.avgDiversity)}</span>
         <span className="block text-xs text-stone-500">avg groups</span>
       </span>
+     </Link>
     </li>
   );
 }

@@ -174,15 +174,16 @@ export const DEMO_CAFETERIAS: DemoCafeteria[] = [
   },
 ];
 
-/** Demo students: nickname + department (the leaderboard groups). */
+/** Demo students: nickname + crew. Crews are the leaderboard groups (clan-style names, not departments). */
 export const DEMO_USERS: { nickname: string; group: string }[] = [
-  ["TolaEats", "Computer Science"], ["JollofJudge", "Computer Science"], ["Kemi_K", "Computer Science"], ["DavidChops", "Computer Science"], ["Ify.Codes", "Computer Science"],
-  ["ChiomaCooks", "Microbiology"], ["Zainab.B", "Microbiology"], ["Emeka247", "Microbiology"], ["AmakaFoodie", "Microbiology"],
-  ["Tunde_Tastes", "Mass Communication"], ["Halima_H", "Mass Communication"], ["Obinna_O", "Mass Communication"], ["BisolaBites", "Mass Communication"], ["Sola_On_Air", "Mass Communication"],
-  ["Musa.Grill", "Law"], ["Ada_LLB", "Law"], ["Kunle_K", "Law"], ["Esther.E", "Law"],
-  ["Nurse_Joy_NG", "Nursing"], ["Precious_P", "Nursing"], ["Damilola_D", "Nursing"], ["Ruth.Rx", "Nursing"],
-  ["Chidi_Accounts", "Accounting"], ["Bukky_B", "Accounting"], ["Yusuf_Y", "Accounting"],
-  ["Ngozi_Econ", "Economics"], ["Femi.F", "Economics"], ["Hauwa_H", "Economics"], ["Victor_V", "Economics"], ["Jessica.J", "Economics"],
+  ["TolaEats", "Jollof Mafia"], ["JollofJudge", "Jollof Mafia"], ["Kemi_K", "Jollof Mafia"], ["DavidChops", "Jollof Mafia"],
+  ["Ify.Codes", "Soya Squad"], ["ChiomaCooks", "Soya Squad"], ["Zainab.B", "Soya Squad"], ["Emeka247", "Soya Squad"],
+  ["AmakaFoodie", "Awara Avengers"], ["Tunde_Tastes", "Awara Avengers"], ["Halima_H", "Awara Avengers"],
+  ["Obinna_O", "Moi Moi Mob"], ["BisolaBites", "Moi Moi Mob"], ["Sola_On_Air", "Moi Moi Mob"], ["Musa.Grill", "Moi Moi Mob"],
+  ["Ada_LLB", "Plantain Pirates"], ["Kunle_K", "Plantain Pirates"], ["Esther.E", "Plantain Pirates"],
+  ["Nurse_Joy_NG", "Kuli Kuli Clan"], ["Precious_P", "Kuli Kuli Clan"], ["Damilola_D", "Kuli Kuli Clan"], ["Ruth.Rx", "Kuli Kuli Clan"],
+  ["Chidi_Accounts", "Chidi's Chop Crew"], ["Bukky_B", "Chidi's Chop Crew"], ["Yusuf_Y", "Chidi's Chop Crew"],
+  ["Ngozi_Econ", "Egusi Elites"], ["Femi.F", "Egusi Elites"], ["Hauwa_H", "Egusi Elites"], ["Victor_V", "Egusi Elites"], ["Jessica.J", "Egusi Elites"],
 ].map(([nickname, group]) => ({ nickname, group }));
 
 /** Review comments by how the dish lands. Plain, campus-style, no emojis. */
