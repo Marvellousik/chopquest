@@ -1,5 +1,6 @@
-import Onboarding from "@/components/Onboarding";
+import SidePicker from "@/components/SidePicker";
 
-export default function Home() {
-  return <Onboarding />;
+// The front door: students pick Chop Squad, restaurant managers pick Kitchen.
+export default function Welcome() {
+  return <SidePicker />;
 }

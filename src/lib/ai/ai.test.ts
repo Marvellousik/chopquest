@@ -191,6 +191,24 @@ describe("kitchen card validator", () => {
     expect(validateCard(card, input)).toEqual([]);
   });
 
+  it("allows foods of the same family as the plate, and doesn't read soya milk as cow's milk", () => {
+    const egusiPlate: DishPart[] = [
+      { foodId: id("Cassava meal"), label: "Eba", grams: 120, role: "staple" },
+      { foodId: id("Egusi soup (no meat)"), label: "Egusi soup", grams: 150, role: "soup" },
+      { foodId: id("Goat meat"), label: "Goat meat", grams: 100, role: "protein" },
+    ];
+    const egusiOpt = { ...option, replaces: [egusiPlate[2]], adds: [{ foodId: id("Soy cheese / Nigerian tofu"), label: "Awara", grams: 150 }] };
+    const egusiCard = { menuName: "Egusi and Awara", studentBlurb: "Thick nutty egusi with soft awara.", steps: ["Fry the awara.", "Simmer it in the egusi soup.", "Serve with eba."], validated: false };
+    expect(validateCard(egusiCard, { dishName: "Eba and egusi with goat meat", breakdown: egusiPlate, option: egusiOpt, foods: FOODS })).toEqual([]);
+
+    const shakePlate: DishPart[] = [{ foodId: id("Milk, cow"), label: "Milk", grams: 300, role: "protein" }];
+    const shakeOpt = { ...option, replaces: shakePlate, adds: [{ foodId: id("Soy milk"), label: "Soya milk", grams: 300 }] };
+    const shake = { menuName: "Soya Shake", studentBlurb: "Cold chocolate shake made with soya milk.", steps: ["Blend 300 ml soya milk with cocoa.", "Serve cold."], validated: false };
+    expect(validateCard(shake, { dishName: "Chocolate milkshake", breakdown: shakePlate, option: shakeOpt, foods: FOODS })).toEqual([]);
+    // ...but cow's milk on its own is still caught
+    expect(validateCard({ ...shake, steps: ["Blend with milk and cocoa."] }, { dishName: "Chocolate milkshake", breakdown: shakePlate, option: shakeOpt, foods: FOODS })).toContain("mentions milk as an ingredient");
+  });
+
   it("allows the removed meat only when it's being replaced", () => {
     const bad = { ...goodCard, steps: [...goodCard.steps, "Top with fried chicken."] };
     expect(validateCard(bad, input)).toContain("mentions chicken as an ingredient");
