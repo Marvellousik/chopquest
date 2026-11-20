@@ -12,8 +12,8 @@ type Item = { href: string; label: string; hint: string; Icon: IconComponent };
 type Bed = { name: string; items: Item[] };
 
 // Two separate apps under one roof: students (Chop Squad) and restaurant managers (Kitchen).
-// "/" is the front door (SidePicker) and shows no menu at all.
-const SWITCH: Item = { href: "/", label: "Switch", hint: "Chop Squad or Kitchen", Icon: SwapIcon };
+// "/" is the landing page and "/start" the front door (SidePicker): neither shows a menu.
+const SWITCH: Item = { href: "/start", label: "Switch", hint: "Chop Squad or Kitchen", Icon: SwapIcon };
 
 // Order follows a student's day: check in, eat somewhere, see how you're doing.
 const SQUAD_BEDS: Bed[] = [
@@ -52,7 +52,7 @@ const KITCHEN_BEDS: Bed[] = [
 
 const KITCHEN_PATHS = ["/kitchen", "/demo"];
 export const sideOf = (path: string): "front" | "kitchen" | "squad" =>
-  path === "/" ? "front" : KITCHEN_PATHS.some((p) => path === p || path.startsWith(`${p}/`)) ? "kitchen" : "squad";
+  path === "/" || path === "/start" ? "front" : KITCHEN_PATHS.some((p) => path === p || path.startsWith(`${p}/`)) ? "kitchen" : "squad";
 
 const isActive = (href: string, path: string) => (href === "/" ? path === "/" : path === href || path.startsWith(`${href}/`));
 

@@ -1,6 +1,6 @@
-import SidePicker from "@/components/SidePicker";
+import Landing from "@/components/landing/Landing";
 
-// The front door: students pick Chop Squad, restaurant managers pick Kitchen.
-export default function Welcome() {
-  return <SidePicker />;
+// "/" is the landing page: what ChopQuest is. "Open the app" goes to /start (pick your side).
+export default function Home() {
+  return <Landing />;
 }
