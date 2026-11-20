@@ -7,15 +7,30 @@ import type { KitchenCard, SwapOption } from "@/lib/types";
 import { postJson } from "@/lib/cafe-client";
 import { ArrowRightIcon, CheckIcon } from "@/components/icons";
 
-export default function KitchenCardPanel({ card, option, menuItemId, oldPrice }: { card: KitchenCard; option: SwapOption; menuItemId: number; oldPrice: number }) {
+/** `publish` overrides the API call (the offline demo keeps everything in memory). */
+export default function KitchenCardPanel({
+  card,
+  option,
+  menuItemId,
+  oldPrice,
+  publish,
+}: {
+  card: KitchenCard;
+  option: SwapOption;
+  menuItemId: number;
+  oldPrice: number;
+  publish?: (priceNgn: number) => Promise<{ id: number | null }>;
+}) {
   const [price, setPrice] = useState(String(oldPrice));
   const [state, setState] = useState<{ s: "idle" | "busy" | "done"; error?: string; id?: number }>({ s: "idle" });
 
-  async function publish() {
+  async function onPublish() {
     setState({ s: "busy" });
     try {
-      const { id } = await postJson<{ id: number }>("/api/plant-dishes", { menuItemId, option, card, priceNgn: Number(price) });
-      setState({ s: "done", id });
+      const { id } = publish
+        ? await publish(Number(price))
+        : await postJson<{ id: number }>("/api/plant-dishes", { menuItemId, option, card, priceNgn: Number(price) });
+      setState({ s: "done", id: id ?? undefined });
     } catch (e) {
       setState({ s: "idle", error: (e as Error).message });
     }
@@ -55,11 +70,15 @@ export default function KitchenCardPanel({ card, option, menuItemId, oldPrice }:
           </svg>
           <style>{`@keyframes cq-draw { from { stroke-dashoffset: 40; } to { stroke-dashoffset: 0; } } .cq-draw { animation: cq-draw .6s .25s ease-out both; } @media (prefers-reduced-motion: reduce) { .cq-draw { animation: none; } }`}</style>
           <p className="text-xl font-black text-green-950">Published to the board</p>
+          {state.id == null ? (
+            <p className="text-sm text-stone-600">Demo mode: nothing was saved.</p>
+          ) : (
           <div className="flex flex-wrap justify-center gap-2">
             <Link href={`/dishes/${state.id}`} className="flex min-h-12 items-center gap-2 rounded-full bg-leaf px-5 font-black text-white hover:bg-leaf-dark">
               See it on the board <ArrowRightIcon size={18} />
             </Link>
           </div>
+          )}
         </div>
       ) : (
         <div className="flex flex-col gap-2 sm:flex-row sm:items-end">
@@ -72,7 +91,7 @@ export default function KitchenCardPanel({ card, option, menuItemId, oldPrice }:
           </label>
           <button
             type="button"
-            onClick={publish}
+            onClick={onPublish}
             disabled={state.s === "busy" || !(Number(price) > 0)}
             className="min-h-12 rounded-full bg-pepper px-6 text-lg font-black text-white shadow-md transition hover:bg-orange-600 active:scale-[0.98] disabled:opacity-60"
           >

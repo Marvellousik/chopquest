@@ -1,0 +1,38 @@
+{
+  "_note": "Offline demo fixtures. PLACEHOLDER until Pascal and Jason hand over the surveyed menus: names and student prices are examples, grams are typical portion estimates. Food ids match src/data/demo/foods.json.",
+  "cafeteria": "Demo Cafe",
+  "dishes": [
+    {
+      "id": 9001,
+      "name": "Chicken jollof",
+      "priceNgn": 2500,
+      "isTopSeller": true,
+      "breakdown": [
+        { "foodId": 22, "label": "Jollof rice", "grams": 250, "role": "staple" },
+        { "foodId": 31, "label": "Chicken", "grams": 120, "role": "protein" },
+        { "foodId": 29, "label": "Dodo", "grams": 80, "role": "side" }
+      ]
+    },
+    {
+      "id": 9002,
+      "name": "Beef fried rice",
+      "priceNgn": 2800,
+      "isTopSeller": true,
+      "breakdown": [
+        { "foodId": 22, "label": "Fried rice", "grams": 250, "role": "staple" },
+        { "foodId": 32, "label": "Beef", "grams": 100, "role": "protein" }
+      ]
+    },
+    {
+      "id": 9003,
+      "name": "Eba and egusi with goat meat",
+      "priceNgn": 3000,
+      "isTopSeller": false,
+      "breakdown": [
+        { "foodId": 27, "label": "Eba", "grams": 250, "role": "staple" },
+        { "foodId": 16, "label": "Egusi soup", "grams": 150, "role": "soup" },
+        { "foodId": 33, "label": "Goat meat", "grams": 100, "role": "protein" }
+      ]
+    }
+  ]
+}

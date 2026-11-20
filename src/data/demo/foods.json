@@ -1,0 +1,344 @@
+[
+{
+"id": 18,
+"food": "Oyster mushroom, fresh",
+"local_name": "Mushroom",
+"dex_group": "Mushroom",
+"type": "Alternative",
+"protein_g_per_100g": 3,
+"price_ngn_per_kg": null
+},
+{
+"id": 9,
+"food": "Soy cheese / Nigerian tofu",
+"local_name": "Awara",
+"dex_group": "Soy",
+"type": "Alternative",
+"protein_g_per_100g": 10,
+"price_ngn_per_kg": null
+},
+{
+"id": 7,
+"food": "Soy chunks (textured soy protein)",
+"local_name": "Soya chunks",
+"dex_group": "Soy",
+"type": "Alternative",
+"protein_g_per_100g": 50,
+"price_ngn_per_kg": null
+},
+{
+"id": 8,
+"food": "Soy milk",
+"local_name": "Soya milk",
+"dex_group": "Soy",
+"type": "Alternative",
+"protein_g_per_100g": 3,
+"price_ngn_per_kg": null
+},
+{
+"id": 6,
+"food": "Soybeans, dried",
+"local_name": "Soya",
+"dex_group": "Soy",
+"type": "Alternative",
+"protein_g_per_100g": 34,
+"price_ngn_per_kg": 714
+},
+{
+"id": 32,
+"food": "Beef (incl. suya)",
+"local_name": "Beef",
+"dex_group": "Animal",
+"type": "Animal",
+"protein_g_per_100g": 18,
+"price_ngn_per_kg": null
+},
+{
+"id": 31,
+"food": "Chicken",
+"local_name": "Chicken",
+"dex_group": "Animal",
+"type": "Animal",
+"protein_g_per_100g": 20,
+"price_ngn_per_kg": null
+},
+{
+"id": 36,
+"food": "Dried fish / crayfish",
+"local_name": "Eja kika / crayfish",
+"dex_group": "Animal",
+"type": "Animal",
+"protein_g_per_100g": 47,
+"price_ngn_per_kg": null
+},
+{
+"id": 34,
+"food": "Egg, hen",
+"local_name": "Egg",
+"dex_group": "Animal",
+"type": "Animal",
+"protein_g_per_100g": 12,
+"price_ngn_per_kg": null
+},
+{
+"id": 35,
+"food": "Fish fillet",
+"local_name": "Fish",
+"dex_group": "Animal",
+"type": "Animal",
+"protein_g_per_100g": 22,
+"price_ngn_per_kg": null
+},
+{
+"id": 33,
+"food": "Goat meat",
+"local_name": "Goat meat",
+"dex_group": "Animal",
+"type": "Animal",
+"protein_g_per_100g": 18,
+"price_ngn_per_kg": null
+},
+{
+"id": 38,
+"food": "Milk powder",
+"local_name": "Powdered milk",
+"dex_group": "Animal",
+"type": "Animal",
+"protein_g_per_100g": 26,
+"price_ngn_per_kg": null
+},
+{
+"id": 37,
+"food": "Milk, cow",
+"local_name": "Milk",
+"dex_group": "Animal",
+"type": "Animal",
+"protein_g_per_100g": 3.8,
+"price_ngn_per_kg": null
+},
+{
+"id": 10,
+"food": "Bambara groundnut, dried",
+"local_name": "Okpa",
+"dex_group": "Bambara",
+"type": "Plant",
+"protein_g_per_100g": 19,
+"price_ngn_per_kg": null
+},
+{
+"id": 11,
+"food": "Okpa (steamed bambara pudding)",
+"local_name": "Okpa",
+"dex_group": "Bambara",
+"type": "Plant",
+"protein_g_per_100g": 8,
+"price_ngn_per_kg": null
+},
+{
+"id": 4,
+"food": "Akara",
+"local_name": "Akara",
+"dex_group": "Beans",
+"type": "Plant",
+"protein_g_per_100g": 9,
+"price_ngn_per_kg": null
+},
+{
+"id": 5,
+"food": "Beans porridge",
+"local_name": "Ewa riro",
+"dex_group": "Beans",
+"type": "Plant",
+"protein_g_per_100g": 6,
+"price_ngn_per_kg": null
+},
+{
+"id": 2,
+"food": "Beans, boiled",
+"local_name": "Ewa agoyin",
+"dex_group": "Beans",
+"type": "Plant",
+"protein_g_per_100g": 8,
+"price_ngn_per_kg": null
+},
+{
+"id": 1,
+"food": "Cowpea / brown beans, dried",
+"local_name": "Ewa",
+"dex_group": "Beans",
+"type": "Plant",
+"protein_g_per_100g": 23,
+"price_ngn_per_kg": 1850
+},
+{
+"id": 3,
+"food": "Moi moi",
+"local_name": "Moin moin",
+"dex_group": "Beans",
+"type": "Plant",
+"protein_g_per_100g": 8,
+"price_ngn_per_kg": null
+},
+{
+"id": 16,
+"food": "Egusi soup (no meat)",
+"local_name": "Egusi soup",
+"dex_group": "Egusi",
+"type": "Plant",
+"protein_g_per_100g": 6,
+"price_ngn_per_kg": null
+},
+{
+"id": 15,
+"food": "Melon seed, shelled",
+"local_name": "Egusi",
+"dex_group": "Egusi",
+"type": "Plant",
+"protein_g_per_100g": 26,
+"price_ngn_per_kg": null
+},
+{
+"id": 13,
+"food": "Groundnut paste",
+"local_name": "Groundnut butter",
+"dex_group": "Groundnut",
+"type": "Plant",
+"protein_g_per_100g": 24,
+"price_ngn_per_kg": null
+},
+{
+"id": 12,
+"food": "Groundnuts, dry",
+"local_name": "Epa / gyada",
+"dex_group": "Groundnut",
+"type": "Plant",
+"protein_g_per_100g": 23,
+"price_ngn_per_kg": null
+},
+{
+"id": 14,
+"food": "Kuli-kuli (groundnut cake)",
+"local_name": "Kuli-kuli",
+"dex_group": "Groundnut",
+"type": "Plant",
+"protein_g_per_100g": 30,
+"price_ngn_per_kg": null
+},
+{
+"id": 17,
+"food": "Fermented locust bean",
+"local_name": "Iru / dawadawa",
+"dex_group": "Iru",
+"type": "Plant",
+"protein_g_per_100g": 35,
+"price_ngn_per_kg": null
+},
+{
+"id": 21,
+"food": "Pigeon pea, dried",
+"local_name": "Fiofio",
+"dex_group": "Pigeon pea",
+"type": "Plant",
+"protein_g_per_100g": 20,
+"price_ngn_per_kg": null
+},
+{
+"id": 20,
+"food": "Tigernut drink",
+"local_name": "Kunun aya",
+"dex_group": "Tigernut",
+"type": "Plant",
+"protein_g_per_100g": 1,
+"price_ngn_per_kg": null
+},
+{
+"id": 19,
+"food": "Tigernut, dried",
+"local_name": "Aya / ofio",
+"dex_group": "Tigernut",
+"type": "Plant",
+"protein_g_per_100g": 5,
+"price_ngn_per_kg": null
+},
+{
+"id": 27,
+"food": "Cassava meal",
+"local_name": "Garri",
+"dex_group": "Staple",
+"type": "Staple",
+"protein_g_per_100g": 1.6,
+"price_ngn_per_kg": null
+},
+{
+"id": 30,
+"food": "Instant noodles, dry",
+"local_name": "Indomie",
+"dex_group": "Staple",
+"type": "Staple",
+"protein_g_per_100g": 9,
+"price_ngn_per_kg": null
+},
+{
+"id": 23,
+"food": "Maize, dried",
+"local_name": "Agbado / masara",
+"dex_group": "Staple",
+"type": "Staple",
+"protein_g_per_100g": 9.4,
+"price_ngn_per_kg": null
+},
+{
+"id": 25,
+"food": "Millet",
+"local_name": "Gero",
+"dex_group": "Staple",
+"type": "Staple",
+"protein_g_per_100g": 10,
+"price_ngn_per_kg": null
+},
+{
+"id": 29,
+"food": "Plantain, ripe",
+"local_name": "Dodo",
+"dex_group": "Staple",
+"type": "Staple",
+"protein_g_per_100g": 1.2,
+"price_ngn_per_kg": null
+},
+{
+"id": 22,
+"food": "Rice, milled",
+"local_name": "Rice",
+"dex_group": "Staple",
+"type": "Staple",
+"protein_g_per_100g": 7,
+"price_ngn_per_kg": null
+},
+{
+"id": 24,
+"food": "Sorghum",
+"local_name": "Guinea corn / dawa",
+"dex_group": "Staple",
+"type": "Staple",
+"protein_g_per_100g": 11,
+"price_ngn_per_kg": null
+},
+{
+"id": 26,
+"food": "Wheat flour (bread)",
+"local_name": "Bread",
+"dex_group": "Staple",
+"type": "Staple",
+"protein_g_per_100g": 11,
+"price_ngn_per_kg": null
+},
+{
+"id": 28,
+"food": "Yam, fresh",
+"local_name": "Isu / doya",
+"dex_group": "Staple",
+"type": "Staple",
+"protein_g_per_100g": 1.9,
+"price_ngn_per_kg": null
+}
+]
