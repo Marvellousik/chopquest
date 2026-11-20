@@ -6,6 +6,7 @@ import type { CafeteriaRank, PlantDish } from "@/lib/types";
 import { naira, useApi } from "@/lib/cafe-client";
 import { ArrowRightIcon } from "@/components/icons";
 import { EmptyBox, ErrorBox, RankBadge, RISE_CSS, ScreenTitle, SkeletonRows, Stars } from "./bits";
+import CampusPulse from "./CampusPulse";
 
 type Board = { ranked: CafeteriaRank[]; gettingStarted: CafeteriaRank[]; topDishes: PlantDish[] };
 
@@ -16,6 +17,7 @@ export default function BoardScreen() {
     <div className="@container flex flex-col gap-6">
       <style>{RISE_CSS}</style>
       <ScreenTitle title="Campus Plant Board" sub="Plant-based dishes on campus, rated by students." />
+      <CampusPulse />
 
       {state.status === "loading" && <SkeletonRows n={5} label="Loading the board" />}
       {state.status === "error" && <ErrorBox message={state.message} onRetry={retry} />}

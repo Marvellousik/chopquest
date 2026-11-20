@@ -1,6 +1,6 @@
-import { timingSafeEqual } from "node:crypto";
 import { connection } from "next/server";
 import { clearDemo, demoStatus, seedDemo } from "@/lib/server/demo";
+import { isAdmin as authorised } from "@/lib/server/admin-auth";
 
 export const maxDuration = 120;
 
@@ -8,14 +8,6 @@ export const maxDuration = 120;
 //   GET  /api/admin/demo                        -> { demo, counts }
 //   POST /api/admin/demo { "action": "seed" }   -> seeds the demo campus (replaces earlier demo data)
 //   POST /api/admin/demo { "action": "clear" }  -> deletes every demo row
-function authorised(req: Request) {
-  const expected = process.env.ADMIN_TOKEN;
-  const got = req.headers.get("x-admin-token") ?? "";
-  if (!expected || expected.length < 16) return false;
-  const a = Buffer.from(got);
-  const b = Buffer.from(expected);
-  return a.length === b.length && timingSafeEqual(a, b);
-}
 const notFound = () => Response.json({ error: "Not found." }, { status: 404 });
 
 export async function GET(req: Request) {

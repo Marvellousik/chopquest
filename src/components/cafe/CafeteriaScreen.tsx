@@ -7,6 +7,7 @@ import { naira, useApi } from "@/lib/cafe-client";
 import { ArrowLeftIcon, ArrowRightIcon } from "@/components/icons";
 import { EmptyBox, ErrorBox, RankBadge, RISE_CSS, SkeletonRows, Stars } from "./bits";
 import AskPlantVersion from "./AskPlantVersion";
+import CampusPulse from "./CampusPulse";
 
 export default function CafeteriaScreen({ slug }: { slug: string }) {
   const { state, retry } = useApi<{ cafeteria: Cafeteria; dishes: PlantDish[] }>(`/api/cafeterias/${slug}/plant-dishes`);
@@ -39,6 +40,8 @@ export default function CafeteriaScreen({ slug }: { slug: string }) {
           </div>
         )}
       </header>
+
+      <CampusPulse cafeteria={slug} title={`Live at ${cafeteria.name}`} />
 
       <section aria-label="Plant dishes" className="flex flex-col gap-3">
         <h2 className="text-xl font-black text-green-950">Plant dishes</h2>
