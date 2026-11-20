@@ -10,7 +10,7 @@ We use **OpenRouter** because the team has credits there. It's one OpenAI-compat
 
 ```
 OPENROUTER_API_KEY=sk-or-...          # from openrouter.ai/keys
-OPENROUTER_MODEL=anthropic/claude-haiku-4.5            # Claude via OpenRouter: images + JSON
+OPENROUTER_MODEL=anthropic/claude-haiku-5.5            # Claude via OpenRouter: images + JSON, $0.10/$0.50 per 1M tokens
 OPENROUTER_MODEL_FALLBACK=anthropic/claude-sonnet-4.6   # used if Haiku fails; "none" to turn off
 ```
 
@@ -87,7 +87,7 @@ writeKitchenCard(input: { menuItem: MenuItem; option: SwapOption; foods: Food[] 
   - **Part accuracy:** the share of true parts the model found.
   - **Protein error:** average gap between the protein from the model's breakdown and Jason's, in grams and %.
   - Time and **credits used** (from `usage`).
-- **Bonus that strengthens "AI contribution":** run the same 15 dishes through 2 models on OpenRouter (e.g. `anthropic/claude-haiku-4.5` vs `anthropic/claude-sonnet-4.6`, or the cheaper `anthropic/claude-haiku-5.5`) and show which is more accurate per ₦. That's a real model choice made from evidence.
+- **Bonus that strengthens "AI contribution":** run the same 15 dishes through 2 models on OpenRouter (e.g. `anthropic/claude-haiku-5.5` vs `anthropic/claude-sonnet-4.6`) and show which is more accurate per ₦. That's a real model choice made from evidence.
 - Also run the kitchen-card validator on 15 cards and report the share that passed first time.
 - Output a small table for the pitch deck. **Report the real numbers, even if they're bad.** The guide rewards honest limits.
 
