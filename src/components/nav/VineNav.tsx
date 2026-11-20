@@ -34,7 +34,7 @@ const SQUAD_BEDS: Bed[] = [
   {
     name: "Progress",
     items: [
-      { href: "/dex", label: "Dex", hint: "Proteins found", Icon: DexIcon },
+      { href: "/inventory", label: "Inventory", hint: "Proteins, meals, diet", Icon: DexIcon },
       { href: "/leaderboard", label: "Ranks", hint: "Group league", Icon: TrophyIcon },
     ],
   },

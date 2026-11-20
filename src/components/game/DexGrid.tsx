@@ -1,4 +1,4 @@
-// Protein Dex (task 7c): 10 groups, locked until discovered.
+// Inventory: the 10 protein groups, locked until a scanned meal contains one.
 // Unlocked cards show trait, meal count and the medal (or progress to the next one).
 
 import { DEX, MEDAL_STYLE, medalFor, nextMedal } from "./dex";
@@ -6,14 +6,14 @@ import Medal from "./Medal";
 
 export type DexProgress = { group: string; mealCount: number };
 
-export default function DexGrid({ progress }: { progress: DexProgress[] }) {
+export default function DexGrid({ progress, foods = {} }: { progress: DexProgress[]; foods?: Record<string, string[]> }) {
   const counts = new Map(progress.map((p) => [p.group, p.mealCount]));
   const found = DEX.filter((d) => counts.has(d.group)).length;
 
   return (
-    <section aria-label="Protein Dex" className="@container flex flex-col gap-3">
+    <section aria-label="Inventory" className="@container flex flex-col gap-3">
       <div className="flex items-end justify-between">
-        <h2 className="text-2xl font-black">Protein Dex</h2>
+        <h2 className="text-2xl font-black">Protein slots</h2>
         <p className="font-bold text-leaf-dark">
           {found} <span className="font-semibold text-stone-500">of {DEX.length} found</span>
         </p>
@@ -39,7 +39,7 @@ export default function DexGrid({ progress }: { progress: DexProgress[] }) {
           const medal = medalFor(count);
           const next = nextMedal(count);
           return (
-            <li key={d.group} className="flex min-h-36 flex-col gap-1.5 rounded-3xl p-3 shadow-sm" style={{ background: d.tint }}>
+            <li key={d.group} className="flex min-h-36 flex-col gap-1.5 rounded-3xl p-3 shadow-sm motion-safe:animate-pop" style={{ background: d.tint }}>
               <div className="flex items-start justify-between">
                 <span
                   className="flex size-11 items-center justify-center rounded-2xl text-base font-black text-white"
@@ -57,6 +57,7 @@ export default function DexGrid({ progress }: { progress: DexProgress[] }) {
               <span className="text-sm text-stone-600">
                 {count} {count === 1 ? "meal" : "meals"}
               </span>
+              {foods[d.group]?.length ? <span className="text-xs leading-snug text-stone-600">{foods[d.group].slice(0, 3).join(", ")}</span> : null}
               {next && (
                 <div className="mt-auto">
                   <div className="h-1.5 overflow-hidden rounded-full bg-white/80" aria-hidden>
