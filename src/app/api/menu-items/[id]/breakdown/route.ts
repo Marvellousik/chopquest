@@ -2,7 +2,8 @@ import { getMenuItem, saveBreakdown } from "@/lib/server/cafeterias";
 import { cachedAiJson, cacheKey } from "@/lib/server/ai-cache";
 import { aiErrorMessage, aiJson } from "@/lib/ai/client";
 import { breakdownDish } from "@/lib/ai/breakdown";
-import { listFoods } from "@/lib/foods-db";
+import { requireKitchen } from "@/lib/server/kitchen-auth";
+import { foodsForCafeteria, getProfile } from "@/lib/server/kitchen";
 import type { DishPart } from "@/lib/types";
 
 export const maxDuration = 60;
@@ -37,6 +38,8 @@ export async function POST(req: Request, ctx: RouteContext<"/api/menu-items/[id]
   try {
     const item = await getMenuItem(id);
     if (!item) return Response.json({ error: "Dish not found." }, { status: 404 });
+    const kitchen = await requireKitchen(item.cafeteriaId);
+    if (kitchen instanceof Response) return kitchen;
 
     if (body.parts !== undefined) {
       const parts = cleanParts(body.parts);
@@ -53,7 +56,7 @@ export async function POST(req: Request, ctx: RouteContext<"/api/menu-items/[id]
         return Response.json({ error: "That photo can't be used. Try a smaller JPEG." }, { status: 400 });
     }
 
-    const foods = await listFoods();
+    const foods = await foodsForCafeteria(item.cafeteriaId, (await getProfile(item.cafeteriaId)).excludedFoodIds);
     const input = { menuItemName: item.name, cafeteria: item.cafeteriaName, priceNgn: item.priceNgn, photoBase64: photo };
     let parts;
     try {

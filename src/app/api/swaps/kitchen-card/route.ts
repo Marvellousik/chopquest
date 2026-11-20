@@ -2,7 +2,8 @@ import { getMenuItem } from "@/lib/server/cafeterias";
 import { cachedAiJson, cacheKey } from "@/lib/server/ai-cache";
 import { aiJson } from "@/lib/ai/client";
 import { writeKitchenCard } from "@/lib/ai/kitchen-card";
-import { listFoods } from "@/lib/foods-db";
+import { requireKitchen } from "@/lib/server/kitchen-auth";
+import { foodsForCafeteria } from "@/lib/server/kitchen";
 import type { SwapOption } from "@/lib/types";
 
 export const maxDuration = 60;
@@ -19,7 +20,9 @@ export async function POST(req: Request) {
   try {
     const item = await getMenuItem(id);
     if (!item?.breakdown?.length) return Response.json({ error: "Dish not found." }, { status: 404 });
-    const foods = await listFoods();
+    const kitchen = await requireKitchen(item.cafeteriaId);
+    if (kitchen instanceof Response) return kitchen;
+    const foods = await foodsForCafeteria(item.cafeteriaId);
     const knownIds = new Set(foods.map((f) => f.id));
     if (!body.option.adds.every((a) => knownIds.has(Number(a.foodId))))
       return Response.json({ error: "That swap doesn't look right. Find swaps again." }, { status: 400 });

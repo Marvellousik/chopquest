@@ -14,7 +14,7 @@ if (!process.env.TURSO_DATABASE_URL) {
   process.exit(0);
 }
 
-for (const script of ["scripts/setup-db.mts", "scripts/seed.mts", "scripts/seed-cafeterias.mts"]) {
+for (const script of ["scripts/setup-db.mts", "scripts/seed.mts", "scripts/seed-cafeterias.mts", "scripts/seed-sources.mts", "scripts/kitchen-codes.mts"]) {
   console.log(`boot: ${script}`);
   execFileSync(process.execPath, [script], { stdio: "inherit", env: process.env });
 }

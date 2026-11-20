@@ -1,5 +1,7 @@
 # ChopQuest: team plan (Hack the Fork Nigeria 2026, Challenge 2)
 
+> **Updated 20 Nov: read [plan-v2.md](plan-v2.md) first.** Two sides that feed each other: the kitchen admin (managers, behind an access code) and the student adoption engine (scan, quests, Dex, pet, leaderboard pointing at cafeteria plant dishes).
+
 **What we are building:** an AI tool that helps our campus cafeterias swap meat in their top dishes for plant-based or alternative protein, at the same or lower cost per plate, plus a **public board** where students rate and review those swapped dishes, so people who are unsure can see what others thought before trying one.
 
 **Cafeterias:** Ase Cafe, Bush Cafe, Munchbox, First Cafe, Second Cafe.

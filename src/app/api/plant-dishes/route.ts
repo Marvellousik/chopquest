@@ -1,5 +1,6 @@
 import { createPlantDish, getMenuItem } from "@/lib/server/cafeterias";
-import { listFoods } from "@/lib/foods-db";
+import { requireKitchen } from "@/lib/server/kitchen-auth";
+import { foodsForCafeteria } from "@/lib/server/kitchen";
 import { findSwaps } from "@/lib/swap";
 import { validateCard } from "@/lib/ai/kitchen-card";
 import type { KitchenCard, SwapOption } from "@/lib/types";
@@ -19,10 +20,12 @@ export async function POST(req: Request) {
   try {
     const item = await getMenuItem(id);
     if (!item?.breakdown?.length) return Response.json({ error: "Dish not found." }, { status: 404 });
+    const kitchen = await requireKitchen(item.cafeteriaId);
+    if (kitchen instanceof Response) return kitchen;
 
     // Re-derive the numbers server-side: find the engine option with the same foods and grams.
     const key = (o: SwapOption) => o.adds.map((a) => `${a.foodId}:${a.grams}`).sort().join("|");
-    const foods = await listFoods();
+    const foods = await foodsForCafeteria(item.cafeteriaId);
     const wanted = key(body.option);
     const match = [false, true]
       .flatMap((identity) => findSwaps(item.breakdown!, item.name, { maxCostPerPlateNgn: null, minProteinKeptPct: 0, keepDishIdentity: identity, maxExtraPrepMin: 240 }, foods))
