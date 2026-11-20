@@ -1,7 +1,8 @@
 import type { Metadata, Viewport } from "next";
 import { Nunito } from "next/font/google";
 import "./globals.css";
-import BottomNav from "@/components/BottomNav";
+import VineNav from "@/components/nav/VineNav";
+import PlantBackdrop from "@/components/nav/PlantBackdrop";
 
 const nunito = Nunito({ variable: "--font-nunito", subsets: ["latin"] });
 
@@ -19,12 +20,13 @@ export const viewport: Viewport = {
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html lang="en" className={`${nunito.variable} h-full antialiased`}>
-      <body className="min-h-full flex flex-col font-sans">
-        {/* Bottom padding keeps content clear of the fixed nav (--nav-h + phone safe area). */}
-        <main className="mx-auto flex w-full max-w-md flex-1 flex-col px-4 pt-6 pb-[calc(var(--nav-h)+env(safe-area-inset-bottom)+1.5rem)]">
+      <body className="relative isolate min-h-full flex flex-col font-sans md:pl-60">
+        <PlantBackdrop />
+        {/* Phone: room for the seed button. Laptop: the vine rail sits on the left (md:pl-60). */}
+        <main className="mx-auto flex w-full max-w-md flex-1 flex-col px-4 pt-6 pb-[calc(env(safe-area-inset-bottom)+7rem)] md:max-w-3xl md:px-8 md:pb-10 lg:max-w-5xl">
           {children}
         </main>
-        <BottomNav />
+        <VineNav />
       </body>
     </html>
   );
