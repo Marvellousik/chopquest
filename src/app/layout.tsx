@@ -5,7 +5,6 @@ import "./globals.css";
 import VineNav from "@/components/nav/VineNav";
 import PlantBackdrop from "@/components/nav/PlantBackdrop";
 import CompanionDock from "@/components/companion/CompanionDock";
-import DemoNotice from "@/components/DemoNotice";
 
 const nunito = Nunito({ variable: "--font-nunito", subsets: ["latin"] });
 
@@ -27,9 +26,6 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
         <PlantBackdrop />
         {/* Phone: room for the seed button. Laptop: the vine rail sits on the left (md:pl-60). */}
         <main className="mx-auto flex w-full max-w-md flex-1 flex-col px-4 pt-6 pb-[calc(env(safe-area-inset-bottom)+7rem)] md:max-w-3xl md:px-8 md:pb-10 lg:max-w-5xl">
-          <Suspense fallback={null}>
-            <DemoNotice />
-          </Suspense>
           {children}
         </main>
         {/* The nav reads the URL, so it streams in on dynamic routes (/kitchen/[slug] ...). */}

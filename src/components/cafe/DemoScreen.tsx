@@ -127,7 +127,7 @@ export default function DemoScreen() {
             <p className="rounded-3xl bg-white p-5 font-bold text-red-800 shadow-sm">No swap fits these limits. Loosen one and try again.</p>
           )}
           {options && options.length > 0 && (
-            <SwapResults options={options} priceNgn={dish.priceNgn} busyRank={null} onCard={(o) => setCard({ option: o, card: templateCard(dish.name, o) })} />
+            <SwapResults options={options} priceNgn={dish.priceNgn} dishName={dish.name} busyRank={null} onCard={(o) => setCard({ option: o, card: templateCard(dish.name, o) })} />
           )}
           {card && (
             <KitchenCardPanel
