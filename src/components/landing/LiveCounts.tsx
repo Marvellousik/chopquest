@@ -1,7 +1,7 @@
 "use client";
 // The landing page's numbers, read live from the database (never typed in).
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 type Stats = { cafeterias: number; plantDishes: number; reviews: number; requests: number; sample: boolean };
 
@@ -23,10 +23,19 @@ function useCount(target: number | null) {
   return n;
 }
 
-function Num({ value, label }: { value: number | null; label: string }) {
-  const n = useCount(value);
+function Num({ value, label, i }: { value: number | null; label: string; i: number }) {
+  const ref = useRef<HTMLDivElement>(null);
+  const [seen, setSeen] = useState(false);
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    const io = new IntersectionObserver(([e]) => e.isIntersecting && (setSeen(true), io.disconnect()), { threshold: 0.4 });
+    io.observe(el);
+    return () => io.disconnect();
+  }, []);
+  const n = useCount(seen ? value : null);
   return (
-    <div className="num">
+    <div className="num" ref={ref} data-reveal="up" style={{ "--d": `${i * 0.1}s` } as React.CSSProperties}>
       <b>{value == null ? "–" : n}</b>
       <span>{label}</span>
     </div>
@@ -44,10 +53,10 @@ export default function LiveCounts() {
   return (
     <>
       <div className="nums">
-        <Num value={s?.cafeterias ?? null} label="Cafeterias" />
-        <Num value={s?.plantDishes ?? null} label="Plant dishes" />
-        <Num value={s?.reviews ?? null} label="Student reviews" />
-        <Num value={s?.requests ?? null} label={"“I'd try it” asks"} />
+        <Num i={0} value={s?.cafeterias ?? null} label="Cafeterias" />
+        <Num i={1} value={s?.plantDishes ?? null} label="Plant dishes" />
+        <Num i={2} value={s?.reviews ?? null} label="Student reviews" />
+        <Num i={3} value={s?.requests ?? null} label={"“I'd try it” asks"} />
       </div>
       <p className="note">Counted live from our database{s?.sample ? ", including sample data until our cafeteria survey is in" : ""}.</p>
     </>

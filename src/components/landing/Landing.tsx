@@ -5,12 +5,18 @@
 import Link from "next/link";
 import { Anton, Inter } from "next/font/google";
 import LiveCounts from "./LiveCounts";
+import LandingFx from "./LandingFx";
+import type { CSSProperties } from "react";
 import "./landing.css";
 
 const anton = Anton({ weight: "400", subsets: ["latin"], variable: "--lp-anton" });
 const inter = Inter({ weight: ["500", "600", "700", "800"], subsets: ["latin"], variable: "--lp-inter" });
 
 const TICKER = ["Meat out, flavour in", "Soy chunks, always", "Moi moi Mondays", "Big bites of akara", "Awara in pepper sauce", "Same jollof, new protein", "Kuli-kuli crunch"];
+
+// Each headline word flies in from its own side and angle.
+const fly = (x: string, y: string, r: string, d: number) => ({ "--x": x, "--y": y, "--r": r, "--d": `${d}s` }) as CSSProperties;
+const delay = (d: number) => ({ "--d": `${d}s` }) as CSSProperties;
 
 const Arrow = () => (
   <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" aria-hidden>
@@ -21,6 +27,8 @@ const Arrow = () => (
 export default function Landing() {
   return (
     <div className={`lp ${anton.variable} ${inter.variable}`}>
+      <LandingFx />
+      <div className="progress" aria-hidden />
       <div className="page">
         <header className="hero">
           <div className="top">
@@ -53,12 +61,16 @@ export default function Landing() {
 
           <div className="heroGrid">
             <div>
-              <h1 className="big">
-                Plants
+              <h1 className="big" aria-label="Plants made to be craved">
+                <span className="w" style={fly("-70vw", "-30vh", "-35deg", 0.15)} aria-hidden>Plants</span>
                 <br />
-                made to
+                <span className="w" style={fly("0", "-70vh", "25deg", 0.35)} aria-hidden>made</span>{" "}
+                <span className="w" style={fly("80vw", "-10vh", "40deg", 0.5)} aria-hidden>to</span>
                 <br />
-                <span className="y">be craved</span>
+                <span className="y">
+                  <span className="w" style={fly("-40vw", "60vh", "-30deg", 0.65)} aria-hidden>be</span>{" "}
+                  <span className="w" style={fly("70vw", "50vh", "30deg", 0.8)} aria-hidden>craved</span>
+                </span>
               </h1>
               <div className="cta">
                 <Link className="btn" href="/home" style={{ background: "var(--cream)", color: "var(--deep)" }}>
@@ -112,7 +124,7 @@ export default function Landing() {
           </div>
         </header>
 
-        <section className="cream">
+        <section className="cream" data-reveal="zoom">
           <h2>
             Big flavours. Local plant protein. No boring plates.<span className="sticker">Made in Abuja</span>
           </h2>
@@ -131,7 +143,7 @@ export default function Landing() {
         </section>
 
         <div className="split">
-          <div className="look">
+          <div className="look" data-reveal="left">
             <img src="/landing/awara.jpg" alt="Awara (soy cheese) in pepper sauce" />
             <h3 className="big">
               Look
@@ -139,7 +151,7 @@ export default function Landing() {
               inside
             </h3>
           </div>
-          <div className="good">
+          <div className="good" data-reveal="right" style={delay(0.12)}>
             <h3 className="big">The good stuff</h3>
             <p>Nigerian plant proteins we already love, ready to replace the meat.</p>
             <div className="facts">
@@ -154,22 +166,22 @@ export default function Landing() {
         </div>
         <p className="note">Protein per 100 g from our food list. Estimates, not medical advice.</p>
 
-        <section className="how">
+        <section className="how" data-reveal="up">
           <h2 className="big">
             How it <span className="y">works</span>
           </h2>
           <div className="steps">
-            <div className="st">
+            <div className="st" data-reveal="up" style={delay(0.15)}>
               <div className="n">01</div>
               <b>Break it down</b>
               <p>Chloe, our AI, splits a menu dish into parts and grams, checked against 38 Nigerian foods.</p>
             </div>
-            <div className="st">
+            <div className="st" data-reveal="up" style={delay(0.3)}>
               <div className="n">02</div>
               <b>Swap the meat</b>
               <p>The manager sets cost and protein limits. The engine returns the top 3 plant swaps with ₦ cost and reasons.</p>
             </div>
-            <div className="st">
+            <div className="st" data-reveal="up" style={delay(0.45)}>
               <div className="n">03</div>
               <b>Let students judge</b>
               <p>The kitchen publishes it, students rate it on the Plant Board, and the best cafeterias climb the ranking.</p>
@@ -180,7 +192,7 @@ export default function Landing() {
         <LiveCounts />
 
         <div className="sides">
-          <div className="side s1">
+          <div className="side s1" data-reveal="left">
             <h3 className="big">Chop Squad</h3>
             <ul>
               <li>Find the best plant dishes on campus</li>
@@ -192,7 +204,7 @@ export default function Landing() {
               I&apos;m a student
             </Link>
           </div>
-          <div className="side s2">
+          <div className="side s2" data-reveal="right" style={delay(0.12)}>
             <h3 className="big">Kitchen</h3>
             <ul>
               <li>Pick a top seller from your menu</li>
@@ -206,7 +218,7 @@ export default function Landing() {
           </div>
         </div>
 
-        <footer>
+        <footer data-reveal="up">
           <h3 className="big">Team Chloe</h3>
           <div className="team">
             <span>Ola · Frontend</span>
