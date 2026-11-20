@@ -5,6 +5,7 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
+    "prestart": "node scripts/boot.mts",
     "start": "next start",
     "lint": "eslint",
     "seed": "node --env-file-if-exists=.env.local scripts/seed.mts",
@@ -14,7 +15,9 @@
     "seed:cafeterias": "node --env-file-if-exists=.env.local scripts/seed-cafeterias.mts",
     "ai:precompute": "tsx scripts/ai-precompute.mts",
     "eval": "tsx scripts/eval-ai.mts",
-    "evidence": "tsx scripts/evidence.mts"
+    "evidence": "tsx scripts/evidence.mts",
+    "seed:sources": "node --env-file-if-exists=.env.local scripts/seed-sources.mts",
+    "kitchen:codes": "node --env-file-if-exists=.env.local scripts/kitchen-codes.mts"
   },
   "dependencies": {
     "@libsql/client": "^0.18.0",
@@ -33,5 +36,8 @@
     "tsx": "^4.23.15",
     "typescript": "^5",
     "vitest": "^5.1.1"
+  },
+  "engines": {
+    "node": ">=22.18"
   }
 }

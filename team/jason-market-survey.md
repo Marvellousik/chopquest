@@ -28,3 +28,13 @@ Everything you need is in [market-survey/](market-survey/). The spreadsheets are
 - **Write down only what you saw or were told.** Date, place and source for every price. No guessing. A blank is better than a made-up number.
 - Note the unit exactly (mudu, derica, paint rubber, sachet, piece, wrap) and its weight, because prices are per unit and we need ₦ per kg.
 - Take photos of price boards and receipts as proof.
+
+---
+
+## Plan v2 (20 Nov): where-to-buy is now in the app, so fill `data/protein_sources.csv`
+
+Managers see **where to buy every alternative protein, campus first, then Bwari**. The app reads `data/protein_sources.csv` on every boot. It has a starting row for all 21 proteins, all marked `likely` (where it is usually sold, **not checked**).
+
+When you **confirm** a place: fill `place_name`, `landmark`, `contact`, `unit`, `price_ngn`, `unit_weight_g`, `last_checked` (date), set `status` to `confirmed` and `source` to your name. Add new rows for extra places. Never mark a place `confirmed` unless you visited or called it.
+
+Also on Saturday morning: walk at least 2 managers through the kitchen survey with their **real** plates per week and what they pay for chicken, beef or fish. That is our profit evidence.

@@ -32,7 +32,6 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
         <Suspense fallback={null}>
           <VineNav />
         </Suspense>
-        <CompanionDock />
       </body>
     </html>
   );
