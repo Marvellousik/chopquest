@@ -1,5 +1,5 @@
 // Evidence numbers for the pitch: run the swap engine over every menu item we have, and summarise
-// the public board. Uses only real data in the database; nothing is invented.
+// the public board. Uses only real data in the database: demo rows (demo_records) are left out.
 //   npm run evidence            -> default limits (keep 80% protein, same dish, max 15 min prep)
 //   npm run evidence -- --budget   also requires the swapped plate to cost no more than before
 // Writes team/evidence/swap-evidence.md.
@@ -13,7 +13,9 @@ import { avg, fmt, pct, writeReport } from "./lib/env.mjs";
 const budget = process.argv.includes("--budget");
 const foods = await listFoods();
 const items = await query<{ id: number; name: string; price_ngn: number; cafeteria: string; breakdown: string | null }>(
-  `SELECT m.id, m.name, m.price_ngn, c.name AS cafeteria, m.breakdown FROM menu_items m JOIN cafeterias c ON c.id = m.cafeteria_id ORDER BY c.name, m.name`,
+  `SELECT m.id, m.name, m.price_ngn, c.name AS cafeteria, m.breakdown FROM menu_items m JOIN cafeterias c ON c.id = m.cafeteria_id
+   WHERE CAST(m.id AS TEXT) NOT IN (SELECT row_key FROM demo_records WHERE table_name = 'menu_items')
+   ORDER BY c.name, m.name`,
 );
 const byId = new Map(foods.map((f) => [f.id, f]));
 
@@ -49,7 +51,11 @@ for (const it of items) {
 }
 
 const board = await query<{ dishes: number; reviews: number; avg_stars: number | null; woa: number | null }>(
-  `SELECT (SELECT COUNT(*) FROM plant_dishes) AS dishes, COUNT(r.id) AS reviews, AVG(r.stars) AS avg_stars, AVG(r.would_order_again) AS woa FROM reviews r`,
+  `SELECT (SELECT COUNT(*) FROM plant_dishes WHERE CAST(id AS TEXT) NOT IN (SELECT row_key FROM demo_records WHERE table_name = 'plant_dishes')) AS dishes,
+          COUNT(r.id) AS reviews, AVG(r.stars) AS avg_stars, AVG(r.would_order_again) AS woa
+   FROM reviews r
+   WHERE CAST(r.id AS TEXT) NOT IN (SELECT row_key FROM demo_records WHERE table_name = 'reviews')
+     AND CAST(r.plant_dish_id AS TEXT) NOT IN (SELECT row_key FROM demo_records WHERE table_name = 'plant_dishes')`,
 );
 const b = board[0];
 
