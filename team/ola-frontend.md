@@ -82,3 +82,24 @@ The money screen of the demo.
 ## Order of work
 
 1. Nav + Board (1) with fake data. 2. Kitchen menu board (7) + breakdown and limits (8). 3. Swap results (9). 4. Dish page (4) + review form (5). 5. Kitchen card (10). 6. Cafeterias (2, 3). 7. Demo mode and phone testing.
+
+---
+
+## Plan v2 additions (20 Nov): kitchen admin + student adoption engine
+
+Read [plan-v2.md](plan-v2.md) first. Backend for the kitchen side is ready (Marv). Every `/kitchen/<cafeteria>` page is already behind a sign-in gate (`src/components/cafe/KitchenGate.tsx`, restyle freely).
+
+**Public nav:** Home (pet + quests), Scan (camera only, no gallery), Where to eat (board + cafeterias), Dex, Leaderboard. Kitchen is **not** in the public nav; managers go to `/kitchen` directly.
+
+**Kitchen screens to build** (all APIs need the kitchen cookie, which the gate sets):
+
+| Screen | API |
+|---|---|
+| Survey step 1: your cafeteria (open days, plates per day, goal) | `GET/PUT /api/kitchen/profile` |
+| Survey step 2–3: your menu + plates per week + cost per plate | `GET/POST /api/kitchen/menu` (`{ id?, name, priceNgn, isTopSeller, platesPerWeek, costPerPlateNgn, confirmed }`) and the existing breakdown route for Chloe's pre-fill |
+| Survey step 3: what you pay for proteins | `GET/PUT /api/kitchen/prices` (`{ foodId, unit, unitPriceNgn, unitWeightG, supplier }`) |
+| Survey step 4: limits (max prep, foods you can't use) | `PUT /api/kitchen/profile` (`maxExtraPrepMin`, `excludedFoodIds`) |
+| **Your report:** top 3 proteins (with where to buy), dishes ranked by weekly profit, totals, switch-rate slider | `GET /api/kitchen/report[?switchRate=10]` |
+| **Where to buy:** all 21 alternative proteins, campus first, then Bwari | `GET /api/protein-sources[?foodId=]` (public) |
+
+**Wording:** use `src/lib/kitchen-copy.ts` (`SWITCH_RATE_EXPLAINER`, `SWITCH_RATE_SHORT`, `ESTIMATE_NOTE`, `WHERE_TO_BUY_NOTE`) so managers read the same plain words everywhere. Show each place's `status` as **"Confirmed"** or **"Check first"**. Show "price coming" when a number is `null`, and list the report's `missing` items as "Add this to see the profit".

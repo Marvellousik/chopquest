@@ -15,7 +15,9 @@
     "seed:cafeterias": "node --env-file-if-exists=.env.local scripts/seed-cafeterias.mts",
     "ai:precompute": "tsx scripts/ai-precompute.mts",
     "eval": "tsx scripts/eval-ai.mts",
-    "evidence": "tsx scripts/evidence.mts"
+    "evidence": "tsx scripts/evidence.mts",
+    "seed:sources": "node --env-file-if-exists=.env.local scripts/seed-sources.mts",
+    "kitchen:codes": "node --env-file-if-exists=.env.local scripts/kitchen-codes.mts"
   },
   "dependencies": {
     "@libsql/client": "^0.18.0",
