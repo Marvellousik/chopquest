@@ -1,5 +1,5 @@
 import { createHash } from "node:crypto";
-import { getSql } from "@/lib/db";
+import { query } from "@/lib/db";
 import { analyzeMeal, GeminiError, sanitizeVision } from "@/lib/gemini";
 import { listFoods } from "@/lib/foods-db";
 import { matchFood } from "@/lib/match";
@@ -36,13 +36,13 @@ export async function POST(req: Request) {
   let vision: VisionResult | null = null;
   let cached = false;
   try {
-    const rows = (await getSql()`SELECT result FROM scan_cache WHERE image_hash = ${hash}`) as { result: unknown }[];
+    const rows = await query<{ result: string }>("SELECT result FROM scan_cache WHERE image_hash = ?", [hash]);
     if (rows.length) {
-      vision = sanitizeVision(rows[0].result);
+      vision = sanitizeVision(JSON.parse(rows[0].result));
       cached = true;
     }
   } catch (e) {
-    console.warn("scan_cache lookup failed (run db/002_scan_cache.sql?)", (e as Error).message);
+    console.warn("scan_cache lookup failed (run npm run db:setup?)", (e as Error).message);
   }
 
   // 2. Gemini.
@@ -64,8 +64,10 @@ export async function POST(req: Request) {
     }
     if (vision.items.length) {
       try {
-        await getSql()`INSERT INTO scan_cache (image_hash, result) VALUES (${hash}, ${JSON.stringify(vision)}::jsonb)
-                  ON CONFLICT (image_hash) DO NOTHING`;
+        await query("INSERT INTO scan_cache (image_hash, result) VALUES (?, ?) ON CONFLICT (image_hash) DO NOTHING", [
+          hash,
+          JSON.stringify(vision),
+        ]);
       } catch (e) {
         console.warn("scan_cache write failed", (e as Error).message);
       }
