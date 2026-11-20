@@ -2,11 +2,11 @@
 // Compares the AI breakdown against Jason's hand-weighed dishes (team/market-survey/eval-dishes.csv)
 // and checks how often the kitchen card passes the validator first time.
 //   npm run eval                                   -> uses OPENROUTER_MODEL
-//   npm run eval -- --models a/model,b/model       -> compares models on the same dishes
+//   npm run eval -- --models anthropic/claude-haiku-4.5,anthropic/claude-sonnet-4.6   -> compares models
 // Writes team/evidence/ai-accuracy.md. Report the real numbers, even when they're bad.
 import "./lib/env.mjs";
 import { existsSync, readFileSync } from "node:fs";
-import { aiJson, type AiJsonResult } from "@/lib/ai/client";
+import { aiJson, DEFAULT_MODEL, type AiJsonResult } from "@/lib/ai/client";
 import { breakdownDish } from "@/lib/ai/breakdown";
 import { writeKitchenCard } from "@/lib/ai/kitchen-card";
 import { matchFood } from "@/lib/match";
@@ -61,7 +61,7 @@ if (!list.length) {
 }
 
 const argModels = process.argv.find((a) => a.startsWith("--models"))?.split("=")[1] ?? process.argv[process.argv.indexOf("--models") + 1];
-const models = process.argv.includes("--models") || argModels?.includes("/") ? (argModels ?? "").split(",").filter(Boolean) : [process.env.OPENROUTER_MODEL || "google/gemini-2.5-flash"];
+const models = process.argv.includes("--models") || argModels?.includes("/") ? (argModels ?? "").split(",").filter(Boolean) : [process.env.OPENROUTER_MODEL || DEFAULT_MODEL];
 
 type ModelResult = { model: string; partRecall: number[]; proteinErrG: number[]; proteinErrPct: number[]; cardFirst: number; cardRetry: number; cardTemplate: number; costUsd: number; tokens: number; failed: number; rows: string[] };
 const results: ModelResult[] = [];

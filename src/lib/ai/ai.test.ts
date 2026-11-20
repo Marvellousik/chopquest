@@ -1,5 +1,5 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import { AiError, aiJson, parseModelJson } from "./client";
+import { AiError, aiJson, DEFAULT_FALLBACK_MODEL, DEFAULT_MODEL, parseModelJson, samplingFor } from "./client";
 import { breakdownDish, buildBreakdownPrompt, sanitizeBreakdown } from "./breakdown";
 import { templateCard, validateCard, writeKitchenCard, type CardInput } from "./kitchen-card";
 import { findSwaps } from "../swap";
@@ -19,7 +19,7 @@ describe("aiJson (OpenRouter client)", () => {
   beforeEach(() => {
     vi.stubEnv("OPENROUTER_API_KEY", "sk-or-test");
     vi.stubEnv("OPENROUTER_MODEL", "main/model");
-    vi.stubEnv("OPENROUTER_MODEL_FALLBACK", "");
+    vi.stubEnv("OPENROUTER_MODEL_FALLBACK", "none");
     vi.spyOn(console, "info").mockImplementation(() => {});
   });
   afterEach(() => {
@@ -39,6 +39,24 @@ describe("aiJson (OpenRouter client)", () => {
     expect(body.model).toBe("main/model");
     expect(body.response_format).toEqual({ type: "json_object" });
     expect(body.messages[1].content[1].image_url.url).toBe("data:image/jpeg;base64,QUJD");
+  });
+
+  it("defaults to Claude Haiku 4.5, falling back to Claude Sonnet 4.6", async () => {
+    vi.stubEnv("OPENROUTER_MODEL", "");
+    vi.stubEnv("OPENROUTER_MODEL_FALLBACK", "");
+    expect(DEFAULT_MODEL).toBe("anthropic/claude-haiku-4.5");
+    expect(DEFAULT_FALLBACK_MODEL).toBe("anthropic/claude-sonnet-4.6");
+    const f = vi.fn().mockResolvedValueOnce(errorReply(502)).mockResolvedValueOnce(errorReply(502)).mockResolvedValueOnce(reply('{"ok":1}'));
+    await aiJson({ system: "s", text: "t" }, f as unknown as typeof fetch);
+    const models = (f.mock.calls as unknown as [string, RequestInit][]).map(([, init]) => JSON.parse(String(init.body)).model);
+    expect(models).toEqual([DEFAULT_MODEL, DEFAULT_MODEL, DEFAULT_FALLBACK_MODEL]);
+  });
+
+  it("sends no temperature to Claude, and gives thinking models room for the answer", () => {
+    expect(samplingFor("anthropic/claude-haiku-4.5", { maxTokens: 800 })).toEqual({ max_tokens: 800 });
+    expect(samplingFor("anthropic/claude-sonnet-4.6", {})).toEqual({ max_tokens: 1200 });
+    expect(samplingFor("anthropic/claude-haiku-5.5", { maxTokens: 800 })).toEqual({ max_tokens: 4000 });
+    expect(samplingFor("google/gemini-2.5-flash", { maxTokens: 800, temperature: 0.4 })).toEqual({ temperature: 0.4, max_tokens: 800 });
   });
 
   it("reads JSON wrapped in code fences or text", () => {

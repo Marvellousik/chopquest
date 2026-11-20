@@ -26,7 +26,24 @@ export type AiJsonResult = { json: unknown; usage: AiUsage };
 
 // OPENROUTER_BASE_URL is only for tests (a local fake server); leave it unset in real use.
 const endpoint = () => `${process.env.OPENROUTER_BASE_URL || "https://openrouter.ai/api/v1"}/chat/completions`;
-const DEFAULT_MODEL = "google/gemini-2.5-flash";
+// Claude through OpenRouter (team credits). Both take images and JSON mode; override with env vars.
+export const DEFAULT_MODEL = "anthropic/claude-haiku-4.5";
+export const DEFAULT_FALLBACK_MODEL = "anthropic/claude-sonnet-4.6";
+
+const isClaude = (model: string) => model.startsWith("anthropic/");
+// Claude 5-generation models think by default, and thinking tokens count toward max_tokens.
+const thinksByDefault = (model: string) => /^anthropic\/claude-[a-z]+-5/.test(model);
+
+/** The model-specific part of the request body. */
+export function samplingFor(model: string, req: Pick<AiJsonRequest, "temperature" | "maxTokens">): Record<string, number> {
+  const maxTokens = req.maxTokens ?? 1200;
+  return {
+    // Claude: leave sampling at its default (newer models and API versions reject a temperature).
+    ...(isClaude(model) ? {} : { temperature: req.temperature ?? 0.2 }),
+    // Give thinking models room so their reasoning can't cut the JSON answer short.
+    max_tokens: thinksByDefault(model) ? Math.max(maxTokens, 4000) : maxTokens,
+  };
+}
 
 /** Pull the JSON object out of a model reply: plain JSON, fenced ```json, or text around one {...}. */
 export function parseModelJson(text: string): unknown {
@@ -76,8 +93,7 @@ async function callOnce(model: string, req: AiJsonRequest, key: string, fetchImp
           { role: "user", content },
         ],
         response_format: { type: "json_object" },
-        temperature: req.temperature ?? 0.2,
-        max_tokens: req.maxTokens ?? 1200,
+        ...samplingFor(model, req),
         usage: { include: true },
       }),
       signal: AbortSignal.timeout(45_000),
@@ -118,15 +134,17 @@ async function callOnce(model: string, req: AiJsonRequest, key: string, fetchImp
 }
 
 /**
- * Ask the model for JSON. Tries the main model, retries once on a server error, then tries
- * OPENROUTER_MODEL_FALLBACK if set. Rate limits, credit and key problems are not retried.
+ * Ask the model for JSON. Tries the main model (OPENROUTER_MODEL, default Claude Haiku 4.5), retries
+ * once on a server error, then tries the fallback (OPENROUTER_MODEL_FALLBACK, default Claude Sonnet
+ * 4.6; set it to "none" to turn the fallback off). Rate limits, credit and key problems are not retried.
  */
 export async function aiJson(req: AiJsonRequest, fetchImpl: typeof fetch = fetch): Promise<AiJsonResult> {
   const key = process.env.OPENROUTER_API_KEY;
   if (!key) throw new AiError("config", "OPENROUTER_API_KEY is not set");
-  const models = [process.env.OPENROUTER_MODEL || DEFAULT_MODEL, process.env.OPENROUTER_MODEL_FALLBACK].filter(
-    (m): m is string => Boolean(m),
-  );
+  const main = process.env.OPENROUTER_MODEL || DEFAULT_MODEL;
+  const fallbackEnv = process.env.OPENROUTER_MODEL_FALLBACK;
+  const fallback = fallbackEnv === "none" ? "" : fallbackEnv || DEFAULT_FALLBACK_MODEL;
+  const models = [...new Set([main, fallback].filter((m): m is string => Boolean(m)))];
 
   let last: AiError = new AiError("upstream", "No model tried");
   for (const model of models) {
