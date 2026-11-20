@@ -1,7 +1,9 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import Link from "next/link";
+import { Button } from "@/components/ui";
+import PetEgg from "@/components/PetEgg";
+import { ScanIcon } from "@/components/icons";
 import {
   clean,
   validate,
@@ -97,41 +99,44 @@ export default function Onboarding() {
   }
 
   if (status === "loading") {
-    return <div className="flex flex-1 items-center justify-center text-5xl" aria-label="Loading">🥚</div>;
+    return (
+      <div className="flex flex-1 items-center justify-center" role="status" aria-label="Loading">
+        <PetEgg size={96} />
+      </div>
+    );
   }
 
   if (status === "ready" && user) {
     return (
       <section className="flex flex-1 flex-col items-center justify-center gap-6 text-center">
-        <div className="text-8xl animate-bounce" aria-hidden>🥚</div>
-        <div>
-          <h1 className="text-3xl font-extrabold">Hi, {user.nickname}!</h1>
-          <p className="mt-1 text-lg text-stone-600">
-            Repping <span className="font-bold text-leaf-dark">{user.group_name}</span>
+        <div className="motion-safe:animate-rise">
+          <h1 className="text-3xl font-black">Hi, {user.nickname}</h1>
+          <p className="mt-2 inline-flex items-center gap-2 rounded-full bg-ink-soft px-4 py-1.5 text-sm font-bold text-on-ink">
+            Playing for <span className="text-gold">{user.group_name}</span>
           </p>
         </div>
-        <p className="text-stone-700">
+        <PetEgg size={150} />
+        <p className="max-w-xs text-pretty text-muted motion-safe:animate-rise [animation-delay:120ms]">
           Your pet is still an egg. Scan meals with new proteins to help it hatch.
         </p>
-        <Link
-          href="/scan"
-          className="w-full rounded-2xl bg-leaf px-6 py-4 text-xl font-extrabold text-white shadow-lg active:scale-95 transition"
-        >
-          📸 Scan a meal
-        </Link>
-        <button onClick={switchUser} className="py-3 text-sm text-stone-500 underline">
+        <Button href="/scan" size="lg" block icon={<ScanIcon />}>
+          Scan a meal
+        </Button>
+        <Button variant="ghost" onClick={switchUser} className="text-sm font-semibold">
           Not {user.nickname}? Switch player
-        </button>
+        </Button>
       </section>
     );
   }
 
   return (
     <section className="flex flex-1 flex-col justify-center gap-8">
-      <header className="text-center">
-        <div className="text-7xl" aria-hidden>🍛</div>
-        <h1 className="mt-2 text-4xl font-extrabold text-leaf-dark">ChopQuest</h1>
-        <p className="mt-2 text-lg font-semibold text-pepper">Keep your jollof, upgrade your protein.</p>
+      <header className="flex flex-col items-center text-center">
+        <PetEgg size={88} />
+        <h1 className="mt-3 text-4xl font-black tracking-tight text-leaf-deep motion-safe:animate-rise">ChopQuest</h1>
+        <p className="mt-1 text-lg font-bold text-pepper-ink motion-safe:animate-rise [animation-delay:100ms]">
+          Keep your jollof, upgrade your protein.
+        </p>
       </header>
 
       <form onSubmit={onSubmit} className="flex flex-col gap-5" noValidate>
@@ -143,20 +148,20 @@ export default function Onboarding() {
             maxLength={NICKNAME_MAX}
             autoComplete="nickname"
             placeholder="e.g. JollofKing"
-            className="rounded-2xl border-2 border-stone-300 bg-white px-4 py-4 text-lg outline-none focus:border-leaf"
+            className="min-h-14 rounded-2xl border-2 border-line bg-paper px-4 text-lg transition-colors focus:border-leaf-dark"
           />
         </label>
 
         <label className="flex flex-col gap-2">
           <span className="text-lg font-bold">Your group</span>
-          <span className="-mt-1 text-sm text-stone-500">Hall, department or squad — you&apos;ll compete on the leaderboard.</span>
+          <span className="-mt-1 text-sm text-muted">Hall, department or squad. You&apos;ll compete on the leaderboard.</span>
           <input
             value={group}
             onChange={(e) => setGroup(e.target.value)}
             maxLength={GROUP_MAX}
             list="group-options"
             placeholder="e.g. Hall B, Microbiology"
-            className="rounded-2xl border-2 border-stone-300 bg-white px-4 py-4 text-lg outline-none focus:border-leaf"
+            className="min-h-14 rounded-2xl border-2 border-line bg-paper px-4 text-lg transition-colors focus:border-leaf-dark"
           />
           <datalist id="group-options">
             {groups.map((g) => (
@@ -172,10 +177,10 @@ export default function Onboarding() {
                 type="button"
                 key={g}
                 onClick={() => setGroup(g)}
-                className={`rounded-full border-2 px-4 py-2 text-sm font-semibold ${
+                className={`min-h-12 rounded-full border-2 px-4 py-2 text-sm font-bold transition-[transform,background-color,color] duration-150 motion-safe:active:scale-95 ${
                   clean(group).toLowerCase() === g.toLowerCase()
-                    ? "border-leaf bg-leaf text-white"
-                    : "border-stone-300 bg-white"
+                    ? "border-leaf-dark bg-leaf-dark text-on-ink"
+                    : "border-line bg-paper text-ink"
                 }`}
               >
                 {g}
@@ -185,21 +190,17 @@ export default function Onboarding() {
         )}
 
         {error && (
-          <p role="alert" className="rounded-xl bg-red-100 px-4 py-3 font-semibold text-red-700">
+          <p role="alert" className="rounded-xl bg-danger-bg px-4 py-3 font-semibold text-danger motion-safe:animate-rise">
             {error}
           </p>
         )}
 
-        <button
-          type="submit"
-          disabled={submitting}
-          className="rounded-2xl bg-leaf px-6 py-4 text-xl font-extrabold text-white shadow-lg transition active:scale-95 disabled:opacity-60"
-        >
-          {submitting ? "Hatching…" : "Start my quest 🥚"}
-        </button>
+        <Button type="submit" size="lg" disabled={submitting}>
+          {submitting ? "Hatching…" : "Start my quest"}
+        </Button>
       </form>
 
-      <p className="text-center text-xs text-stone-500">No password needed. Nutrition figures are estimates, not medical advice.</p>
+      <p className="text-center text-xs text-muted">No password needed. Nutrition figures are estimates, not medical advice.</p>
     </section>
   );
 }

@@ -20,7 +20,7 @@ export async function POST(req: Request) {
     // Nicknames are unique case-insensitively so "Tunde" and "tunde" can't both exist.
     const taken = await sql`SELECT 1 FROM users WHERE lower(nickname) = lower(${nickname}) LIMIT 1`;
     if (taken.length) {
-      return Response.json({ error: "That nickname is taken — try another." }, { status: 409 });
+      return Response.json({ error: "That nickname is taken. Try another." }, { status: 409 });
     }
     // Snap to an existing group's spelling ("hall a" joins "Hall A") so the leaderboard isn't split.
     const existing = (await sql`
@@ -35,7 +35,7 @@ export async function POST(req: Request) {
     return Response.json({ user: rows[0] }, { status: 201 });
   } catch (e: unknown) {
     if ((e as { code?: string }).code === "23505") {
-      return Response.json({ error: "That nickname is taken — try another." }, { status: 409 });
+      return Response.json({ error: "That nickname is taken. Try another." }, { status: 409 });
     }
     console.error("create user failed", e);
     return Response.json({ error: "Couldn't create your profile. Try again." }, { status: 500 });

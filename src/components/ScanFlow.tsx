@@ -6,6 +6,9 @@ import { useRouter } from "next/navigation";
 import { loadUser, type User } from "@/lib/user";
 import { resizeToJpeg } from "@/lib/image";
 import type { DraftItem, Food, ScanResponse } from "@/lib/foods";
+import { Button } from "@/components/ui";
+import ScanReticle from "@/components/ScanReticle";
+import { ArrowLeftIcon, CameraIcon, CheckIcon, CloseIcon, ImageIcon, ScanIcon } from "@/components/icons";
 
 type Row = {
   key: string;
@@ -163,7 +166,7 @@ export default function ScanFlow() {
       }
       setStage({ name: "saved", scanId: data.scan_id, total: data.total_protein_g, dish: stage.dish });
     } catch {
-      setError("No connection. Your list is still here — try again.");
+      setError("No connection. Your list is still here, so try again.");
       setStage({ name: "confirm", preview: stage.preview, dish: stage.dish, cached: false });
     }
   }
@@ -195,48 +198,47 @@ export default function ScanFlow() {
   return (
     <section className="flex flex-1 flex-col gap-5">
       <header className="flex items-center justify-between">
-        <Link href="/" className="-ml-2 px-2 py-2 text-lg font-bold text-stone-600" aria-label="Back home">
-          ← Home
+        <Link href="/" className="-ml-2 flex min-h-12 items-center px-2 text-lg font-bold text-muted" aria-label="Back home">
+          <ArrowLeftIcon size={20} className="mr-1" /> Home
         </Link>
-        <span className="text-sm font-semibold text-stone-500">{user.nickname}</span>
+        <span className="text-sm font-semibold text-muted">{user.nickname}</span>
       </header>
 
       <input ref={cameraRef} type="file" accept="image/*" capture="environment" hidden onChange={onFile} data-testid="camera-input" />
       <input ref={galleryRef} type="file" accept="image/*" hidden onChange={onFile} data-testid="gallery-input" />
 
       {error && (
-        <p role="alert" className="rounded-xl bg-red-100 px-4 py-3 font-semibold text-red-700">
+        <p role="alert" className="rounded-xl bg-danger-bg px-4 py-3 font-semibold text-danger motion-safe:animate-rise">
           {error}
         </p>
       )}
 
       {stage.name === "pick" && (
         <div className="flex flex-1 flex-col justify-center gap-4 text-center">
-          <div className="text-7xl" aria-hidden>📸</div>
-          <h1 className="text-3xl font-extrabold">What are you eating?</h1>
-          <p className="text-stone-600">Snap your plate from above, in good light.</p>
-          <button
-            onClick={() => cameraRef.current?.click()}
-            className="mt-2 rounded-2xl bg-leaf px-6 py-5 text-xl font-extrabold text-white shadow-lg transition active:scale-95"
-          >
-            📷 Take a photo
-          </button>
-          <button
-            onClick={() => galleryRef.current?.click()}
-            className="rounded-2xl border-2 border-leaf bg-white px-6 py-4 text-lg font-bold text-leaf-dark transition active:scale-95"
-          >
-            🖼️ Choose from gallery
-          </button>
-          <p className="text-xs text-stone-500">Your photo is only used to spot the food. We don&apos;t keep it.</p>
+          <ScanReticle />
+          <h1 className="text-3xl font-black motion-safe:animate-rise">What are you eating?</h1>
+          <p className="text-muted motion-safe:animate-rise [animation-delay:80ms]">Snap your plate from above, in good light.</p>
+          <Button size="lg" onClick={() => cameraRef.current?.click()} className="mt-2" icon={<CameraIcon />}>
+            Take a photo
+          </Button>
+          <Button variant="secondary" size="lg" onClick={() => galleryRef.current?.click()} icon={<ImageIcon />}>
+            Choose from gallery
+          </Button>
+          <p className="text-xs text-muted">Your photo is only used to spot the food. We don&apos;t keep it.</p>
         </div>
       )}
 
       {stage.name === "analyzing" && (
         <div className="flex flex-1 flex-col items-center justify-center gap-5 text-center">
-          {/* eslint-disable-next-line @next/next/no-img-element -- local data URL preview */}
-          <img src={stage.preview} alt="Your meal" className="max-h-72 w-full rounded-3xl object-cover shadow" />
-          <div className="text-5xl animate-spin" aria-hidden>🍽️</div>
-          <p className="text-xl font-bold">Looking at your plate…</p>
+          <ScanReticle preview={stage.preview} />
+          <p className="flex items-center gap-2 text-xl font-black" role="status">
+            Reading your plate
+            <span className="flex gap-1" aria-hidden>
+              <span className="size-2 rounded-full bg-leaf-dark motion-safe:animate-blink" />
+              <span className="size-2 rounded-full bg-leaf-dark motion-safe:animate-blink [animation-delay:200ms]" />
+              <span className="size-2 rounded-full bg-leaf-dark motion-safe:animate-blink [animation-delay:400ms]" />
+            </span>
+          </p>
         </div>
       )}
 
@@ -246,7 +248,7 @@ export default function ScanFlow() {
           <img src={stage.preview} alt="Your meal" className="max-h-48 w-full rounded-3xl object-cover shadow" />
           <div>
             <h1 className="text-2xl font-extrabold">{stage.dish}</h1>
-            <p className="text-stone-600">Is this right? Tap a food to fix it.</p>
+            <p className="text-muted">Is this right? Tap a food to fix it.</p>
           </div>
 
           <ul className="flex flex-col gap-3">
@@ -256,35 +258,35 @@ export default function ScanFlow() {
               return (
                 <li
                   key={r.key}
-                  className={`rounded-2xl border-2 bg-white p-3 ${
-                    r.food_id === null || unsure ? "border-palm" : "border-stone-200"
+                  className={`rounded-2xl border-2 bg-paper p-3 motion-safe:animate-rise ${
+                    r.food_id === null || unsure ? "border-palm" : "border-line/40"
                   }`}
                 >
                   <div className="flex items-start justify-between gap-2">
                     <div className="min-w-0">
                       <p className="truncate font-bold">{r.raw_label ?? foodsById.get(r.food_id ?? -1)?.food ?? "Added food"}</p>
-                      <p className="text-sm text-stone-500">
+                      <p className="text-sm text-muted">
                         {r.portion} · ~{r.estimated_grams} g
-                        {unsure && <span className="ml-2 font-semibold text-amber-700">not sure — check</span>}
-                        {changed && !r.added && <span className="ml-2 font-semibold text-leaf-dark">✓ fixed</span>}
-                        {r.added && <span className="ml-2 font-semibold text-leaf-dark">✓ added</span>}
+                        {unsure && <span className="ml-2 font-semibold text-warn-ink">not sure, check it</span>}
+                        {changed && !r.added && <span className="ml-2 inline-flex items-center gap-0.5 font-semibold text-leaf-dark"><CheckIcon size={14} /> fixed</span>}
+                        {r.added && <span className="ml-2 inline-flex items-center gap-0.5 font-semibold text-leaf-dark"><CheckIcon size={14} /> added</span>}
                       </p>
                     </div>
                     <button
                       onClick={() => removeRow(r.key)}
                       aria-label={`Remove ${r.raw_label ?? "food"}`}
-                      className="-mr-1 -mt-1 h-11 w-11 shrink-0 rounded-full text-2xl text-stone-400 active:bg-stone-100"
+                      className="-mr-1 -mt-1 grid size-12 shrink-0 place-items-center rounded-full text-muted transition-transform active:bg-mist motion-safe:active:scale-90"
                     >
-                      ×
+                      <CloseIcon size={20} />
                     </button>
                   </div>
                   <select
                     value={r.food_id ?? ""}
                     onChange={(e) => setFood(r.key, e.target.value)}
                     aria-label={`Food for ${r.raw_label ?? "added item"}`}
-                    className="mt-2 w-full rounded-xl border-2 border-stone-300 bg-stone-50 px-3 py-3 text-base font-semibold"
+                    className="mt-2 min-h-12 w-full rounded-xl border-2 border-line bg-mist px-3 text-base font-semibold"
                   >
-                    <option value="">❓ Not sure — pick a food</option>
+                    <option value="">Not sure? Pick a food</option>
                     {foodOptions}
                   </select>
                 </li>
@@ -296,51 +298,54 @@ export default function ScanFlow() {
             value=""
             onChange={(e) => addRow(e.target.value)}
             aria-label="Add a food we missed"
-            className="w-full rounded-2xl border-2 border-dashed border-stone-300 bg-transparent px-4 py-4 text-base font-bold text-stone-600"
+            className="min-h-14 w-full rounded-2xl border-2 border-dashed border-line bg-transparent px-4 text-base font-bold text-muted"
           >
-            <option value="">＋ Add a food we missed</option>
+            <option value="">Add a food we missed</option>
             {foodOptions}
           </select>
 
-          <p className="text-xs text-stone-500">Portions and protein are estimates, not medical advice.</p>
+          <p className="text-xs text-muted">Portions and protein are estimates, not medical advice.</p>
 
-          <div className="sticky bottom-0 -mx-4 flex gap-3 bg-cream/95 px-4 pb-4 pt-2 backdrop-blur">
-            <button
-              onClick={reset}
-              disabled={stage.name === "saving"}
-              className="rounded-2xl border-2 border-stone-300 bg-white px-5 py-4 font-bold text-stone-600 disabled:opacity-60"
-            >
+          {/* Sticks just above the bottom nav. */}
+          <div className="sticky bottom-[calc(var(--nav-h)+env(safe-area-inset-bottom))] -mx-4 flex gap-3 bg-cream/95 px-4 pb-3 pt-2 backdrop-blur">
+            <Button variant="secondary" size="lg" onClick={reset} disabled={stage.name === "saving"} className="text-lg">
               Retake
-            </button>
-            <button
-              onClick={save}
-              disabled={stage.name === "saving" || rows.length === 0}
-              className="flex-1 rounded-2xl bg-leaf px-6 py-4 text-lg font-extrabold text-white shadow-lg transition active:scale-95 disabled:opacity-60"
-            >
-              {stage.name === "saving" ? "Saving…" : "Looks good ✓"}
-            </button>
+            </Button>
+            <Button size="lg" onClick={save} disabled={stage.name === "saving" || rows.length === 0} className="flex-1 text-lg">
+              {stage.name === "saving" ? "Saving…" : "Looks good"}
+            </Button>
           </div>
         </div>
       )}
 
       {stage.name === "saved" && (
         <div className="flex flex-1 flex-col items-center justify-center gap-4 text-center">
-          <div className="text-7xl" aria-hidden>✅</div>
-          <h1 className="text-2xl font-extrabold">{stage.dish} saved!</h1>
-          <p className="text-lg">
-            About <span className="font-extrabold text-leaf-dark">{stage.total} g</span> of protein
-            <span className="block text-sm text-stone-500">(estimate)</span>
+          <svg viewBox="0 0 100 100" className="size-28 motion-safe:animate-pop" aria-hidden>
+            <circle cx="50" cy="50" r="44" style={{ fill: "var(--color-leaf-dark)" }} />
+            <circle cx="50" cy="50" r="44" fill="none" strokeWidth="6" style={{ stroke: "var(--color-leaf-deep)" }} />
+            <path
+              d="M30 51 44 65 71 37"
+              fill="none"
+              strokeWidth="9"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeDasharray="60"
+              className="motion-safe:animate-draw"
+              style={{ stroke: "var(--color-on-ink)" }}
+            />
+          </svg>
+          <h1 className="text-2xl font-black motion-safe:animate-rise">{stage.dish} saved</h1>
+          <p className="text-lg motion-safe:animate-rise [animation-delay:100ms]">
+            About <span className="text-3xl font-black tabular-nums text-leaf-dark">{stage.total} g</span> of protein
+            <span className="block text-sm text-muted">(estimate)</span>
           </p>
-          <p className="text-stone-600">Your Protein Map is coming in the next update.</p>
-          <button
-            onClick={reset}
-            className="w-full rounded-2xl bg-leaf px-6 py-4 text-xl font-extrabold text-white shadow-lg active:scale-95"
-          >
-            📸 Scan another meal
-          </button>
-          <Link href="/" className="py-3 font-bold text-stone-600 underline">
+          <p className="text-muted">Your Protein Map is coming in the next update.</p>
+          <Button size="lg" block onClick={reset} icon={<ScanIcon />}>
+            Scan another meal
+          </Button>
+          <Button href="/" variant="ghost">
             Back home
-          </Link>
+          </Button>
         </div>
       )}
     </section>
