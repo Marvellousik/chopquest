@@ -88,8 +88,10 @@ Add-on map `src/lib/addons.ts` (content from Jason): dish → foods that fit it,
 `GET /api/board`: rank cafeterias with a **Bayesian average** so one 5-star review can't beat twenty 4-star ones:
 
 ```
-score = (C × m + sum_of_stars) / (C + review_count)      m = average stars across all dishes, C = 5
+score = (C × m + sum_of_stars) / (C + review_count)      m = 3 (neutral), C = 5
 ```
+
+(Every cafeteria starts with 5 imaginary 3-star reviews. Pulling toward the overall average instead still lets one 5-star review beat twenty 4-star ones: a test caught it.)
 
 Then add up to +0.3 for having more plant dishes (0.1 each, max 3). Cafeterias with no reviews go at the bottom, in "Getting started". Same formula for "Top rated dishes".
 
