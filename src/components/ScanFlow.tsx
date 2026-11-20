@@ -12,7 +12,7 @@ import { ArrowLeftIcon, CameraIcon, CheckIcon, CloseIcon, ImageIcon, ScanIcon } 
 
 type Row = {
   key: string;
-  raw_label: string | null; // what Gemini said (null for foods the user added)
+  raw_label: string | null; // what the AI said (null for foods the user added)
   portion: string;
   estimated_grams: number;
   confidence: number | null;
@@ -64,7 +64,7 @@ export default function ScanFlow() {
   useEffect(() => {
     const u = loadUser();
     if (!u) {
-      router.replace("/");
+      router.replace("/home");
       return;
     }
     setUser(u); // eslint-disable-line react-hooks/set-state-in-effect -- localStorage is browser-only
@@ -198,7 +198,7 @@ export default function ScanFlow() {
   return (
     <section className="flex flex-1 flex-col gap-5">
       <header className="flex items-center justify-between">
-        <Link href="/" className="-ml-2 flex min-h-12 items-center px-2 text-lg font-bold text-muted" aria-label="Back home">
+        <Link href="/home" className="-ml-2 flex min-h-12 items-center px-2 text-lg font-bold text-muted" aria-label="Back home">
           <ArrowLeftIcon size={20} className="mr-1" /> Home
         </Link>
         <span className="text-sm font-semibold text-muted">{user.nickname}</span>
@@ -343,7 +343,7 @@ export default function ScanFlow() {
           <Button size="lg" block onClick={reset} icon={<ScanIcon />}>
             Scan another meal
           </Button>
-          <Button href="/" variant="ghost">
+          <Button href="/home" variant="ghost">
             Back home
           </Button>
         </div>

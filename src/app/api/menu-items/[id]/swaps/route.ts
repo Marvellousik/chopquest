@@ -1,5 +1,6 @@
 import { getMenuItem } from "@/lib/server/cafeterias";
-import { listFoods } from "@/lib/foods-db";
+import { requireKitchen } from "@/lib/server/kitchen-auth";
+import { foodsForCafeteria, getProfile } from "@/lib/server/kitchen";
 import { findSwaps } from "@/lib/swap";
 import { DEFAULT_LIMITS, type SwapLimits } from "@/lib/types";
 
@@ -28,9 +29,14 @@ export async function POST(req: Request, ctx: RouteContext<"/api/menu-items/[id]
   try {
     const item = await getMenuItem(id);
     if (!item) return Response.json({ error: "Dish not found." }, { status: 404 });
+    const kitchen = await requireKitchen(item.cafeteriaId);
+    if (kitchen instanceof Response) return kitchen;
     if (!item.breakdown?.length)
       return Response.json({ error: "Break the dish down first.", code: "no_breakdown" }, { status: 409 });
-    const options = findSwaps(item.breakdown, item.name, limits, await listFoods());
+    // Uses this kitchen's own prices and leaves out foods it can't get; limits come from the request.
+    const profile = await getProfile(item.cafeteriaId);
+    const foods = await foodsForCafeteria(item.cafeteriaId, profile.excludedFoodIds);
+    const options = findSwaps(item.breakdown, item.name, limits, foods);
     return Response.json({ options, limits });
   } catch (e) {
     console.error("swaps failed", e);
