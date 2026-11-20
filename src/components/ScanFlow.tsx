@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { loadUser, type User } from "@/lib/user";
@@ -8,7 +8,8 @@ import { resizeToJpeg } from "@/lib/image";
 import type { DraftItem, Food, ScanResponse } from "@/lib/foods";
 import { Button } from "@/components/ui";
 import ScanReticle from "@/components/ScanReticle";
-import { ArrowLeftIcon, CameraIcon, CheckIcon, CloseIcon, ImageIcon, ScanIcon } from "@/components/icons";
+import LiveCamera, { liveCameraSupported } from "@/components/LiveCamera";
+import { ArrowLeftIcon, CameraIcon, CheckIcon, CloseIcon, ScanIcon } from "@/components/icons";
 
 type Row = {
   key: string;
@@ -23,6 +24,7 @@ type Row = {
 
 type Stage =
   | { name: "pick" }
+  | { name: "camera" }
   | { name: "analyzing"; preview: string }
   | { name: "confirm"; preview: string; dish: string; cached: boolean }
   | { name: "saving"; preview: string; dish: string }
@@ -59,7 +61,8 @@ export default function ScanFlow() {
   const [foods, setFoods] = useState<Food[]>([]);
   const [error, setError] = useState<string | null>(null);
   const cameraRef = useRef<HTMLInputElement>(null);
-  const galleryRef = useRef<HTMLInputElement>(null);
+  // Live in-app camera first; the phone's own camera app only if the live one can't open.
+  const [nativeOnly, setNativeOnly] = useState(false);
 
   useEffect(() => {
     const u = loadUser();
@@ -76,10 +79,25 @@ export default function ScanFlow() {
 
   const foodsById = new Map(foods.map((f) => [f.id, f]));
 
+  function openCamera() {
+    setError(null);
+    if (!nativeOnly && liveCameraSupported()) setStage({ name: "camera" });
+    else cameraRef.current?.click();
+  }
+
+  const cameraUnavailable = useCallback((message: string) => {
+    setNativeOnly(true);
+    setError(message);
+    setStage({ name: "pick" });
+  }, []);
+
   async function onFile(e: React.ChangeEvent<HTMLInputElement>) {
     const file = e.target.files?.[0];
-    e.target.value = ""; // allow picking the same photo again
-    if (!file) return;
+    e.target.value = ""; // allow taking the same photo again
+    if (file) await analyze(file);
+  }
+
+  async function analyze(file: Blob) {
     setError(null);
     let dataUrl: string;
     try {
@@ -206,7 +224,6 @@ export default function ScanFlow() {
       </header>
 
       <input ref={cameraRef} type="file" accept="image/*" capture="environment" hidden onChange={onFile} data-testid="camera-input" />
-      <input ref={galleryRef} type="file" accept="image/*" hidden onChange={onFile} data-testid="gallery-input" />
 
       {error && (
         <p role="alert" className="rounded-xl bg-danger-bg px-4 py-3 font-semibold text-danger motion-safe:animate-rise">
@@ -218,15 +235,16 @@ export default function ScanFlow() {
         <div className="flex flex-1 flex-col justify-center gap-4 text-center">
           <ScanReticle />
           <h1 className="text-3xl font-black motion-safe:animate-rise">What are you eating?</h1>
-          <p className="text-muted motion-safe:animate-rise [animation-delay:80ms]">Snap your plate from above, in good light.</p>
-          <Button size="lg" onClick={() => cameraRef.current?.click()} className="mt-2" icon={<CameraIcon />}>
-            Take a photo
+          <p className="text-muted motion-safe:animate-rise [animation-delay:80ms]">Point your camera at your plate, from above, in good light.</p>
+          <Button size="lg" onClick={openCamera} className="mt-2" icon={<CameraIcon />}>
+            {nativeOnly ? "Use phone camera" : "Open camera"}
           </Button>
-          <Button variant="secondary" size="lg" onClick={() => galleryRef.current?.click()} icon={<ImageIcon />}>
-            Choose from gallery
-          </Button>
-          <p className="text-xs text-muted">Your photo is only used to spot the food. We don&apos;t keep it.</p>
+          <p className="text-xs text-muted">Live camera only, so every scan is a real meal. Your photo is only used to spot the food. We don&apos;t keep it.</p>
         </div>
+      )}
+
+      {stage.name === "camera" && (
+        <LiveCamera onCapture={analyze} onCancel={() => setStage({ name: "pick" })} onUnavailable={cameraUnavailable} />
       )}
 
       {stage.name === "analyzing" && (
@@ -309,7 +327,16 @@ export default function ScanFlow() {
 
           {/* Sticks just above the bottom nav. */}
           <div className="sticky bottom-[calc(var(--nav-h)+env(safe-area-inset-bottom))] -mx-4 flex gap-3 bg-cream/95 px-4 pb-3 pt-2 backdrop-blur">
-            <Button variant="secondary" size="lg" onClick={reset} disabled={stage.name === "saving"} className="text-lg">
+            <Button
+              variant="secondary"
+              size="lg"
+              onClick={() => {
+                reset();
+                openCamera();
+              }}
+              disabled={stage.name === "saving"}
+              className="text-lg"
+            >
               Retake
             </Button>
             <Button size="lg" onClick={save} disabled={stage.name === "saving" || rows.length === 0} className="flex-1 text-lg">
