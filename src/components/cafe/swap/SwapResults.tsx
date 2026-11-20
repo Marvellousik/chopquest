@@ -1,11 +1,13 @@
 "use client";
 // 9. Top 3 swaps. Option 1 is large; 2 and 3 sit below. Numbers count up; the score ring fills.
 
+import { useState } from "react";
 import type { SwapOption } from "@/lib/types";
 import { naira } from "@/lib/cafe-client";
 import { CheckIcon, SwapIcon } from "@/components/icons";
 import { PriceComing } from "../bits";
 import { CountUp, ScoreRing } from "./anim";
+import WhyUpgrade from "./WhyUpgrade";
 
 const outIn = (o: SwapOption) => ({
   out: o.replaces.map((p) => `${p.label} ${p.grams} g`).join(" + "),
@@ -32,7 +34,8 @@ function Compare({ label, before, after, fmt, better, delay }: { label: string; 
   );
 }
 
-function Option({ o, priceNgn, big, onCard, busy }: { o: SwapOption; priceNgn: number; big: boolean; onCard: () => void; busy: boolean }) {
+function Option({ o, priceNgn, big, onCard, busy, dishName, itemId }: { o: SwapOption; priceNgn: number; big: boolean; onCard: () => void; busy: boolean; dishName: string; itemId?: number }) {
+  const [why, setWhy] = useState(big);
   const t = outIn(o);
   const margin = (c: number | null) => (c == null ? null : priceNgn - c);
   const d = big ? 200 : 400;
@@ -72,26 +75,13 @@ function Option({ o, priceNgn, big, onCard, busy }: { o: SwapOption; priceNgn: n
         <Compare label="Margin / plate (est.)" before={margin(o.before.costNgn)} after={margin(o.after.costNgn)} fmt={naira} better="up" delay={d + 200} />
       </div>
 
-      {(big || o.reasons.length > 0) && (
-        <details open={big} className="group rounded-2xl bg-[#f3fbe9] p-3">
-          <summary className="flex min-h-10 cursor-pointer list-none items-center justify-between font-extrabold text-green-950">
-            Why this swap
-            <span className="text-sm text-green-700 group-open:rotate-180">▾</span>
-          </summary>
-          <ul className="mt-1 flex flex-col gap-1">
-            {o.reasons.map((r, i) => (
-              <li key={i} className="flex items-start gap-2 text-sm">
-                <span className={`w-9 shrink-0 text-right font-black tabular-nums ${r.points >= 0 ? "text-green-700" : "text-orange-700"}`}>
-                  {r.points >= 0 ? "+" : ""}
-                  {r.points}
-                </span>
-                <span className="text-stone-700">{r.note}</span>
-              </li>
-            ))}
-          </ul>
-        </details>
+      {why ? (
+        <WhyUpgrade o={o} priceNgn={priceNgn} dishName={dishName} itemId={itemId} />
+      ) : (
+        <button type="button" onClick={() => setWhy(true)} className="min-h-12 rounded-2xl bg-[#f3fbe9] px-3 text-left font-extrabold text-green-950 hover:bg-green-100">
+          Why put this on your menu?
+        </button>
       )}
-
       <button
         type="button"
         onClick={onCard}
@@ -104,16 +94,16 @@ function Option({ o, priceNgn, big, onCard, busy }: { o: SwapOption; priceNgn: n
   );
 }
 
-export default function SwapResults({ options, priceNgn, onCard, busyRank }: { options: SwapOption[]; priceNgn: number; onCard: (o: SwapOption) => void; busyRank: number | null }) {
+export default function SwapResults({ options, priceNgn, onCard, busyRank, dishName, itemId }: { options: SwapOption[]; priceNgn: number; onCard: (o: SwapOption) => void; busyRank: number | null; dishName?: string; itemId?: number }) {
   const [first, ...rest] = options;
   return (
     <section aria-label="Swap options" className="flex flex-col gap-3">
       <h2 className="text-2xl font-black text-green-950">Top {options.length} swaps</h2>
-      <Option o={first} priceNgn={priceNgn} big onCard={() => onCard(first)} busy={busyRank === first.rank} />
+      <Option o={first} priceNgn={priceNgn} big onCard={() => onCard(first)} busy={busyRank === first.rank} dishName={dishName ?? "this dish"} itemId={itemId} />
       {rest.length > 0 && (
         <div className="grid gap-3 md:grid-cols-2">
           {rest.map((o) => (
-            <Option key={o.rank} o={o} priceNgn={priceNgn} big={false} onCard={() => onCard(o)} busy={busyRank === o.rank} />
+            <Option key={o.rank} o={o} priceNgn={priceNgn} big={false} onCard={() => onCard(o)} busy={busyRank === o.rank} dishName={dishName ?? "this dish"} itemId={itemId} />
           ))}
         </div>
       )}

@@ -172,7 +172,7 @@ export default function DishWorkbench({ slug, itemId }: { slug: string; itemId: 
           <ErrorBox message="No swap fits these limits. Try a higher cost limit, keeping less protein, or turning off 'Keep it the same dish'." />
         )}
         {options && options.length > 0 && (
-          <SwapResults options={options} priceNgn={item.priceNgn} onCard={makeCard} busyRank={cardBusy} />
+          <SwapResults options={options} priceNgn={item.priceNgn} onCard={makeCard} busyRank={cardBusy} dishName={item.name} itemId={itemId} />
         )}
         {cardError && <p role="alert" className="mt-2 font-bold text-red-800">{cardError}</p>}
       </div>
