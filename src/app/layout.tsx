@@ -4,6 +4,7 @@ import { Nunito } from "next/font/google";
 import "./globals.css";
 import VineNav from "@/components/nav/VineNav";
 import PlantBackdrop from "@/components/nav/PlantBackdrop";
+import CompanionDock from "@/components/companion/CompanionDock";
 import DemoNotice from "@/components/DemoNotice";
 
 const nunito = Nunito({ variable: "--font-nunito", subsets: ["latin"] });
@@ -35,6 +36,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
         <Suspense fallback={null}>
           <VineNav />
         </Suspense>
+        <CompanionDock />
       </body>
     </html>
   );
