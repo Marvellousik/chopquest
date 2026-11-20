@@ -6,29 +6,49 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
-import { ChefIcon, CloseIcon, DexIcon, HomeIcon, LeafIcon, PodiumIcon, ScanIcon, StoreIcon, TrophyIcon, type IconComponent } from "@/components/icons";
+import { ChefIcon, CloseIcon, DexIcon, HomeIcon, LeafIcon, PodiumIcon, ScanIcon, StoreIcon, SwapIcon, TrophyIcon, type IconComponent } from "@/components/icons";
 
 type Item = { href: string; label: string; hint: string; Icon: IconComponent };
-const BEDS: { name: string; items: Item[] }[] = [
+type Bed = { name: string; items: Item[] };
+
+// Two separate apps under one roof: students (Chop Squad) and restaurant managers (Kitchen).
+// "/" is the front door (SidePicker) and shows no menu at all.
+const SWITCH: Item = { href: "/", label: "Switch", hint: "Chop Squad or Kitchen", Icon: SwapIcon };
+
+const SQUAD_BEDS: Bed[] = [
   {
-    name: "Campus food",
+    name: "Where to eat",
     items: [
       { href: "/board", label: "Board", hint: "Top plant dishes", Icon: PodiumIcon },
       { href: "/cafeterias", label: "Cafeterias", hint: "Where to eat", Icon: StoreIcon },
-      { href: "/kitchen", label: "Kitchen", hint: "For managers", Icon: ChefIcon },
+      SWITCH,
     ],
   },
   {
     name: "My quest",
     items: [
-      { href: "/", label: "Home", hint: "You and your pet", Icon: HomeIcon },
+      { href: "/home", label: "Home", hint: "You and your pet", Icon: HomeIcon },
       { href: "/scan", label: "Scan", hint: "Snap a meal", Icon: ScanIcon },
       { href: "/dex", label: "Dex", hint: "Proteins found", Icon: DexIcon },
       { href: "/leaderboard", label: "Ranks", hint: "Group league", Icon: TrophyIcon },
     ],
   },
 ];
-const ALL = BEDS.flatMap((b) => b.items);
+
+const KITCHEN_BEDS: Bed[] = [
+  {
+    name: "Kitchen",
+    items: [
+      { href: "/kitchen", label: "Kitchen", hint: "Your cafeteria", Icon: ChefIcon },
+      { href: "/demo", label: "Demo", hint: "Try it offline", Icon: LeafIcon },
+      SWITCH,
+    ],
+  },
+];
+
+const KITCHEN_PATHS = ["/kitchen", "/demo"];
+export const sideOf = (path: string): "front" | "kitchen" | "squad" =>
+  path === "/" ? "front" : KITCHEN_PATHS.some((p) => path === p || path.startsWith(`${p}/`)) ? "kitchen" : "squad";
 
 const isActive = (href: string, path: string) => (href === "/" ? path === "/" : path === href || path.startsWith(`${href}/`));
 
@@ -44,19 +64,22 @@ const css = `
 
 export default function VineNav() {
   const path = usePathname();
-  const current = ALL.find((i) => isActive(i.href, path)) ?? null;
+  const side = sideOf(path);
+  if (side === "front") return null; // the front door has no menu
+  const beds = side === "kitchen" ? KITCHEN_BEDS : SQUAD_BEDS;
+  const current = beds.flatMap((b) => b.items).find((i) => i.href !== "/" && isActive(i.href, path)) ?? null;
   return (
     <>
       <style>{css}</style>
-      <SeedNav current={current} path={path} />
-      <VineRail path={path} />
+      <SeedNav current={current} path={path} beds={beds} />
+      <VineRail path={path} beds={beds} side={side} />
     </>
   );
 }
 
 /* ---------------- Phone: seed button + garden sheet ---------------- */
 
-function SeedNav({ current, path }: { current: Item | null; path: string }) {
+function SeedNav({ current, path, beds }: { current: Item | null; path: string; beds: Bed[] }) {
   const [open, setOpen] = useState(false);
   const [lastPath, setLastPath] = useState(path);
   const seedRef = useRef<HTMLButtonElement>(null);
@@ -99,7 +122,7 @@ function SeedNav({ current, path }: { current: Item | null; path: string }) {
           <svg aria-hidden className="pointer-events-none absolute -right-6 -top-8 w-40 text-green-200" viewBox="0 0 100 100" fill="currentColor">
             <path d="M10 90C10 40 45 10 95 5 90 55 60 90 10 90z" />
           </svg>
-          {BEDS.map((bed) => (
+          {beds.map((bed) => (
             <section key={bed.name} className="relative mb-3 last:mb-0">
               <h2 className="mb-2 px-1 text-xs font-black uppercase tracking-wider text-green-800/70">{bed.name}</h2>
               <ul className={`grid gap-2 ${bed.items.length === 3 ? "grid-cols-3" : "grid-cols-4"}`}>
@@ -157,18 +180,21 @@ function SeedNav({ current, path }: { current: Item | null; path: string }) {
 
 /* ---------------- Laptop: the vine rail ---------------- */
 
-function VineRail({ path }: { path: string }) {
+function VineRail({ path, beds, side }: { path: string; beds: Bed[]; side: "kitchen" | "squad" }) {
   let i = 0;
   return (
     <nav aria-label="Main" className="fixed inset-y-0 left-0 z-40 hidden w-60 flex-col bg-[#eef8e3]/90 px-4 py-6 backdrop-blur md:flex">
-      <Link href="/board" className="mb-6 flex items-center gap-2 px-2">
+      <Link href={side === "kitchen" ? "/kitchen" : "/home"} className="mb-6 flex items-center gap-2 px-2">
         <svg aria-hidden viewBox="0 0 32 32" className="size-9">
           <ellipse cx="16" cy="19" rx="11" ry="10" fill="#fdf3dc" stroke="#3b2a1a" strokeWidth="2" />
           <path d="M16 9c0-4 2-6 5-7-1 4-2 6-5 7zM16 9c-1-3-3-4-6-4 1 3 3 4 6 4z" fill="#22c55e" />
           <circle cx="12.5" cy="18" r="1.4" fill="#3b2a1a" /><circle cx="19.5" cy="18" r="1.4" fill="#3b2a1a" />
           <path d="M13.5 22q2.5 2 5 0" stroke="#3b2a1a" strokeWidth="1.6" fill="none" strokeLinecap="round" />
         </svg>
-        <span className="text-xl font-black text-green-900">ChopQuest</span>
+        <span className="leading-tight">
+          <span className="block text-xl font-black text-green-900">ChopQuest</span>
+          <span className="block text-xs font-bold text-green-800/70">{side === "kitchen" ? "Kitchen" : "Chop Squad"}</span>
+        </span>
       </Link>
 
       {/* the vine */}
@@ -177,7 +203,7 @@ function VineRail({ path }: { path: string }) {
       </svg>
 
       <div className="relative flex flex-1 flex-col gap-5 overflow-y-auto">
-        {BEDS.map((bed) => (
+        {beds.map((bed) => (
           <section key={bed.name}>
             <h2 className="mb-2 pl-14 text-xs font-black uppercase tracking-wider text-green-800/60">{bed.name}</h2>
             <ul className="flex flex-col gap-1.5">
