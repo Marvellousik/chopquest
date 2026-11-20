@@ -1,16 +1,148 @@
+/* Hallmark · checked: 2026-11-20 · genre: playful (inferred) · shape: app screen
+ * floor: 0 FAIL · fixed: 30a, 34, 27, 40, 39a, 46a, 19, 74, 12 · structural: none printed
+ * built: the project · redesign: polish · v2.0.0 */
+/* Hallmark · waive 39b · inputs 56px, buttons 60px · the ChopQuest brief asks for big 48px+ tap targets for students on phones */
+/* Hallmark · waive 12 · one spring on the nav selector · the owner asked for game-style motion and the HUD tab slide is its one spring */
+/* Hallmark · dismissed 29 · the scanner laser and HUD selector glow are the game material, small and offset, not a wash behind text */
 @import "tailwindcss";
 
+/*
+ * ChopQuest design tokens. Use these names everywhere (bg-leaf, text-muted, border-line ...),
+ * never Tailwind's stock greys or raw hex. No emoji anywhere: icons are SVG in
+ * src/components/icons.tsx and the game feel comes from motion (keyframes below).
+ *   leaf   = main action, plant protein, success        ink    = text, HUD surfaces
+ *   pepper = accent, Animal protein (pepper-ink for text) gold   = rewards, medals, XP
+ *   palm   = highlights, "check this"                     sky    = info, Staple foods
+ */
 @theme inline {
   --font-sans: var(--font-nunito);
+
   --color-leaf: #16a34a;
   --color-leaf-dark: #15803d;
+  --color-leaf-deep: #0f5f2d;
   --color-pepper: #ea580c;
+  --color-pepper-ink: #c2410c; /* 4.9:1 on cream: use for orange text */
   --color-palm: #facc15;
+  --color-gold: #f2b01e;
+  --color-gold-deep: #b7791f;
+  --color-sky: #0284c7;
+
   --color-cream: #fffbeb;
+  --color-paper: #fffdf6; /* raised surface on cream */
+  --color-mist: #f4eedc; /* quiet fill */
+  --color-line: #8c857b; /* field and divider edges, 3.4:1 on paper */
+  --color-muted: #5c564e; /* secondary text, 6.8:1 on cream */
   --color-ink: #1c1917;
+  --color-ink-soft: #2b2622; /* HUD surfaces */
+  --color-ink-line: #4a433d;
+  --color-on-ink: #fbf6ea;
+  --color-on-ink-muted: #b9b0a2;
+
+  --color-danger: #b42318;
+  --color-danger-bg: #fde8e4;
+  --color-warn-ink: #92400e;
+
+  --color-shell-hi: #fff7df; /* pet egg shading */
+  --color-shell: #f6d79a;
+  --color-shell-lo: #d99a4e;
+  --color-shell-speck: #e3a65a;
+
+  --color-bronze: #c27a43;
+  --color-silver: #a9b1bb;
+
+  --animate-float: float 3.2s ease-in-out infinite;
+  --animate-wobble: wobble 4.8s ease-in-out infinite;
+  --animate-shadow: shadow-breathe 3.2s ease-in-out infinite;
+  --animate-pop: pop-in 480ms cubic-bezier(0.22, 1.2, 0.36, 1) both;
+  --animate-rise: rise-in 520ms cubic-bezier(0.16, 1, 0.3, 1) both;
+  --animate-sweep: sweep 1.8s cubic-bezier(0.65, 0, 0.35, 1) infinite;
+  --animate-shine: shine 3.6s ease-in-out infinite;
+  --animate-glint: glint 2.4s ease-in-out infinite;
+  --animate-blink: blink 1.2s ease-in-out infinite;
+  --animate-draw: draw 700ms cubic-bezier(0.65, 0, 0.35, 1) 150ms both;
+  --animate-orbit: orbit 9s linear infinite;
+}
+
+:root {
+  --nav-h: 4.75rem; /* floating HUD nav incl. its bottom gap. Sticky footers sit above it. */
+}
+
+html,
+body {
+  overflow-x: clip;
 }
 
 body {
   background: var(--color-cream);
   color: var(--color-ink);
+}
+
+::selection {
+  background: color-mix(in oklab, var(--color-leaf) 28%, transparent);
+}
+
+:focus-visible {
+  outline: 3px solid var(--color-leaf-dark);
+  outline-offset: 3px;
+}
+
+/* ---------- Motion: game feel lives here (transform and opacity only). ---------- */
+
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}
+@keyframes shadow-breathe {
+  0%, 100% { transform: scaleX(1); opacity: 0.28; }
+  50% { transform: scaleX(0.78); opacity: 0.16; }
+}
+@keyframes wobble {
+  0%, 80%, 100% { transform: rotate(0); }
+  84% { transform: rotate(-7deg); }
+  88% { transform: rotate(6deg); }
+  92% { transform: rotate(-3deg); }
+  96% { transform: rotate(2deg); }
+}
+@keyframes pop-in {
+  from { opacity: 0; transform: scale(0.6); }
+  to { opacity: 1; transform: scale(1); }
+}
+@keyframes rise-in {
+  from { opacity: 0; transform: translateY(14px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+@keyframes sweep {
+  0% { transform: translateY(0); opacity: 0; }
+  10%, 90% { opacity: 1; }
+  100% { transform: translateY(var(--sweep-distance, 220px)); opacity: 0; }
+}
+@keyframes shine {
+  0%, 60% { transform: translateX(-120%) skewX(-20deg); }
+  100% { transform: translateX(220%) skewX(-20deg); }
+}
+@keyframes glint {
+  0%, 100% { opacity: 0.35; transform: scale(0.85); }
+  50% { opacity: 1; transform: scale(1.1); }
+}
+@keyframes blink {
+  0%, 100% { opacity: 0.25; }
+  50% { opacity: 1; }
+}
+@keyframes draw {
+  from { stroke-dashoffset: var(--dash, 60); }
+  to { stroke-dashoffset: 0; }
+}
+@keyframes orbit {
+  to { transform: rotate(360deg); }
+}
+
+/* Every animation above stops for people who ask for less motion. Content stays visible. */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 1ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 1ms !important;
+  }
 }

@@ -19,7 +19,7 @@ export async function POST(req: Request) {
     // Nicknames are unique case-insensitively (COLLATE NOCASE) so "Tunde" and "tunde" can't both exist.
     const taken = await query("SELECT 1 FROM users WHERE nickname = ? COLLATE NOCASE LIMIT 1", [nickname]);
     if (taken.length) {
-      return Response.json({ error: "That nickname is taken — try another." }, { status: 409 });
+      return Response.json({ error: "That nickname is taken. Try another." }, { status: 409 });
     }
     // Snap to an existing group's spelling ("hall a" joins "Hall A") so the leaderboard isn't split.
     const existing = await query<{ group_name: string }>(
@@ -34,7 +34,7 @@ export async function POST(req: Request) {
     return Response.json({ user: rows[0] }, { status: 201 });
   } catch (e: unknown) {
     if (isUniqueViolation(e)) {
-      return Response.json({ error: "That nickname is taken — try another." }, { status: 409 });
+      return Response.json({ error: "That nickname is taken. Try another." }, { status: 409 });
     }
     console.error("create user failed", e);
     return Response.json({ error: "Couldn't create your profile. Try again." }, { status: 500 });
