@@ -4,7 +4,7 @@
     "buildCommand": "npm run build"
   },
   "deploy": {
-    "startCommand": "npm run db:setup && npm run seed && npm run seed:cafeterias && npm start",
+    "startCommand": "npm start",
     "healthcheckPath": "/api/cafeterias",
     "healthcheckTimeout": 120,
     "restartPolicyType": "ON_FAILURE",
