@@ -49,10 +49,13 @@ export function sanitizeBreakdown(raw: unknown, foods: Food[]): BreakdownPart[] 
     const role = ROLES.has(p.role as DishRole) ? (p.role as DishRole) : "side";
     const conf = Number(p.confidence);
     const exact = foods.find((f) => f.food.toLowerCase() === label.toLowerCase());
-    const match = exact ?? matchFood(label, null, foods);
+    let match = exact ?? matchFood(label, null, foods);
+    // A sauce or stew named after a dish ("jollof sauce") is not the staple itself: never count it as rice.
+    if (!exact && match && role === "soup" && match.type === "Staple") match = null;
     out.push({
       foodId: match?.id ?? null,
-      label: match?.local_name && match.local_name !== match.food ? match.local_name : (match?.food ?? label),
+      // Our own name only when the AI used it exactly; otherwise keep the AI's words ("Spaghetti", not "Bread").
+      label: exact ? (exact.local_name && exact.local_name !== exact.food ? exact.local_name : exact.food) : label,
       grams: Math.round(Math.min(800, grams)),
       role,
       confidence: Number.isFinite(conf) ? Math.round(Math.min(1, Math.max(0, conf)) * 100) / 100 : 0.5,

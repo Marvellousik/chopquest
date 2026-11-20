@@ -17,9 +17,19 @@ const PANTRY = "salt, oil, palm oil, pepper, onion, tomato, stock cube, seasonin
 const NEGATION = /\b(instead of|in place of|without|no|replac\w*|swap\w*|skip|leave out)\b[^.;,]{0,25}$/i;
 const HEALTH = /\b(cure[sd]?|heal(s|ing)?|prevent(s|ing)?|treat(s|ment)?|diabet\w*|cancer|weight[- ]loss|detox\w*|immunity|medicin\w*)\b/i;
 
+// Words that describe a food's state, not the food ("Instant noodles, dry"): never treated as a food name.
+const DESCRIPTORS = new Set(["dry", "dried", "raw", "fresh", "ripe", "milled", "shelled", "cooked", "boiled", "steamed", "fried", "incl. suya", "hen", "cow", "powder"]);
+
 /** Every name a food is known by, lower case: "Soy chunks (textured soy protein)" -> soy chunks, textured soy protein, soya chunks. */
 function namesOf(f: Food): string[] {
-  return [...new Set([f.food, f.local_name ?? ""].flatMap((s) => s.split(/[\/(),]/)).map((s) => s.trim().toLowerCase()).filter((s) => s.length >= 3))];
+  return [
+    ...new Set(
+      [f.food, f.local_name ?? ""]
+        .flatMap((s) => s.split(/[\/(),]/))
+        .map((s) => s.trim().toLowerCase())
+        .filter((s) => s.length >= 3 && !DESCRIPTORS.has(s)),
+    ),
+  ];
 }
 
 const wordRe = (name: string) => new RegExp(`\\b${name.replace(/[.*+?^${}()|[\]\\]/g, "\\$&").replace(/\s+/g, "\\s+")}s?\\b`, "i");

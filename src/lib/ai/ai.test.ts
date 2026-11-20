@@ -102,6 +102,16 @@ describe("dish breakdown", () => {
     expect(parts[2]).toMatchObject({ role: "side" });
   });
 
+  it("never counts a sauce named after a dish as the staple, and keeps the AI's own names", () => {
+    const parts = sanitizeBreakdown(
+      { parts: [{ food: "Jollof rice", grams: 85, role: "staple" }, { food: "Jollof sauce", grams: 50, role: "soup" }, { food: "Spaghetti", grams: 100, role: "staple" }] },
+      FOODS,
+    );
+    expect(parts[0]).toMatchObject({ foodId: id("Rice, milled"), label: "Jollof rice" });
+    expect(parts[1]).toMatchObject({ foodId: null, label: "Jollof sauce" });
+    expect(parts[2]).toMatchObject({ foodId: id("Wheat flour (bread)"), label: "Spaghetti" });
+  });
+
   it("returns an empty list for nonsense instead of crashing", () => {
     expect(sanitizeBreakdown("hello", FOODS)).toEqual([]);
     expect(sanitizeBreakdown({ parts: "x" }, FOODS)).toEqual([]);
@@ -136,6 +146,11 @@ describe("kitchen card validator", () => {
   it("passes a card that only uses the swap's foods and pantry items", () => {
     expect(option.adds.map((a) => a.foodId)).toContain(id("Soy chunks (textured soy protein)"));
     expect(validateCard(goodCard, input)).toEqual([]);
+  });
+
+  it("doesn't mistake describing words like dry or fresh for foods", () => {
+    const card = { ...goodCard, steps: ["Soak 60 g dry soya chunks in fresh water.", ...goodCard.steps] };
+    expect(validateCard(card, input)).toEqual([]);
   });
 
   it("allows the removed meat only when it's being replaced", () => {
