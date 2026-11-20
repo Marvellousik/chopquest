@@ -37,7 +37,7 @@ function isGrain(f: Food) {
 }
 
 /** Plant-only plate is complete when it has soy, or a grain together with a legume. */
-function isComplete(foods: Food[]) {
+export function isComplete(foods: Food[]) {
   if (foods.some((f) => f.dex_group === "Soy")) return true;
   return foods.some(isGrain) && foods.some((f) => LEGUME_GROUPS.has(f.dex_group));
 }

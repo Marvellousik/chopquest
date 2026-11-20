@@ -76,11 +76,18 @@ export function validateCard(card: KitchenCard, input: CardInput): string[] {
   const addedFoods = input.option.adds.map((a) => byId.get(a.foodId)).filter((f): f is Food => Boolean(f));
   const removedIds = new Set(input.option.replaces.map((p) => p.foodId));
   const stayingFoods = input.breakdown.filter((p) => p.foodId != null && !removedIds.has(p.foodId)).map((p) => byId.get(p.foodId!)).filter((f): f is Food => Boolean(f));
-  const allowedGroups = new Set(addedFoods.map((f) => f.dex_group));
+  // Plant foods of the same family as anything on the new plate are fine ("soya" with soya chunks,
+  // "egusi" with egusi soup). Meat is never in an allowed family.
+  const allowedGroups = new Set([...addedFoods, ...stayingFoods].filter((f) => f.type !== "Animal").map((f) => f.dex_group));
   const allowedIds = new Set([...addedFoods, ...stayingFoods].map((f) => f.id));
+  // Hide the allowed foods' own names first, so "milk" inside "soya milk" isn't read as cow's milk.
+  const allowedNames = [...addedFoods, ...stayingFoods, ...input.foods.filter((f) => f.type !== "Animal" && allowedGroups.has(f.dex_group))]
+    .flatMap(namesOf)
+    .sort((x, y) => y.length - x.length);
+  const mask = (t: string) => allowedNames.reduce((acc, n) => acc.replace(new RegExp(wordRe(n).source, "gi"), " "), t);
 
   const problems: string[] = [];
-  const sentences = [card.menuName, card.studentBlurb, ...card.steps].flatMap((t) => t.split(/(?<=[.!?;])\s+/));
+  const sentences = [card.menuName, card.studentBlurb, ...card.steps].flatMap((t) => t.split(/(?<=[.!?;])\s+/)).map(mask);
 
   for (const f of input.foods) {
     if (allowedIds.has(f.id)) continue;
