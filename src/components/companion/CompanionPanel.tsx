@@ -95,7 +95,7 @@ function MeTab({ state, name, onRename, onTalk }: { state: CompanionState; name:
         <Pet stage="egg" mood="content" size={180} />
         <p className="text-2xl font-black text-green-950">Sign up to hatch your companion</p>
         <p className="text-stone-600">It grows with every plant protein you eat, and helps you find plant dishes on campus.</p>
-        <Link href="/" className="flex min-h-12 items-center rounded-full bg-leaf px-6 font-black text-white">Sign up</Link>
+        <Link href="/home" className="flex min-h-12 items-center rounded-full bg-leaf px-6 font-black text-white">Sign up</Link>
       </div>
     );
   if (state.status === "error") return <p className="m-4 rounded-2xl bg-red-50 p-4 font-bold text-red-800">{state.message}</p>;
