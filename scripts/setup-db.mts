@@ -1,7 +1,8 @@
-// Create all tables in Turso (or a local file: DB) from db/schema.sql.
+// Create all tables in Turso (or a local file: DB): db/schema.sql, then every numbered
+// migration in db/ (002_..., 003_...) in order.
 //   npm run db:setup
 // Safe to re-run: every statement is CREATE ... IF NOT EXISTS.
-import { readFileSync } from "node:fs";
+import { readFileSync, readdirSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import { createClient } from "@libsql/client";
 
@@ -11,7 +12,11 @@ if (!url) {
   process.exit(1);
 }
 const db = createClient({ url, authToken: process.env.TURSO_AUTH_TOKEN || undefined });
-const schema = readFileSync(fileURLToPath(new URL("../db/schema.sql", import.meta.url)), "utf8");
-await db.executeMultiple(schema);
+const dir = fileURLToPath(new URL("../db/", import.meta.url));
+const files = ["schema.sql", ...readdirSync(dir).filter((f) => /^\d{3}_.*\.sql$/.test(f)).sort()];
+for (const f of files) {
+  await db.executeMultiple(readFileSync(dir + f, "utf8"));
+  console.log(`applied ${f}`);
+}
 const rs = await db.execute("SELECT name FROM sqlite_master WHERE type = 'table' AND name NOT LIKE 'sqlite_%' ORDER BY name");
 console.log(`Schema applied. Tables: ${rs.rows.map((r) => r[0]).join(", ")}`);
