@@ -43,3 +43,28 @@ export function clearUser() {
     localStorage.removeItem(STORAGE_KEY);
   } catch {}
 }
+
+/**
+ * Make sure this browser has its 90-day sign-in cookie (browser only). Returns the signed-in user,
+ * attaching an older device that only has the localStorage copy, or null if there is no account here.
+ */
+export async function restoreSession(): Promise<User | null> {
+  try {
+    const me = await fetch("/api/users/me");
+    if (me.ok) {
+      const { user } = (await me.json()) as { user: User };
+      saveUser(user);
+      return user;
+    }
+    const saved = loadUser();
+    if (me.status !== 401 || !saved) return null;
+    const bind = await fetch("/api/users/me", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ id: saved.id, nickname: saved.nickname }),
+    });
+    return bind.ok ? ((await bind.json()) as { user: User }).user : null;
+  } catch {
+    return null;
+  }
+}

@@ -1,4 +1,6 @@
 import { getDb, placeholders, query } from "@/lib/db";
+import { mealIsComplete } from "@/lib/diet";
+import { currentUser } from "@/lib/server/user-session";
 
 type InItem = { raw_label?: unknown; food_id?: unknown; estimated_grams?: unknown; corrected?: unknown };
 
@@ -30,17 +32,21 @@ export async function POST(req: Request) {
   const dishName = typeof body.dish_name === "string" ? body.dish_name.trim().slice(0, 100) || null : null;
 
   try {
+    // A signed-in device may only save meals to its own account.
+    const me = await currentUser();
+    if (me && me.id !== userId) return Response.json({ error: "That's not your account on this phone." }, { status: 403 });
     const user = await query("SELECT 1 FROM users WHERE id = ?", [userId]);
     if (!user.length) return Response.json({ error: "Profile not found. Please sign up again." }, { status: 404 });
 
     const ids = [...new Set(items.map((i) => i.food_id).filter((x): x is number => x !== null))];
     const foods = ids.length
-      ? await query<{ id: number; p: number }>(
-          `SELECT id, protein_g_per_100g AS p FROM foods WHERE id IN (${placeholders(ids.length)})`,
+      ? await query<{ id: number; p: number; food: string; grp: string; type: "Plant" | "Alternative" | "Staple" | "Animal" }>(
+          `SELECT id, protein_g_per_100g AS p, food, dex_group AS grp, type FROM foods WHERE id IN (${placeholders(ids.length)})`,
           ids,
         )
       : [];
     const per100 = new Map(foods.map((f) => [f.id, f.p]));
+    const foodById = new Map(foods.map((f) => [f.id, f]));
 
     const rows = items.map((i) => {
       const p = i.food_id !== null ? per100.get(i.food_id) : undefined;
@@ -51,14 +57,21 @@ export async function POST(req: Request) {
       };
     });
     const total = Math.round(rows.reduce((s, r) => s + (r.protein_g ?? 0), 0) * 10) / 10;
+    // Variety and pairing for the leaderboard and inventory (protein groups, Staple excluded).
+    const matched = rows.map((r) => (r.food_id == null ? null : foodById.get(r.food_id))).filter((f) => f != null);
+    const diversity = new Set(matched.map((f) => f.grp).filter((g) => g !== "Staple")).size;
+    const complete = mealIsComplete({
+      id: 0, at: "", dish: dishName, total,
+      items: matched.map((f) => ({ label: f.food, food: f.food, group: f.grp, type: f.type, grams: 0, protein: null })),
+    });
 
     // Scan + items in one write transaction, so a meal is never saved half-way.
     const tx = await getDb().transaction("write");
     let scanId: number;
     try {
       const s = await tx.execute({
-        sql: "INSERT INTO scans (user_id, dish_name, total_protein_g) VALUES (?, ?, ?) RETURNING id",
-        args: [userId, dishName, total],
+        sql: "INSERT INTO scans (user_id, dish_name, total_protein_g, is_complete_pair, diversity_count) VALUES (?, ?, ?, ?, ?) RETURNING id",
+        args: [userId, dishName, total, complete ? 1 : 0, diversity],
       });
       scanId = Number(s.rows[0][0]);
       await tx.batch(

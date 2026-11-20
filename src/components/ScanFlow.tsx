@@ -367,7 +367,9 @@ export default function ScanFlow() {
             About <span className="text-3xl font-black tabular-nums text-leaf-dark">{stage.total} g</span> of protein
             <span className="block text-sm text-muted">(estimate)</span>
           </p>
-          <p className="text-muted">Your Protein Map is coming in the next update.</p>
+          <Button href="/inventory" variant="secondary" size="lg" block>
+            See it in your inventory
+          </Button>
           <Button size="lg" block onClick={reset} icon={<ScanIcon />}>
             Scan another meal
           </Button>

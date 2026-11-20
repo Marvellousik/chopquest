@@ -53,7 +53,7 @@ const SIDES: {
     name: "Chop Squad",
     who: "For students",
     pitch: "Eat the plant dishes on campus and make every plate count.",
-    points: ["Find plant dishes at your cafeterias", "Scan your plate to log it", "Grow your pet and unlock the Dex", "Lift your hall up the leaderboard"],
+    points: ["Find plant dishes at your cafeterias", "Scan your plate to log it", "Grow your pet and fill your inventory", "Lift your hall up the leaderboard"],
     cta: "Join the Chop Squad",
     Icon: LeafIcon,
     card: "bg-gradient-to-br from-leaf to-leaf-dark text-white shadow-[0_18px_40px_-16px_#14532d]",

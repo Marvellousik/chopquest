@@ -9,7 +9,7 @@ import { DexIcon, HomeIcon, ScanIcon, TrophyIcon } from "./icons";
 const TABS = [
   { href: "/", label: "Home", Icon: HomeIcon },
   { href: "/scan", label: "Scan", Icon: ScanIcon },
-  { href: "/dex", label: "Dex", Icon: DexIcon },
+  { href: "/inventory", label: "Inventory", Icon: DexIcon },
   { href: "/leaderboard", label: "Ranks", Icon: TrophyIcon },
 ] as const;
 

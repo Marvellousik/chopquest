@@ -20,7 +20,7 @@ const FAKE_DEX = [
   { group: "Groundnut", mealCount: 4 },
 ];
 
-const TABS = ["Home", "Dex", "Rewards"] as const;
+const TABS = ["Home", "Inventory", "Rewards"] as const;
 type Tab = (typeof TABS)[number];
 
 export default function GamePreview() {
@@ -57,7 +57,7 @@ export default function GamePreview() {
           }
         />
       )}
-      {tab === "Dex" && <DexGrid progress={FAKE_DEX} />}
+      {tab === "Inventory" && <DexGrid progress={FAKE_DEX} />}
       {tab === "Rewards" && (
         <div className="flex flex-col gap-3">
           <RewardsBanner key={replay} rewards={FAKE_REWARDS} />
