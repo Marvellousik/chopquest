@@ -15,10 +15,10 @@ export default function DexGrid({ progress }: { progress: DexProgress[] }) {
       <div className="flex items-end justify-between">
         <h2 className="text-2xl font-black">Protein Dex</h2>
         <p className="font-bold text-leaf-dark">
-          {found} <span className="font-semibold text-stone-500">of {DEX.length} found</span>
+          {found} <span className="font-semibold text-muted">of {DEX.length} found</span>
         </p>
       </div>
-      <div className="h-2 overflow-hidden rounded-full bg-stone-200" aria-hidden>
+      <div className="h-2 overflow-hidden rounded-full bg-mist" aria-hidden>
         <div className="h-full rounded-full bg-leaf transition-all" style={{ width: `${(found / DEX.length) * 100}%` }} />
       </div>
 
@@ -27,12 +27,12 @@ export default function DexGrid({ progress }: { progress: DexProgress[] }) {
           const count = counts.get(d.group);
           if (count === undefined) {
             return (
-              <li key={d.group} className="flex min-h-36 flex-col gap-2 rounded-3xl border-2 border-dashed border-stone-300 bg-stone-100 p-3">
-                <span className="flex size-11 items-center justify-center rounded-2xl bg-stone-300 text-xl font-black text-stone-500" aria-hidden>
+              <li key={d.group} className="flex min-h-36 flex-col gap-2 rounded-3xl border-2 border-dashed border-line/50 bg-mist p-3">
+                <span className="flex size-11 items-center justify-center rounded-2xl bg-line/40 text-xl font-black text-muted" aria-hidden>
                   ?
                 </span>
-                <span className="font-extrabold text-stone-500">{d.group}</span>
-                <span className="text-sm leading-snug text-stone-500">{d.hint}</span>
+                <span className="font-extrabold text-muted">{d.group}</span>
+                <span className="text-sm leading-snug text-muted">{d.hint}</span>
               </li>
             );
           }
@@ -54,15 +54,15 @@ export default function DexGrid({ progress }: { progress: DexProgress[] }) {
               <span className="text-sm font-bold" style={{ color: d.color }}>
                 {d.trait ? `${d.trait} · ${d.blurb}` : d.blurb}
               </span>
-              <span className="text-sm text-stone-600">
+              <span className="text-sm text-muted">
                 {count} {count === 1 ? "meal" : "meals"}
               </span>
               {next && (
                 <div className="mt-auto">
-                  <div className="h-1.5 overflow-hidden rounded-full bg-white/80" aria-hidden>
+                  <div className="h-1.5 overflow-hidden rounded-full bg-paper/80" aria-hidden>
                     <div className="h-full rounded-full" style={{ width: `${next.progress * 100}%`, background: d.color }} />
                   </div>
-                  <span className="text-xs text-stone-500">
+                  <span className="text-xs text-muted">
                     {next.at - count} more for {MEDAL_STYLE[next.medal].label}
                   </span>
                 </div>

@@ -14,11 +14,11 @@ export function clean(s: unknown): string {
 
 export function validate(nickname: string, group: string): string | null {
   if (nickname.length < NICKNAME_MIN || nickname.length > NICKNAME_MAX)
-    return `Nickname must be ${NICKNAME_MIN}–${NICKNAME_MAX} characters.`;
+    return `Nickname must be ${NICKNAME_MIN} to ${NICKNAME_MAX} characters.`;
   if (!/^[\p{L}\p{N} _.\-]+$/u.test(nickname))
     return "Nickname can use letters, numbers, spaces, _ . -";
   if (group.length < GROUP_MIN || group.length > GROUP_MAX)
-    return `Group must be ${GROUP_MIN}–${GROUP_MAX} characters.`;
+    return `Group must be ${GROUP_MIN} to ${GROUP_MAX} characters.`;
   return null;
 }
 

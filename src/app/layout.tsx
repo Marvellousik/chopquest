@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import { Nunito } from "next/font/google";
 import "./globals.css";
+import BottomNav from "@/components/BottomNav";
 
 const nunito = Nunito({ variable: "--font-nunito", subsets: ["latin"] });
 
@@ -19,7 +20,11 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html lang="en" className={`${nunito.variable} h-full antialiased`}>
       <body className="min-h-full flex flex-col font-sans">
-        <main className="mx-auto flex w-full max-w-md flex-1 flex-col px-4 py-6">{children}</main>
+        {/* Bottom padding keeps content clear of the fixed nav (--nav-h + phone safe area). */}
+        <main className="mx-auto flex w-full max-w-md flex-1 flex-col px-4 pt-6 pb-[calc(var(--nav-h)+env(safe-area-inset-bottom)+1.5rem)]">
+          {children}
+        </main>
+        <BottomNav />
       </body>
     </html>
   );

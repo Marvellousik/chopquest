@@ -3,7 +3,8 @@
 
 import Link from "next/link";
 import type { ReactNode } from "react";
-import Pet, { type PetMood, type PetStage } from "@/components/pet/Pet";
+import Pet from "@/components/pet/Pet";
+import type { PetMood, PetStage } from "@/lib/rewards";
 
 export type HomeProps = {
   nickname: string;
@@ -17,7 +18,7 @@ export type HomeProps = {
   quests?: ReactNode;
 };
 
-// 7a: stage thresholds (egg < 100, young 100–399, evolved 400+).
+// Mirrors petStage() in src/lib/rewards.ts (egg < 100, young 100–399, evolved 400+).
 const NEXT_STAGE: Record<PetStage, { at: number; name: string } | null> = {
   egg: { at: 100, name: "hatch" },
   young: { at: 400, name: "evolve" },
@@ -41,10 +42,10 @@ export default function HomeScreen({ nickname, groupName, stage, mood, totalPoin
     <div className="@container flex flex-col gap-4">
       <header className="flex items-center justify-between">
         <div>
-          <p className="text-sm font-semibold text-stone-500">Hi, {nickname}</p>
+          <p className="text-sm font-semibold text-muted">Hi, {nickname}</p>
           <h1 className="text-2xl font-black text-leaf-dark">ChopQuest</h1>
         </div>
-        <span className="rounded-full bg-white px-3 py-1.5 text-sm font-bold shadow-sm">{groupName}</span>
+        <span className="rounded-full bg-paper px-3 py-1.5 text-sm font-bold shadow-sm">{groupName}</span>
       </header>
 
       <div className="grid gap-4 @2xl:grid-cols-2 @2xl:items-start">
@@ -55,11 +56,11 @@ export default function HomeScreen({ nickname, groupName, stage, mood, totalPoin
           <span className="font-black">{petName}</span> {MOOD_LINE[mood]}
         </p>
         <div className="mt-3 w-full">
-          <div className="flex justify-between text-xs font-bold text-stone-500">
+          <div className="flex justify-between text-xs font-bold text-muted">
             <span className="capitalize">{stage}</span>
             <span>{next ? `${next.at - totalPoints} pts to ${next.name}` : "Fully grown"}</span>
           </div>
-          <div className="mt-1 h-2.5 overflow-hidden rounded-full bg-stone-200" aria-hidden>
+          <div className="mt-1 h-2.5 overflow-hidden rounded-full bg-mist" aria-hidden>
             <div className="h-full rounded-full bg-palm" style={{ width: `${stagePct}%` }} />
           </div>
         </div>
@@ -68,19 +69,19 @@ export default function HomeScreen({ nickname, groupName, stage, mood, totalPoin
       <div className="flex flex-col gap-4">
       {/* Stats */}
       <section className="grid grid-cols-2 gap-3">
-        <div className="rounded-3xl bg-white p-3 shadow-sm">
-          <p className="text-xs font-bold uppercase tracking-wide text-stone-500">Points</p>
+        <div className="rounded-3xl bg-paper p-3 shadow-sm">
+          <p className="text-xs font-bold uppercase tracking-wide text-muted">Points</p>
           <p className="text-3xl font-black tabular-nums">{totalPoints}</p>
         </div>
-        <div className="rounded-3xl bg-white p-3 shadow-sm">
-          <p className="text-xs font-bold uppercase tracking-wide text-stone-500">This week</p>
+        <div className="rounded-3xl bg-paper p-3 shadow-sm">
+          <p className="text-xs font-bold uppercase tracking-wide text-muted">This week</p>
           <p className="text-3xl font-black tabular-nums">
             {weeklyDiversity}
-            <span className="ml-1 text-sm font-bold text-stone-500">{weeklyDiversity === 1 ? "group" : "groups"}</span>
+            <span className="ml-1 text-sm font-bold text-muted">{weeklyDiversity === 1 ? "group" : "groups"}</span>
           </p>
           <div className="mt-1 flex gap-1" aria-label={`${weeklyDiversity} of ${GOAL} protein groups for a happy pet`}>
             {Array.from({ length: Math.max(GOAL, weeklyDiversity) }, (_, i) => (
-              <span key={i} className={`h-2 flex-1 rounded-full ${i < weeklyDiversity ? "bg-leaf" : "bg-stone-200"}`} />
+              <span key={i} className={`h-2 flex-1 rounded-full ${i < weeklyDiversity ? "bg-leaf" : "bg-mist"}`} />
             ))}
           </div>
         </div>
@@ -106,7 +107,7 @@ export default function HomeScreen({ nickname, groupName, stage, mood, totalPoin
       </div>
       </div>
 
-      <p className="text-center text-xs text-stone-500">Protein figures are estimates, not medical advice.</p>
+      <p className="text-center text-xs text-muted">Protein figures are estimates, not medical advice.</p>
     </div>
   );
 }

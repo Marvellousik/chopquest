@@ -1,5 +1,7 @@
 # ChopQuest — project brief for Claude Code
 
+Team name: **Chloe**. The in-app AI assistant users talk to is also called **Chloe**.
+
 ChopQuest is a mobile-first web app for the Hack the Fork hackathon (Abuja, AI × alternative protein, "Plants on our Plates" track).
 A user photographs a Nigerian meal. The AI shows where its protein comes from, checks whether it is a complete protein,
 suggests ONE cheap local plant-protein upgrade with its Naira cost, turns it into a quest, and grows a virtual pet.
@@ -10,21 +12,22 @@ Hard constraint: **zero cost**. Use only free tiers. Never add a paid service.
 ## Stack
 
 - Next.js (App Router) + TypeScript + Tailwind, mobile-first, deployed on Vercel (Hobby, free)
-- Neon Postgres (free plan) via `@neondatabase/serverless`
+- Turso (libSQL / SQLite, free plan) via `@libsql/client`. Local dev can use `file:local.db`.
 - Gemini API, free tier, Flash model (`gemini-flash-latest` or the current free Flash / Flash-Lite model shown in AI Studio)
 - No auth: users pick a nickname + group (hall/department). Store `user_id` in localStorage.
 - Do NOT store photos. Send the image to Gemini as base64 from an API route and keep only the parsed result.
 
 Env vars (`.env.local`, never commit):
 ```
-DATABASE_URL=postgres://...      # Neon connection string
+TURSO_DATABASE_URL=libsql://...  # Turso Cloud URL, or file:local.db for offline dev
+TURSO_AUTH_TOKEN=...             # turso db tokens create <db> (not needed for file:)
 GEMINI_API_KEY=...               # from aistudio.google.com
 ```
 
 ## Data
 
-- `db/schema.sql` — run once in the Neon SQL editor.
-- `data/protein_db.csv` — 38 Nigerian foods. Seed the `foods` table from it with a small script (`scripts/seed.ts`).
+- `db/schema.sql` — SQLite schema, applied with `npm run db:setup` (idempotent). Booleans are 0/1, timestamps ISO-8601 UTC text. Weekly resets (Monday, Lagos time = UTC+1) are computed in TypeScript, not SQL.
+- `data/protein_db.csv` — 38 Nigerian foods. Seed the `foods` table from it with `npm run seed` (`scripts/seed.mts`).
 - `price_ngn_per_kg` is mostly empty until the team's market survey; code must handle NULL prices (show "price coming" instead of a number).
 
 ## Core loop (build in this order)

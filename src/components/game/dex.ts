@@ -1,6 +1,6 @@
-// Display catalog for the Protein Dex (task 7c). UI-only: names, traits, colours, hints.
-// Rule numbers (medal thresholds, trait map) also live in 7a's src/lib/rewards.ts;
-// at integration, import them from there and delete the copies marked "7a".
+// Display catalog for the Protein Dex (task 7c). UI-only: colours, hints, blurbs.
+// The rules (traits, medal thresholds) come from 7a's src/lib/rewards.ts.
+import { MASTERY, medalFor as rulesMedalFor, traitFor } from "@/lib/rewards";
 
 export type DexGroup =
   | "Beans" | "Soy" | "Bambara" | "Groundnut" | "Egusi"
@@ -15,33 +15,28 @@ export type DexEntry = {
   tint: string; // card background once unlocked
 };
 
-export const DEX: DexEntry[] = [
-  { group: "Beans", trait: "Strength", blurb: "Hits harder", hint: "Try akara, moi moi or ewa", color: "#b45309", tint: "#fef3c7" },
-  { group: "Soy", trait: "Defense", blurb: "Leaf shield", hint: "Try awara or soy chunks", color: "#ca8a04", tint: "#fef9c3" },
-  { group: "Bambara", trait: "Stamina", blurb: "Plays longer", hint: "Try okpa", color: "#9a3412", tint: "#ffedd5" },
-  { group: "Groundnut", trait: "Energy", blurb: "Extra bounce", hint: "Try kuli-kuli or groundnuts", color: "#c2410c", tint: "#ffedd5" },
-  { group: "Egusi", trait: "Recovery", blurb: "Wakes up faster", hint: "Try egusi soup", color: "#65a30d", tint: "#ecfccb" },
-  { group: "Mushroom", trait: "Focus", blurb: "Sharp eyes", hint: "Try oyster mushroom", color: "#78716c", tint: "#f5f5f4" },
-  { group: "Iru", trait: "Wisdom", blurb: "Tiny glasses", hint: "Try iru in your soup", color: "#7c2d12", tint: "#fde68a" },
-  { group: "Tigernut", trait: "Speed", blurb: "Quick feet", hint: "Try kunun aya", color: "#a16207", tint: "#fef3c7" },
-  { group: "Pigeon pea", trait: "Agility", blurb: "Nimble leaves", hint: "Try fiofio", color: "#15803d", tint: "#dcfce7" },
-  { group: "Animal", trait: null, blurb: "Base stats", hint: "Egg, chicken, fish or meat", color: "#be123c", tint: "#ffe4e6" },
+const RAW: Omit<DexEntry, "trait">[] = [
+  { group: "Beans", blurb: "Hits harder", hint: "Try akara, moi moi or ewa", color: "#b45309", tint: "#fef3c7" },
+  { group: "Soy", blurb: "Leaf shield", hint: "Try awara or soy chunks", color: "#ca8a04", tint: "#fef9c3" },
+  { group: "Bambara", blurb: "Plays longer", hint: "Try okpa", color: "#9a3412", tint: "#ffedd5" },
+  { group: "Groundnut", blurb: "Extra bounce", hint: "Try kuli-kuli or groundnuts", color: "#c2410c", tint: "#ffedd5" },
+  { group: "Egusi", blurb: "Wakes up faster", hint: "Try egusi soup", color: "#65a30d", tint: "#ecfccb" },
+  { group: "Mushroom", blurb: "Sharp eyes", hint: "Try oyster mushroom", color: "#78716c", tint: "#f5f5f4" },
+  { group: "Iru", blurb: "Tiny glasses", hint: "Try iru in your soup", color: "#7c2d12", tint: "#fde68a" },
+  { group: "Tigernut", blurb: "Quick feet", hint: "Try kunun aya", color: "#a16207", tint: "#fef3c7" },
+  { group: "Pigeon pea", blurb: "Nimble leaves", hint: "Try fiofio", color: "#15803d", tint: "#dcfce7" },
+  { group: "Animal", blurb: "Base stats", hint: "Egg, chicken, fish or meat", color: "#be123c", tint: "#ffe4e6" },
 ];
+
+export const DEX: DexEntry[] = RAW.map((d) => ({ ...d, trait: traitFor(d.group) }));
 
 export const dexEntry = (group: string) => DEX.find((d) => d.group === group);
 
-// 7a: mastery thresholds (Bronze 3, Silver 10, Gold 25).
 export type Medal = "bronze" | "silver" | "gold";
-const MEDALS: { medal: Medal; at: number }[] = [
-  { medal: "bronze", at: 3 },
-  { medal: "silver", at: 10 },
-  { medal: "gold", at: 25 },
-];
+const MEDALS = MASTERY.map((m) => ({ medal: m.medal.toLowerCase() as Medal, at: m.at }));
 
 export function medalFor(mealCount: number): Medal | null {
-  let m: Medal | null = null;
-  for (const t of MEDALS) if (mealCount >= t.at) m = t.medal;
-  return m;
+  return (rulesMedalFor(mealCount)?.toLowerCase() as Medal | undefined) ?? null;
 }
 
 /** Next medal and how far along the user is, for the progress bar. null once Gold. */

@@ -7,7 +7,8 @@ import { useEffect, useState } from "react";
 import { dexEntry, type Medal as MedalKind } from "./dex";
 import Medal from "./Medal";
 
-export type Reward = { reason: string; points: number; dexGroup?: string };
+import type { Reward } from "@/lib/rewards";
+export type { Reward };
 
 const css = `
 @keyframes cq-rise { from { opacity: 0; transform: translateY(12px) scale(.96); } to { opacity: 1; transform: none; } }
@@ -53,7 +54,7 @@ function describe(r: Reward): { title: string; sub: string | null } {
 /** Badge per reward kind: group initials for discovery, a medal for mastery, symbols for the rest. */
 function Badge({ r }: { r: Reward }) {
   const mastery = /(bronze|silver|gold)/i.exec(r.reason)?.[1]?.toLowerCase() as MedalKind | undefined;
-  if (mastery) return <span className="flex size-9 shrink-0 items-center justify-center rounded-full bg-white/90"><Medal medal={mastery} size={26} /></span>;
+  if (mastery) return <span className="flex size-9 shrink-0 items-center justify-center rounded-full bg-paper"><Medal medal={mastery} size={26} /></span>;
   const entry = r.dexGroup ? dexEntry(r.dexGroup) : undefined;
   const symbol = /discover/i.test(r.reason) && entry ? entry.group.slice(0, 2)
     : /complete/i.test(r.reason) ? "✓"

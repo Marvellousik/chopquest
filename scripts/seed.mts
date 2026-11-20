@@ -1,11 +1,11 @@
 // Seed / refresh the `foods` table from data/protein_db.csv.
-//   npm run seed            -> upserts rows into Neon (needs DATABASE_URL in .env.local)
+//   npm run seed            -> upserts rows into Turso (needs TURSO_DATABASE_URL in .env.local)
 //   npm run seed -- --dry   -> just parses and prints the rows
 // Safe to re-run: rows are matched on `food`, so scan_items keep pointing at the same ids
 // and new prices from the market survey simply overwrite the old ones.
 import { readFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";
-import { neon } from "@neondatabase/serverless";
+import { createClient } from "@libsql/client";
 
 const csvPath = fileURLToPath(new URL("../data/protein_db.csv", import.meta.url));
 
@@ -78,23 +78,24 @@ if (process.argv.includes("--dry")) {
   process.exit(0);
 }
 
-if (!process.env.DATABASE_URL) {
-  console.error("DATABASE_URL is not set. Put it in .env.local.");
+if (!process.env.TURSO_DATABASE_URL) {
+  console.error("TURSO_DATABASE_URL is not set. Put it in .env.local.");
   process.exit(1);
 }
-const sql = neon(process.env.DATABASE_URL);
-let inserted = 0, updated = 0;
-for (const f of foods) {
-  const rows = await sql`
-    UPDATE foods SET local_name = ${f.local_name}, dex_group = ${f.dex_group}, type = ${f.type},
-      protein_g_per_100g = ${f.protein_g_per_100g}, basis = ${f.basis}, amino_note = ${f.amino_note},
-      pet_trait = ${f.pet_trait}, price_ngn_per_kg = ${f.price_ngn_per_kg}, source = ${f.source}
-    WHERE food = ${f.food} RETURNING id`;
-  if (rows.length) { updated++; continue; }
-  await sql`
-    INSERT INTO foods (food, local_name, dex_group, type, protein_g_per_100g, basis, amino_note, pet_trait, price_ngn_per_kg, source)
-    VALUES (${f.food}, ${f.local_name}, ${f.dex_group}, ${f.type}, ${f.protein_g_per_100g}, ${f.basis},
-            ${f.amino_note}, ${f.pet_trait}, ${f.price_ngn_per_kg}, ${f.source})`;
-  inserted++;
-}
-console.log(`Seeded foods: ${inserted} inserted, ${updated} updated.`);
+const db = createClient({ url: process.env.TURSO_DATABASE_URL, authToken: process.env.TURSO_AUTH_TOKEN || undefined });
+const before = Number((await db.execute("SELECT count(*) FROM foods")).rows[0][0]);
+// One round trip: upsert every row on the unique `food` column, keeping existing ids.
+await db.batch(
+  foods.map((f) => ({
+    sql: `INSERT INTO foods (food, local_name, dex_group, type, protein_g_per_100g, basis, amino_note, pet_trait, price_ngn_per_kg, source)
+          VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+          ON CONFLICT (food) DO UPDATE SET local_name = excluded.local_name, dex_group = excluded.dex_group,
+            type = excluded.type, protein_g_per_100g = excluded.protein_g_per_100g, basis = excluded.basis,
+            amino_note = excluded.amino_note, pet_trait = excluded.pet_trait,
+            price_ngn_per_kg = excluded.price_ngn_per_kg, source = excluded.source`,
+    args: [f.food, f.local_name, f.dex_group, f.type, f.protein_g_per_100g, f.basis, f.amino_note, f.pet_trait, f.price_ngn_per_kg, f.source],
+  })),
+  "write",
+);
+const after = Number((await db.execute("SELECT count(*) FROM foods")).rows[0][0]);
+console.log(`Seeded foods: ${after - before} inserted, ${foods.length - (after - before)} updated.`);
