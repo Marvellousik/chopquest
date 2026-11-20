@@ -68,7 +68,10 @@ export async function clearDemo(): Promise<Record<string, number>> {
   await del("scans", "DELETE FROM scans WHERE id IN (__IN__)", scanIds);
   await del("menu_item_stats", "DELETE FROM menu_item_stats WHERE menu_item_id IN (__IN__)", menuIds);
   await del("menu_items", "DELETE FROM menu_items WHERE id IN (__IN__)", menuIds);
-  await del("users", "DELETE FROM users WHERE id IN (__IN__)", await ids("users"));
+  const demoUsers = await ids("users");
+  await del("user_sessions", "DELETE FROM user_sessions WHERE user_id IN (__IN__)", demoUsers);
+  await del("user_bound", "DELETE FROM user_bound WHERE user_id IN (__IN__)", demoUsers);
+  await del("users", "DELETE FROM users WHERE id IN (__IN__)", demoUsers);
   for (const key of await ids("cafeteria_prices")) {
     const [cafe, food] = key.split(":").map(Number);
     await query("DELETE FROM cafeteria_prices WHERE cafeteria_id = ? AND food_id = ?", [cafe, food]);

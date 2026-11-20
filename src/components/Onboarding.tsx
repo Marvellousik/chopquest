@@ -26,28 +26,47 @@ export default function Onboarding() {
   const [error, setError] = useState<string | null>(null);
   const [submitting, setSubmitting] = useState(false);
 
-  // Restore a saved user. If the server says it no longer exists (DB reset), start over.
-  // Network/server errors keep the saved user so the app still works offline.
+  // Restore the account. The 90-day sign-in cookie is the source of truth (it survives Safari wiping
+  // localStorage); the localStorage copy makes the first paint instant and works offline.
   useEffect(() => {
     // localStorage only exists in the browser, so this must run after hydration.
     /* eslint-disable react-hooks/set-state-in-effect */
     const saved = loadUser();
-    if (!saved) {
-      setStatus("form");
-      return;
+    if (saved) {
+      setUser(saved);
+      setStatus("ready");
     }
-    setUser(saved);
-    setStatus("ready");
     /* eslint-enable react-hooks/set-state-in-effect */
-    fetch(`/api/users/${saved.id}`)
-      .then((r) => {
-        if (r.status === 404) {
-          clearUser();
-          setUser(null);
-          setStatus("form");
-        }
-      })
-      .catch(() => {});
+    const signedIn = (u: User) => {
+      saveUser(u);
+      setUser(u);
+      setStatus("ready");
+    };
+    const signedOut = () => {
+      clearUser();
+      setUser(null);
+      setStatus("form");
+    };
+    (async () => {
+      try {
+        const me = await fetch("/api/users/me");
+        if (me.ok) return signedIn((await me.json()).user);
+        if (me.status !== 401) return saved ? undefined : setStatus("form"); // server trouble: keep what we have
+        if (!saved) return setStatus("form");
+        // Signed up before sign-in cookies existed: attach this device once.
+        const bind = await fetch("/api/users/me", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ id: saved.id, nickname: saved.nickname }),
+        });
+        if (bind.ok) return signedIn((await bind.json()).user);
+        // Account gone (DB reset) or it now lives on another device's sign-in: start over.
+        const exists = await fetch(`/api/users/${saved.id}`);
+        if (exists.status === 404) signedOut();
+      } catch {
+        if (!saved) setStatus("form"); // offline: keep the saved account
+      }
+    })();
   }, []);
 
   useEffect(() => {
@@ -91,6 +110,7 @@ export default function Onboarding() {
   }
 
   function switchUser() {
+    fetch("/api/users/me", { method: "DELETE" }).catch(() => {});
     clearUser();
     setUser(null);
     setNickname("");
@@ -200,7 +220,7 @@ export default function Onboarding() {
         </Button>
       </form>
 
-      <p className="text-center text-xs text-muted">No password needed. Nutrition figures are estimates, not medical advice.</p>
+      <p className="text-center text-xs text-muted">No password needed: this phone keeps you signed in for 90 days, renewed every visit. Nutrition figures are estimates, not medical advice.</p>
     </section>
   );
 }

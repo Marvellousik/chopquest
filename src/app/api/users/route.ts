@@ -1,5 +1,6 @@
 import { isUniqueViolation, query } from "@/lib/db";
 import { clean, validate, type User } from "@/lib/user";
+import { startUserSession } from "@/lib/server/user-session";
 
 // POST /api/users  { nickname, group } -> { user }
 export async function POST(req: Request) {
@@ -31,6 +32,7 @@ export async function POST(req: Request) {
       "INSERT INTO users (nickname, group_name) VALUES (?, ?) RETURNING id, nickname, group_name",
       [nickname, groupName],
     );
+    await startUserSession(rows[0].id); // stays signed in on this device for 90 days, renewed each visit
     return Response.json({ user: rows[0] }, { status: 201 });
   } catch (e: unknown) {
     if (isUniqueViolation(e)) {
