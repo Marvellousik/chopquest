@@ -1,6 +1,6 @@
 // Demo data (server only): seed a lively campus from src/lib/demo-data.ts, or remove all of it.
 // Every created row is recorded in demo_records; clearDemo() deletes exactly those rows.
-import { query } from "@/lib/db";
+import { getDb, query } from "@/lib/db";
 import { listFoods } from "@/lib/foods-db";
 import { addonsFor, DEFAULT_PREP_MIN } from "@/lib/addons";
 import { isComplete } from "@/lib/swap";
@@ -8,7 +8,7 @@ import { validateCard } from "@/lib/ai/kitchen-card";
 import { DEMO_CAFETERIAS, DEMO_COMMENTS, DEMO_PRICES, DEMO_USERS } from "@/lib/demo-data";
 import type { DishPart, Food, KitchenCard, SwapOption } from "@/lib/types";
 
-const TABLES = ["reviews", "plant_dishes", "scans", "menu_item_stats", "menu_items", "users", "cafeteria_prices"] as const;
+const TABLES = ["plant_requests", "reviews", "plant_dishes", "scans", "menu_item_stats", "menu_items", "users", "cafeteria_prices"] as const;
 
 /** Small deterministic PRNG so a reseed gives the same campus. */
 function rng(seed: number) {
@@ -58,6 +58,8 @@ export async function clearDemo(): Promise<Record<string, number>> {
   const dishIds = await ids("plant_dishes");
   const scanIds = await ids("scans");
   const menuIds = await ids("menu_items");
+  await del("plant_requests", "DELETE FROM plant_requests WHERE id IN (__IN__)", await ids("plant_requests"));
+  await del("plant_requests", "DELETE FROM plant_requests WHERE menu_item_id IN (__IN__)", menuIds);
   // Reviews on demo dishes go too, even ones a real student wrote, since their dish is removed.
   await del("reviews", "DELETE FROM reviews WHERE plant_dish_id IN (__IN__)", dishIds);
   await del("reviews", "DELETE FROM reviews WHERE id IN (__IN__)", await ids("reviews"));
@@ -139,6 +141,7 @@ export async function seedDemo(now = new Date()): Promise<Record<string, number>
 
   // Students.
   const userIds: number[] = [];
+  const nickOf = new Map<number, string>();
   for (const u of DEMO_USERS) {
     const rows = await query<{ id: number }>(
       "INSERT INTO users (nickname, group_name, created_at) VALUES (?, ?, ?) ON CONFLICT (nickname) DO NOTHING RETURNING id",
@@ -146,6 +149,7 @@ export async function seedDemo(now = new Date()): Promise<Record<string, number>
     );
     if (rows[0]) {
       userIds.push(Number(rows[0].id));
+      nickOf.set(Number(rows[0].id), u.nickname);
       await tag("users", rows[0].id);
       count("users");
     }
@@ -180,7 +184,13 @@ export async function seedDemo(now = new Date()): Promise<Record<string, number>
         "INSERT INTO menu_items (cafeteria_id, name, price_ngn, is_top_seller, breakdown) VALUES (?, ?, ?, ?, ?) ON CONFLICT (cafeteria_id, name) DO NOTHING RETURNING id",
         [cafe.id, m.name, m.priceNgn, m.topSeller ? 1 : 0, parts.length ? JSON.stringify(parts) : null],
       );
-      if (!r[0]) continue; // a real dish with this name exists: leave it alone
+      if (!r[0]) {
+        // A real dish with this name exists (e.g. Third Cafe's board): link the sample plant dish to it,
+        // but never change the real dish or tag it as demo.
+        const real = await query<{ id: number }>("SELECT id FROM menu_items WHERE cafeteria_id = ? AND name = ?", [cafe.id, m.name]);
+        if (real[0]) menuParts.set(m.name, { id: Number(real[0].id), parts });
+        continue;
+      }
       const id = Number(r[0].id);
       await tag("menu_items", id);
       count("menu_items");
@@ -207,25 +217,57 @@ export async function seedDemo(now = new Date()): Promise<Record<string, number>
       plantPlates.push({ cafeteriaId: cafe.id, name: pd.name, parts: base.parts.filter((x) => !pd.replace.includes(x.label)), option, dishId });
 
       // Reviews from different students.
+      // Reviews from different students, written in one batch (each review then tagged by its row id).
       const reviewers = [...userIds].sort(() => rand() - 0.5).slice(0, Math.min(pd.reviews, userIds.length));
-      for (const uid of reviewers) {
+      const writes = reviewers.flatMap((uid) => {
         const roll = rand();
         const stars = pd.rating === "great" ? (roll < 0.7 ? 5 : roll < 0.95 ? 4 : 3) : pd.rating === "good" ? (roll < 0.35 ? 5 : roll < 0.8 ? 4 : 3) : roll < 0.2 ? 4 : roll < 0.7 ? 3 : 2;
         const comment = rand() < 0.75 ? pick(DEMO_COMMENTS[stars >= 5 ? "great" : stars === 4 ? "good" : "mixed"]) : null;
-        const nick = DEMO_USERS[userIds.indexOf(uid)]?.nickname ?? "Student";
-        const rr = await query<{ id: number }>(
-          "INSERT INTO reviews (plant_dish_id, device_id, nickname, stars, would_order_again, comment, created_at) VALUES (?, ?, ?, ?, ?, ?, ?) RETURNING id",
-          [dishId, `demo-device-${uid}`, nick, stars, stars >= 4 || (stars === 3 && rand() < 0.4) ? 1 : 0, comment, iso(thisWeek())],
-        );
-        await tag("reviews", rr[0].id);
         count("reviews");
-      }
+        return [
+          {
+            sql: "INSERT INTO reviews (plant_dish_id, device_id, nickname, stars, would_order_again, comment, created_at) VALUES (?, ?, ?, ?, ?, ?, ?)",
+            args: [dishId, `demo-device-${uid}`, nickOf.get(uid) ?? "Student", stars, stars >= 4 || (stars === 3 && rand() < 0.4) ? 1 : 0, comment, iso(thisWeek())],
+          },
+          { sql: "INSERT OR IGNORE INTO demo_records (table_name, row_key) VALUES ('reviews', CAST(last_insert_rowid() AS TEXT))", args: [] },
+        ];
+      });
+      if (writes.length) await getDb().batch(writes, "write");
     }
   }
 
-  // This week's scanned plant meals, so the leaderboard and Dex have life.
+  // Students asking cafeterias for plant versions of their meat dishes (real and sample menus): the demand signal.
+  const meaty = await query<{ id: number }>(
+    `SELECT m.id FROM menu_items m WHERE m.cafeteria_id IN (${cafes.map(() => "?").join(", ")})
+       AND (lower(m.name) LIKE '%chicken%' OR lower(m.name) LIKE '%beef%' OR lower(m.name) LIKE '%turkey%'
+         OR lower(m.name) LIKE '%fish%' OR lower(m.name) LIKE '%goat%' OR lower(m.name) LIKE '%sausage%' OR lower(m.name) LIKE '%meat%'
+         OR lower(m.name) LIKE '%egg%' OR lower(m.name) LIKE '%gizzard%' OR lower(m.name) LIKE '%suya%' OR lower(m.name) LIKE '%burger%'
+         OR lower(m.name) LIKE '%shawarma%' OR lower(m.name) LIKE '%bolognese%' OR lower(m.name) LIKE '%seafood%')`,
+    cafes.map((c) => c.id),
+  );
+  for (const item of meaty) {
+    const askers = [...userIds].sort(() => rand() - 0.5).slice(0, Math.floor(rand() * rand() * 45));
+    if (!askers.length) continue;
+    await getDb().batch(
+      askers.flatMap((uid) => {
+        count("plant_requests");
+        const device = `demo-device-${uid}`;
+        return [
+          { sql: "INSERT OR IGNORE INTO plant_requests (menu_item_id, device_id, created_at) VALUES (?, ?, ?)", args: [item.id, device, iso(thisWeek())] },
+          {
+            sql: "INSERT OR IGNORE INTO demo_records (table_name, row_key) SELECT 'plant_requests', CAST(id AS TEXT) FROM plant_requests WHERE menu_item_id = ? AND device_id = ?",
+            args: [item.id, device],
+          },
+        ];
+      }),
+      "write",
+    );
+  }
+
+  // This week's scanned plant meals, so the leaderboard, Dex and campus pulse have life.
+  const db = getDb();
   for (const uid of userIds) {
-    const meals = 2 + Math.floor(rand() * 4);
+    const meals = 1 + Math.floor(rand() * 7);
     for (let i = 0; i < meals && plantPlates.length; i++) {
       const plate = pick(plantPlates);
       const items = [
@@ -235,14 +277,22 @@ export async function seedDemo(now = new Date()): Promise<Record<string, number>
       const withProtein = items.map((x) => ({ ...x, protein: x.foodId ? Math.round((((foods.find((f) => f.id === x.foodId)?.protein_g_per_100g ?? 0) * x.grams) / 100) * 10) / 10 : null }));
       const total = Math.round(withProtein.reduce((s, x) => s + (x.protein ?? 0), 0) * 10) / 10;
       const groups = new Set(withProtein.map((x) => foods.find((f) => f.id === x.foodId)?.dex_group).filter((g) => g && g !== "Staple"));
-      const s = await query<{ id: number }>(
-        "INSERT INTO scans (user_id, dish_name, total_protein_g, is_complete_pair, diversity_count, created_at) VALUES (?, ?, ?, ?, ?, ?) RETURNING id",
-        [uid, plate.name, total, plate.option.completeProtein ? 1 : 0, groups.size, iso(thisWeek())],
+      // One batch per meal: the scan, its items and its demo tag all point at the scan just inserted.
+      const last = "(SELECT MAX(id) FROM scans WHERE user_id = ?)";
+      await db.batch(
+        [
+          {
+            sql: "INSERT INTO scans (user_id, dish_name, total_protein_g, is_complete_pair, diversity_count, created_at) VALUES (?, ?, ?, ?, ?, ?)",
+            args: [uid, plate.name, total, plate.option.completeProtein ? 1 : 0, groups.size, iso(thisWeek())],
+          },
+          ...withProtein.map((x) => ({
+            sql: `INSERT INTO scan_items (scan_id, food_id, raw_label, estimated_grams, protein_g, corrected) VALUES (${last}, ?, ?, ?, ?, 0)`,
+            args: [uid, x.foodId, x.label, x.grams, x.protein],
+          })),
+          { sql: `INSERT OR IGNORE INTO demo_records (table_name, row_key) SELECT 'scans', CAST(${last} AS TEXT)`, args: [uid] },
+        ],
+        "write",
       );
-      const scanId = Number(s[0].id);
-      for (const x of withProtein)
-        await query("INSERT INTO scan_items (scan_id, food_id, raw_label, estimated_grams, protein_g, corrected) VALUES (?, ?, ?, ?, ?, 0)", [scanId, x.foodId, x.label, x.grams, x.protein]);
-      await tag("scans", scanId);
       count("scans");
     }
   }
