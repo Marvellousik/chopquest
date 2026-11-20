@@ -1,0 +1,2 @@
+date,place_name,place_type,food_in_our_database,what_seller_called_it,unit,unit_price_ngn,unit_weight_g,price_per_kg_ngn,weighed_or_seller_said,collected_by,photo,notes
+2026-11-20,EXAMPLE ROW - delete me,market,Soy chunks (textured soy protein),soya chunks,sachet,,,,weighed,Jason,,"price_per_kg_ngn = unit_price_ngn / unit_weight_g * 1000"
