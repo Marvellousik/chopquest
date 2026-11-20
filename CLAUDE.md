@@ -10,7 +10,7 @@ Submission: **Sat 21 Nov 2026, 12:30 PM**. The full team plan, screen list, API 
 1. **Kitchen (cafeteria managers):** pick a dish from a campus cafeteria's real menu, the AI breaks it into parts, the manager sets limits (max cost per plate, min protein kept, keep the dish recognisable, max extra prep), and the **swap engine** returns the top 3 plant-based swaps that replace the meat, with before/after protein and ₦ cost and the reasons. The AI then writes a kitchen card (menu name, student blurb, prep steps) that is **validated** against our food list. The manager publishes it.
 2. **Public Plant Board (students):** the five cafeterias ranked by student reviews of their plant dishes; dish pages with ratings, "would order again" and reviews, so unsure students can see what others thought.
 
-Cafeterias: **Ase Cafe, Bush Cafe, Munchbox, First Cafe, Second Cafe**.
+Cafeterias: **Ase Cafe, Bush Cafe, Munchbox, First Cafe, Second Cafe, Third Cafe, GG's, Machana Cafe, Mac D**.
 
 The old student app (pet, quests, Dex, leaderboard, protein scanning game) is **out of the demo**. Don't extend it.
 

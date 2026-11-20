@@ -1,6 +1,208 @@
 cafeteria,dish_name,price_ngn,main_protein,other_parts,portion_notes,top_seller_rank,photo,date_collected,notes
-Ase Cafe,,,,,,,,,
-Bush Cafe,,,,,,,,,
-Munchbox,,,,,,,,,
-First Cafe,,,,,,,,,
-Second Cafe,,,,,,,,,
+Third Cafe,Jambalaya rice,2500,,,,,Snapchat-1093413246.jpg,2026-11-20,section: Specials
+Third Cafe,Chinese rice,2500,,,,2,Snapchat-1093413246.jpg,2026-11-20,section: Specials
+Third Cafe,Mexican rice,2500,,,,,Snapchat-1093413246.jpg,2026-11-20,section: Specials
+Third Cafe,Signature rice,2000,,,,,Snapchat-1093413246.jpg,2026-11-20,section: Specials
+Third Cafe,Stir fry special rice,2500,,,,1,Snapchat-1093413246.jpg,2026-11-20,section: Specials
+Third Cafe,Singapore rice,3000,,,,,Snapchat-1093413246.jpg,2026-11-20,section: Specials
+Third Cafe,Seafood rice,4000,,,,,Snapchat-1093413246.jpg,2026-11-20,section: Specials
+Third Cafe,Seafood pasta,4000,,,,,Snapchat-1093413246.jpg,2026-11-20,section: Specials
+Third Cafe,Pasta Alfredo,3000,,,,,Snapchat-1093413246.jpg,2026-11-20,section: Specials
+Third Cafe,Pasta Alfredo with cheese,4000,,,,,Snapchat-1093413246.jpg,2026-11-20,section: Specials
+Third Cafe,Chicken pasta,2500,chicken,,,,Snapchat-1093413246.jpg,2026-11-20,section: Specials
+Third Cafe,Beef pasta,2500,beef,,,,Snapchat-1093413246.jpg,2026-11-20,section: Specials
+Third Cafe,Singapore noodles,3000,,,,,Snapchat-1093413246.jpg,2026-11-20,section: Specials
+Third Cafe,Celebrity special noodles,3000,,,,,Snapchat-1093413246.jpg,2026-11-20,section: Specials
+Third Cafe,Smokey jollof rice,1500,,,,4,Snapchat-1093413246.jpg,2026-11-20,section: Main dish
+Third Cafe,Fried rice,1500,,,,,Snapchat-1093413246.jpg,2026-11-20,section: Main dish
+Third Cafe,White rice,1000,,,,,Snapchat-1093413246.jpg,2026-11-20,section: Main dish
+Third Cafe,White rice and beans,1500,beans,,,,Snapchat-1093413246.jpg,2026-11-20,section: Main dish
+Third Cafe,Rice and beans mixed,2000,beans,,,,Snapchat-1093413246.jpg,2026-11-20,section: Main dish
+Third Cafe,Breakfast platter,4000,,,,,Snapchat-1093413246.jpg,2026-11-20,section: Platter
+Third Cafe,Lunch platter,4000,,,,,Snapchat-1093413246.jpg,2026-11-20,section: Platter
+Third Cafe,Valentine platter,,,,,,Snapchat-1093413246.jpg,2026-11-20,section: Platter
+Third Cafe,Birthday platter,,,,,,Snapchat-1093413246.jpg,2026-11-20,section: Platter
+Third Cafe,Loaded fries with chicken/beef and cheese,5000,chicken or beef,,,,Snapchat-1093413246.jpg,2026-11-20,section: Fries
+Third Cafe,Loaded fries with chicken/beef,4000,chicken or beef,,,,Snapchat-1093413246.jpg,2026-11-20,section: Fries
+Third Cafe,Loaded fries,3000,,,,,Snapchat-1093413246.jpg,2026-11-20,section: Fries
+Third Cafe,Chicken and chops,4000,chicken,,,,Snapchat-1093413246.jpg,2026-11-20,section: Fries
+Third Cafe,French fries,2500,,,,5,Snapchat-1093413246.jpg,2026-11-20,section: Fries
+Third Cafe,Fried yam,2000,,,,,Snapchat-1093413246.jpg,2026-11-20,section: Fries
+Third Cafe,Sweet potato and egg sauce,1700,egg,,,,Snapchat-1093413246.jpg,2026-11-20,section: Fries
+Third Cafe,Plantain,3000,,,,,Snapchat-1093413246.jpg,2026-11-20,section: Fries; check: price looks high for plantain
+Third Cafe,Pancakes,500,,,,,Snapchat-1093413246.jpg,2026-11-20,section: Fries
+Third Cafe,Gizdodo,3000,gizzard,,,,Snapchat-1093413246.jpg,2026-11-20,section: Fries
+Third Cafe,Masa and egg sauce,1500,egg,,,,Snapchat-1093413246.jpg,2026-11-20,section: Fries
+Third Cafe,Turkey sauce,2500,turkey,,,,Snapchat-1093413246.jpg,2026-11-20,section: Sauce
+Third Cafe,Chicken sauce,1500,chicken,,,3,Snapchat-1093413246.jpg,2026-11-20,section: Sauce
+Third Cafe,Chicken vegetable,2500,chicken,,,,Snapchat-1093413246.jpg,2026-11-20,section: Sauce
+Third Cafe,Beef sauce,1500,beef,,,,Snapchat-1093413246.jpg,2026-11-20,section: Sauce
+Third Cafe,Fish sauce,1500,fish,,,,Snapchat-1093413246.jpg,2026-11-20,section: Sauce
+Third Cafe,Catfish sauce,2000,fish,,,,Snapchat-1093413246.jpg,2026-11-20,section: Sauce
+Third Cafe,Cow tail sauce,1500,beef,,,,Snapchat-1093413246.jpg,2026-11-20,section: Sauce
+Third Cafe,Chicken shawarma single sausage,3000,chicken,,,,Snapchat-1093413246.jpg,2026-11-20,section: Pastries
+Third Cafe,Chicken shawarma double sausage,3500,chicken,,,,Snapchat-1093413246.jpg,2026-11-20,section: Pastries
+Third Cafe,Chicken shawarma single sausage and cheese,3500,chicken,,,,Snapchat-1093413246.jpg,2026-11-20,section: Pastries
+Third Cafe,Chicken shawarma double sausage and cheese,4000,chicken,,,,Snapchat-1093413246.jpg,2026-11-20,section: Pastries
+Third Cafe,Beef shawarma single sausage,3000,beef,,,,Snapchat-1093413246.jpg,2026-11-20,section: Pastries
+Third Cafe,Beef shawarma double sausage,3500,beef,,,,Snapchat-1093413246.jpg,2026-11-20,section: Pastries
+Third Cafe,Beef shawarma single sausage and cheese,3500,beef,,,,Snapchat-1093413246.jpg,2026-11-20,section: Pastries
+Third Cafe,Beef shawarma double sausage and cheese,4000,beef,,,,Snapchat-1093413246.jpg,2026-11-20,section: Pastries
+Third Cafe,Cheese burger,3000,beef,,,,Snapchat-1093413246.jpg,2026-11-20,section: Pastries
+Third Cafe,Double cheese burger,4000,beef,,,,Snapchat-1093413246.jpg,2026-11-20,section: Pastries
+Third Cafe,French toast,2000,egg,,,,Snapchat-1093413246.jpg,2026-11-20,section: Pastries
+Third Cafe,Milky donut,1500,,,,,Snapchat-1093413246.jpg,2026-11-20,section: Pastries
+Third Cafe,Egusi soup,1500,,,,,Snapchat-1093413246.jpg,2026-11-20,section: Soups
+Third Cafe,Ogbono soup,1500,,,,,Snapchat-1093413246.jpg,2026-11-20,section: Soups
+Third Cafe,Afang soup,2000,,,,,Snapchat-1093413246.jpg,2026-11-20,section: Soups
+Third Cafe,Seafood okro,4000,fish,,,,Snapchat-1093413246.jpg,2026-11-20,section: Soups
+Third Cafe,Vegetable soup,2000,,,,,Snapchat-1093413246.jpg,2026-11-20,section: Soups
+Third Cafe,Milkshake,3000,milk,,,,Snapchat-1093413246.jpg,2026-11-20,section: Drinks
+Third Cafe,Fruit punch,2600,,,,,Snapchat-1093413246.jpg,2026-11-20,section: Drinks; check: price hard to read
+Third Cafe,Fruit salad,2000,,,,,Snapchat-1093413246.jpg,2026-11-20,section: Drinks
+Third Cafe,Coleslaw,500,,,,,Snapchat-1093413246.jpg,2026-11-20,section: Salads
+Third Cafe,Creamy chicken salad,2000,chicken,,,,Snapchat-1093413246.jpg,2026-11-20,section: Salads
+Third Cafe,Celebrity special salad,2500,,,,,Snapchat-1093413246.jpg,2026-11-20,section: Salads
+Third Cafe,Spaghetti bolognese,1500,beef,,,,Snapchat-1093413246.jpg,2026-11-20,section: Pasta
+Third Cafe,Vegetable pasta,1500,,,,,Snapchat-1093413246.jpg,2026-11-20,section: Pasta
+Third Cafe,Macaroni,1500,,,,,Snapchat-1093413246.jpg,2026-11-20,section: Pasta
+Third Cafe,Peppered turkey,4000,turkey,,,,Snapchat-1093413246.jpg,2026-11-20,section: Proteins (add-on)
+Third Cafe,Peppered chicken (large),2500,chicken,,,,Snapchat-1093413246.jpg,2026-11-20,section: Proteins (add-on)
+Third Cafe,Peppered chicken (small),1500,chicken,,,,Snapchat-1093413246.jpg,2026-11-20,section: Proteins (add-on)
+Third Cafe,Chicken wing,2000,chicken,,,,Snapchat-1093413246.jpg,2026-11-20,section: Proteins (add-on)
+Third Cafe,Cow leg,1000,beef,,,,Snapchat-1093413246.jpg,2026-11-20,section: Proteins (add-on)
+Third Cafe,Gizzard,500,gizzard,,,,Snapchat-1093413246.jpg,2026-11-20,section: Proteins (add-on)
+Third Cafe,Sausage,300,sausage,,,,Snapchat-1093413246.jpg,2026-11-20,section: Proteins (add-on)
+Third Cafe,Boiled egg,300,egg,,,,Snapchat-1093413246.jpg,2026-11-20,section: Proteins (add-on)
+Third Cafe,Beef,300,beef,,,,Snapchat-1093413246.jpg,2026-11-20,section: Proteins (add-on)
+Third Cafe,Fish,500,fish,,,,Snapchat-1093413246.jpg,2026-11-20,section: Proteins (add-on); check: price hard to read
+Machana Cafe,Jollof rice,800,,,,,Snapchat-1542687790.jpg,2026-11-20,section: Food menu
+Machana Cafe,Fried rice,800,,,,,Snapchat-1542687790.jpg,2026-11-20,section: Food menu
+Machana Cafe,White rice and stew,800,,,,,Snapchat-1542687790.jpg,2026-11-20,section: Food menu
+Machana Cafe,Spaghetti,800,,,,,Snapchat-1542687790.jpg,2026-11-20,section: Food menu
+Machana Cafe,Macaroni,800,,,,,Snapchat-1542687790.jpg,2026-11-20,section: Food menu
+Machana Cafe,White beans,300,beans,,,,Snapchat-1542687790.jpg,2026-11-20,section: Food menu
+Machana Cafe,Noodles,1000,,,,,Snapchat-1542687790.jpg,2026-11-20,section: Food menu
+Machana Cafe,Boiled yam and egg sauce,1500,egg,,,,Snapchat-1542687790.jpg,2026-11-20,section: Food menu
+Machana Cafe,Plantain,200,,,,,Snapchat-1542687790.jpg,2026-11-20,section: Food menu
+Machana Cafe,Moi moi,300,beans,,,,Snapchat-1542687790.jpg,2026-11-20,section: Food menu
+Machana Cafe,Irish potato chips,1000,,,,,Snapchat-1542687790.jpg,2026-11-20,section: Food menu
+Machana Cafe,Bitter leaf soup,1000,,,,,Snapchat-1542687790.jpg,2026-11-20,section: Soups
+Machana Cafe,Vegetable soup,1000,,,,,Snapchat-1542687790.jpg,2026-11-20,section: Soups
+Machana Cafe,Egusi soup,1000,,,,,Snapchat-1542687790.jpg,2026-11-20,section: Soups
+Machana Cafe,Ofe Owerri,1000,,,,,Snapchat-1542687790.jpg,2026-11-20,section: Soups
+Machana Cafe,Eba,500,,,,,Snapchat-1542687790.jpg,2026-11-20,section: Swallows
+Machana Cafe,Semo,500,,,,,Snapchat-1542687790.jpg,2026-11-20,section: Swallows
+Machana Cafe,Fufu,100,,,,,Snapchat-1542687790.jpg,2026-11-20,section: Swallows; check: printed 100
+Machana Cafe,Puff puff,100,,,,,Snapchat-1542687790.jpg,2026-11-20,section: Pastry
+Machana Cafe,Short bread,800,,,,,Snapchat-1542687790.jpg,2026-11-20,section: Pastry
+Machana Cafe,Pancake,500,,,,,Snapchat-1542687790.jpg,2026-11-20,section: Pastry
+Machana Cafe,Meat pie,700,beef,,,,Snapchat-1542687790.jpg,2026-11-20,section: Pastry
+Machana Cafe,Milky donuts,800,,,,,Snapchat-1542687790.jpg,2026-11-20,section: Pastry
+Machana Cafe,Jam donuts,800,,,,,Snapchat-1542687790.jpg,2026-11-20,section: Pastry
+Machana Cafe,Plain donuts,600,,,,,Snapchat-1542687790.jpg,2026-11-20,section: Pastry
+Machana Cafe,Sausage rolls,800,sausage,,,,Snapchat-1542687790.jpg,2026-11-20,section: Pastry
+Machana Cafe,Mini banana bread,1000,,,,,Snapchat-1542687790.jpg,2026-11-20,section: Pastry
+Machana Cafe,Cookies,1100,,,,,Snapchat-1542687790.jpg,2026-11-20,section: Pastry
+Machana Cafe,Samosa,400,,,,,Snapchat-1542687790.jpg,2026-11-20,section: Pastry
+Machana Cafe,Spring rolls,400,,,,,Snapchat-1542687790.jpg,2026-11-20,section: Pastry
+Machana Cafe,Sliced chocolate cake,1100,,,,,Snapchat-1542687790.jpg,2026-11-20,section: Pastry
+Machana Cafe,Sliced red velvet cake,1100,,,,,Snapchat-1542687790.jpg,2026-11-20,section: Pastry
+Machana Cafe,Sliced vanilla cake,1100,,,,,Snapchat-1542687790.jpg,2026-11-20,section: Pastry
+Machana Cafe,Mini pizza,2000,,,,,Snapchat-1542687790.jpg,2026-11-20,section: Pastry
+Machana Cafe,Chicken avocado sandwich,1500,chicken,,,,Snapchat-1542687790.jpg,2026-11-20,section: Pastry
+Machana Cafe,Tortilla wrap,1500,,,,,Snapchat-1542687790.jpg,2026-11-20,section: Pastry
+Machana Cafe,Beef,200,beef,,,,Snapchat-1542687790.jpg,2026-11-20,section: Protein (add-on)
+Machana Cafe,Chicken,1500,chicken,,,,Snapchat-1542687790.jpg,2026-11-20,section: Protein (add-on)
+Machana Cafe,Turkey,1500,turkey,,,,Snapchat-1542687790.jpg,2026-11-20,section: Protein (add-on)
+Machana Cafe,Fish,800,fish,,,,Snapchat-1542687790.jpg,2026-11-20,section: Protein (add-on)
+Machana Cafe,Sausage,300,sausage,,,,Snapchat-1542687790.jpg,2026-11-20,section: Protein (add-on)
+Machana Cafe,Boiled egg,300,egg,,,,Snapchat-1542687790.jpg,2026-11-20,section: Protein (add-on)
+Machana Cafe,Water,250,,,,,Snapchat-1542687790.jpg,2026-11-20,section: Chilled drinks
+Machana Cafe,Zobo,600,,,,,Snapchat-1542687790.jpg,2026-11-20,section: Chilled drinks
+Machana Cafe,Tiger nut drink,700,tigernut,,,,Snapchat-1542687790.jpg,2026-11-20,section: Chilled drinks
+Machana Cafe,Soft drinks,,,,,,Snapchat-1542687790.jpg,2026-11-20,section: Chilled drinks
+Second Cafe,Asun jollof rice,,,,,,Snapchat-162145101.jpg,2026-11-20,section: Rice; board has no prices
+Second Cafe,Asun fried rice,,,,,,Snapchat-162145101.jpg,2026-11-20,section: Rice; board has no prices
+Second Cafe,Basmati / white rice,,,,,,Snapchat-162145101.jpg,2026-11-20,section: Rice; board has no prices
+Second Cafe,Gizzard and plantain,,,,,,Snapchat-162145101.jpg,2026-11-20,section: Rice; board has no prices
+Second Cafe,Native rice,,,,,,Snapchat-162145101.jpg,2026-11-20,section: Rice; board has no prices
+Second Cafe,Stir-fried spaghetti,,,,,,Snapchat-162145101.jpg,2026-11-20,section: Rice; board has no prices
+Second Cafe,White rice,,,,,,Snapchat-162145101.jpg,2026-11-20,section: Rice; board has no prices
+Second Cafe,Smokey jollof rice,,,,,,Snapchat-162145101.jpg,2026-11-20,section: Rice; board has no prices
+Second Cafe,Fried rice,,,,,,Snapchat-162145101.jpg,2026-11-20,section: Rice; board has no prices
+Second Cafe,Jollof spaghetti,,,,,4,Snapchat-162145101.jpg,2026-11-20,section: Pasta; board has no prices
+Second Cafe,Native spaghetti,,,,,,Snapchat-162145101.jpg,2026-11-20,section: Pasta; board has no prices
+Second Cafe,White spaghetti,,,,,,Snapchat-162145101.jpg,2026-11-20,section: Pasta; board has no prices
+Second Cafe,Yam porridge,,,,,,Snapchat-162145101.jpg,2026-11-20,section: Porridge; board has no prices
+Second Cafe,Porridge beans / potatoes,,,,,2,Snapchat-162145101.jpg,2026-11-20,section: Porridge; board has no prices
+Second Cafe,Unripe plantain porridge,,,,,,Snapchat-162145101.jpg,2026-11-20,section: Porridge; board has no prices
+Second Cafe,Salad,,,,,,Snapchat-162145101.jpg,2026-11-20,section: Sides; board has no prices
+Second Cafe,Moi moi,,,,,,Snapchat-162145101.jpg,2026-11-20,section: Sides; board has no prices
+Second Cafe,Plantain,,,,,,Snapchat-162145101.jpg,2026-11-20,section: Sides; board has no prices
+Second Cafe,Vegetables (spinach / green),,,,,,Snapchat-162145101.jpg,2026-11-20,section: Sides; board has no prices
+Second Cafe,Eba,,,,,,Snapchat-162145101.jpg,2026-11-20,section: Swallow; board has no prices
+Second Cafe,Corn flour (tuwo),,,,,,Snapchat-162145101.jpg,2026-11-20,section: Swallow; board has no prices
+Second Cafe,Semo,,,,,,Snapchat-162145101.jpg,2026-11-20,section: Swallow; board has no prices
+Second Cafe,Fufu / oat,,,,,,Snapchat-162145101.jpg,2026-11-20,section: Swallow; board has no prices
+Second Cafe,Beef,,,,,,Snapchat-162145101.jpg,2026-11-20,"section: Proteins (add-on); board has no prices; survey: chicken 1,500-2,500, beef 300, fish 1,000-2,000"
+Second Cafe,Boiled egg,,,,,,Snapchat-162145101.jpg,2026-11-20,"section: Proteins (add-on); board has no prices; survey: chicken 1,500-2,500, beef 300, fish 1,000-2,000"
+Second Cafe,Chicken,,,,,,Snapchat-162145101.jpg,2026-11-20,"section: Proteins (add-on); board has no prices; survey: chicken 1,500-2,500, beef 300, fish 1,000-2,000"
+Second Cafe,Fish,,,,,,Snapchat-162145101.jpg,2026-11-20,"section: Proteins (add-on); board has no prices; survey: chicken 1,500-2,500, beef 300, fish 1,000-2,000"
+Second Cafe,Kpomo,,,,,,Snapchat-162145101.jpg,2026-11-20,"section: Proteins (add-on); board has no prices; survey: chicken 1,500-2,500, beef 300, fish 1,000-2,000"
+Second Cafe,Sausage,,,,,,Snapchat-162145101.jpg,2026-11-20,"section: Proteins (add-on); board has no prices; survey: chicken 1,500-2,500, beef 300, fish 1,000-2,000"
+Second Cafe,Egusi soup,,,,,3,Snapchat-162145101.jpg,2026-11-20,section: Soup; board has no prices
+Second Cafe,Oha soup,,,,,,Snapchat-162145101.jpg,2026-11-20,section: Soup; board has no prices
+Second Cafe,Bitter leaf soup,,,,,,Snapchat-162145101.jpg,2026-11-20,section: Soup; board has no prices
+Second Cafe,Okro soup,,,,,,Snapchat-162145101.jpg,2026-11-20,section: Soup; board has no prices
+Second Cafe,Edikaikong,,,,,,Snapchat-162145101.jpg,2026-11-20,section: Soup; board has no prices
+Second Cafe,White soup,,,,,,Snapchat-162145101.jpg,2026-11-20,section: Soup; board has no prices
+Second Cafe,Tomato stew,,,,,,Snapchat-162145101.jpg,2026-11-20,section: Sauce; board has no prices
+Second Cafe,Banga stew,,,,,5,Snapchat-162145101.jpg,2026-11-20,section: Sauce; board has no prices
+Second Cafe,Ofada sauce,,,,,,Snapchat-162145101.jpg,2026-11-20,section: Sauce; board has no prices
+Second Cafe,Vegetable stew,,,,,,Snapchat-162145101.jpg,2026-11-20,section: Sauce; board has no prices
+Second Cafe,Soft drinks,,,,,,Snapchat-162145101.jpg,2026-11-20,section: Drinks; board has no prices
+Second Cafe,Water,,,,,,Snapchat-162145101.jpg,2026-11-20,section: Drinks; board has no prices
+Second Cafe,Fruit mix drinks,,,,,,Snapchat-162145101.jpg,2026-11-20,section: Drinks; board has no prices
+Second Cafe,Berry blast,,,,,,Snapchat-162145101.jpg,2026-11-20,section: Drinks; board has no prices
+Second Cafe,Zobo,,,,,,Snapchat-162145101.jpg,2026-11-20,section: Drinks; board has no prices
+Second Cafe,Kunu aya,,,,,,Snapchat-162145101.jpg,2026-11-20,section: Drinks; board has no prices
+Second Cafe,Chicken shawarma,,,,,,Snapchat-698984119.jpg,2026-11-20,section: Shawarma and sandwich; board has no prices
+Second Cafe,Beef shawarma,,,,,,Snapchat-698984119.jpg,2026-11-20,section: Shawarma and sandwich; board has no prices
+Second Cafe,Chicken and beef shawarma,,,,,,Snapchat-698984119.jpg,2026-11-20,section: Shawarma and sandwich; board has no prices
+Second Cafe,Special Luchies shawarma,,,,,,Snapchat-698984119.jpg,2026-11-20,section: Shawarma and sandwich; board has no prices
+Second Cafe,Chicken sandwich,,,,,,Snapchat-698984119.jpg,2026-11-20,section: Shawarma and sandwich; board has no prices
+Second Cafe,Sausage sandwich,,,,,,Snapchat-698984119.jpg,2026-11-20,section: Shawarma and sandwich; board has no prices
+Second Cafe,Egg sandwich,,,,,,Snapchat-698984119.jpg,2026-11-20,section: Shawarma and sandwich; board has no prices
+Second Cafe,Chicken and sausage sandwich,,,,,,Snapchat-698984119.jpg,2026-11-20,section: Shawarma and sandwich; board has no prices
+Second Cafe,Special Luchies sandwich,,,,,,Snapchat-698984119.jpg,2026-11-20,section: Shawarma and sandwich; board has no prices
+Mac D,Jollof rice,,,,,,Snapchat-447712562.jpg,2026-11-20,"section: Menu; poster has no prices; add-ons listed: goat meat, sausage, fish, egg, plantain, salad"
+Mac D,Fried rice,,,,,,Snapchat-447712562.jpg,2026-11-20,"section: Menu; poster has no prices; add-ons listed: goat meat, sausage, fish, egg, plantain, salad"
+Mac D,Beans,,,,,,Snapchat-447712562.jpg,2026-11-20,"section: Menu; poster has no prices; add-ons listed: goat meat, sausage, fish, egg, plantain, salad"
+Mac D,White rice,,,,,,Snapchat-447712562.jpg,2026-11-20,"section: Menu; poster has no prices; add-ons listed: goat meat, sausage, fish, egg, plantain, salad"
+Mac D,Native or palm oil rice,,,,,,Snapchat-447712562.jpg,2026-11-20,"section: Menu; poster has no prices; add-ons listed: goat meat, sausage, fish, egg, plantain, salad"
+Mac D,Spaghetti,,,,,,Snapchat-447712562.jpg,2026-11-20,"section: Menu; poster has no prices; add-ons listed: goat meat, sausage, fish, egg, plantain, salad"
+Mac D,Yam and egg sauce,,,,,,Snapchat-447712562.jpg,2026-11-20,"section: Menu; poster has no prices; add-ons listed: goat meat, sausage, fish, egg, plantain, salad"
+Mac D,Noodles,,,,,,Snapchat-447712562.jpg,2026-11-20,"section: Menu; poster has no prices; add-ons listed: goat meat, sausage, fish, egg, plantain, salad"
+Mac D,Moi moi,,,,,,Snapchat-447712562.jpg,2026-11-20,"section: Menu; poster has no prices; add-ons listed: goat meat, sausage, fish, egg, plantain, salad"
+Mac D,Macaroni,,,,,,Snapchat-447712562.jpg,2026-11-20,"section: Menu; poster has no prices; add-ons listed: goat meat, sausage, fish, egg, plantain, salad"
+Mac D,Swallow,,,,,,Snapchat-447712562.jpg,2026-11-20,"section: Menu; poster has no prices; add-ons listed: goat meat, sausage, fish, egg, plantain, salad"
+Mac D,Beef / chicken sauce,,,,,,Snapchat-447712562.jpg,2026-11-20,"section: Menu; poster has no prices; add-ons listed: goat meat, sausage, fish, egg, plantain, salad"
+Mac D,Bread and egg,,,,,,Snapchat-447712562.jpg,2026-11-20,"section: Menu; poster has no prices; add-ons listed: goat meat, sausage, fish, egg, plantain, salad"
+Mac D,Pepper soup,,,,,,Snapchat-447712562.jpg,2026-11-20,"section: Menu; poster has no prices; add-ons listed: goat meat, sausage, fish, egg, plantain, salad"
+Mac D,Plantain and egg sauce,,,,,,Snapchat-447712562.jpg,2026-11-20,"section: Menu; poster has no prices; add-ons listed: goat meat, sausage, fish, egg, plantain, salad"
+Mac D,Chips,,,,,,Snapchat-447712562.jpg,2026-11-20,"section: Menu; poster has no prices; add-ons listed: goat meat, sausage, fish, egg, plantain, salad"
+First Cafe,Chicken,1500,chicken,,,,,2026-11-20,"section: Proteins (add-on); survey: 1,500-2,000; verbal survey (team/market-survey/survey-2026-11-20.md)"
+First Cafe,Chicken (biggest piece),2500,chicken,,,,,2026-11-20,section: Proteins (add-on); verbal survey (team/market-survey/survey-2026-11-20.md)
+First Cafe,Beef,500,beef,,,,,2026-11-20,section: Proteins (add-on); verbal survey (team/market-survey/survey-2026-11-20.md)
+First Cafe,Fish,500,fish,,,,,2026-11-20,"section: Proteins (add-on); survey: 500 or 1,000; verbal survey (team/market-survey/survey-2026-11-20.md)"
+First Cafe,Sausage,300,sausage,,,,,2026-11-20,section: Proteins (add-on); verbal survey (team/market-survey/survey-2026-11-20.md)
+Bush Cafe,Chicken,1500,chicken,,,,,2026-11-20,"section: Proteins (add-on); survey: 1,500, 2,000, 2,500; verbal survey (team/market-survey/survey-2026-11-20.md)"
+Bush Cafe,Beef,300,beef,,,,,2026-11-20,section: Proteins (add-on); verbal survey (team/market-survey/survey-2026-11-20.md)
+Bush Cafe,Sausage,300,sausage,,,,,2026-11-20,section: Proteins (add-on); out of stock on the day; verbal survey (team/market-survey/survey-2026-11-20.md)
+GG's,Chicken,2000,chicken,,,,,2026-11-20,"section: Proteins (add-on); survey: 2,000, 2,500, 3,000; verbal survey (team/market-survey/survey-2026-11-20.md)"
+GG's,Beef,200,beef,,,,,2026-11-20,section: Proteins (add-on); verbal survey (team/market-survey/survey-2026-11-20.md)
+GG's,Fish,1000,fish,,,,,2026-11-20,"section: Proteins (add-on); survey: 1,000, 1,500; verbal survey (team/market-survey/survey-2026-11-20.md)"
+Munchbox,Chicken,2500,chicken,,,,,2026-11-20,"section: Proteins (add-on); survey: 2,500, 3,000, 3,500; verbal survey (team/market-survey/survey-2026-11-20.md)"
+Munchbox,Beef,300,beef,,,,,2026-11-20,section: Proteins (add-on); verbal survey (team/market-survey/survey-2026-11-20.md)
+Munchbox,Fish,1000,fish,,,,,2026-11-20,section: Proteins (add-on); verbal survey (team/market-survey/survey-2026-11-20.md)

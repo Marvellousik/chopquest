@@ -75,3 +75,46 @@ export function buildLeaderboard(users: LbUser[], meals: LbMeal[], now: Date = n
 
 /** ISO instant the current Lagos week began, for the SQL WHERE created_at >= ? filter. */
 export const weekStartIso = (now: Date = new Date()) => lagosWeekStart(now).toISOString();
+
+// ---- Inside one group: each member's own ranking ----
+
+export type LbMember = { userId: number; nickname: string };
+
+export type MemberRow = {
+  userId: number;
+  nickname: string;
+  /** Distinct protein groups this Lagos week (Staple excluded), same score as the group board. */
+  diversity: number;
+  /** Meals this week with at least one plant or alternative protein (tie-breaker). */
+  plantMeals: number;
+  /** 1-based; members with the same diversity and plant meals share a rank. */
+  rank: number;
+};
+
+const NOT_PLANT = new Set(["Animal", "Staple"]);
+
+/** Rank the members of one group against each other for the current Lagos week. */
+export function rankMembers(members: LbMember[], meals: LbMeal[], now: Date = new Date()): MemberRow[] {
+  const start = lagosWeekStart(now).getTime();
+  const end = start + 7 * 24 * 60 * 60 * 1000;
+  const rows: MemberRow[] = members.map((m) => {
+    const mine = meals.filter((x) => x.userId === m.userId);
+    const thisWeek = mine.filter((x) => {
+      const t = new Date(x.createdAt).getTime();
+      return t >= start && t < end;
+    });
+    return {
+      userId: m.userId,
+      nickname: m.nickname,
+      diversity: weeklyDiversity(mine, now),
+      plantMeals: thisWeek.filter((x) => x.groups.some((g) => g && !NOT_PLANT.has(g))).length,
+      rank: 0,
+    };
+  });
+  rows.sort((a, b) => b.diversity - a.diversity || b.plantMeals - a.plantMeals || a.nickname.localeCompare(b.nickname));
+  rows.forEach((r, i) => {
+    const prev = rows[i - 1];
+    r.rank = prev && prev.diversity === r.diversity && prev.plantMeals === r.plantMeals ? prev.rank : i + 1;
+  });
+  return rows;
+}

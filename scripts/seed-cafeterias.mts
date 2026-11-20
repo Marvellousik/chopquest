@@ -1,4 +1,4 @@
-// Load the 5 campus cafeterias and their menus (from Jason's team/market-survey/cafeteria-menus.csv).
+// Load the 9 campus cafeterias and their menus (from Jason's team/market-survey/cafeteria-menus.csv).
 //   npm run seed:cafeterias            -> upserts into Turso (needs TURSO_DATABASE_URL in .env.local)
 //   npm run seed:cafeterias -- --dry   -> parses and prints only
 // Safe to re-run: cafeterias match on slug, menu items on (cafeteria, dish name). Saved AI breakdowns are kept.
@@ -12,6 +12,10 @@ const CAFETERIAS = [
   { slug: "munchbox", name: "Munchbox" },
   { slug: "first-cafe", name: "First Cafe" },
   { slug: "second-cafe", name: "Second Cafe" },
+  { slug: "third-cafe", name: "Third Cafe" },
+  { slug: "ggs", name: "GG's" },
+  { slug: "machana", name: "Machana Cafe" },
+  { slug: "mac-d", name: "Mac D" },
 ];
 const slugOf = (name: string) => CAFETERIAS.find((c) => c.name.toLowerCase() === name.trim().toLowerCase())?.slug;
 
@@ -43,6 +47,7 @@ function parseCsv(text: string): string[][] {
 type Item = { slug: string; name: string; price: number; topSeller: boolean };
 const items: Item[] = [];
 const skipped: string[] = [];
+let unpriced = 0; // dishes on a menu board with no price: kept in the CSV, not loaded (price_ngn is required)
 const csvPath = fileURLToPath(new URL("../team/market-survey/cafeteria-menus.csv", import.meta.url));
 if (existsSync(csvPath)) {
   const [head, ...data] = parseCsv(readFileSync(csvPath, "utf8"));
@@ -54,6 +59,7 @@ if (existsSync(csvPath)) {
     if (!name && !priceText) continue; // template row still empty
     const slug = slugOf(cafe);
     const price = Number(priceText);
+    if (slug && name && !priceText) { unpriced++; continue; }
     if (!slug || !name || !Number.isFinite(price) || price <= 0) {
       skipped.push(`${cafe} / ${name || "(no name)"} / ${priceText || "(no price)"}`);
       continue;
@@ -67,7 +73,7 @@ if (existsSync(csvPath)) {
 
 if (process.argv.includes("--dry")) {
   console.table(items);
-  console.log(`${CAFETERIAS.length} cafeterias, ${items.length} menu items parsed (dry run).`);
+  console.log(`${CAFETERIAS.length} cafeterias, ${items.length} menu items parsed, ${unpriced} without a price (dry run).`);
   if (skipped.length) console.log("Skipped rows (fix in the CSV):", skipped);
   process.exit(0);
 }
@@ -96,5 +102,5 @@ if (items.length) {
     "write",
   );
 }
-console.log(`Seeded ${CAFETERIAS.length} cafeterias and ${items.length} menu items.`);
+console.log(`Seeded ${CAFETERIAS.length} cafeterias and ${items.length} menu items (${unpriced} listed without a price, not loaded).`);
 if (skipped.length) console.log("Skipped rows (fix in the CSV):", skipped);

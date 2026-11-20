@@ -2,12 +2,12 @@
 //   KITCHEN_CODES="ase-cafe:123456,bush-cafe:654321,munchbox:...,first-cafe:...,second-cafe:..."
 // Only a scrypt hash is stored. Runs on every boot; a cafeteria not listed keeps its current code.
 //   npm run kitchen:codes                 -> apply KITCHEN_CODES
-//   npm run kitchen:codes -- --generate   -> print 5 fresh random codes to paste into KITCHEN_CODES
+//   npm run kitchen:codes -- --generate   -> print fresh random codes (one per cafeteria) to paste into KITCHEN_CODES
 // Hash format (must match src/lib/server/access-code.ts): "scrypt$<saltHex>$<hashHex>", N=16384, r=8, p=1, 32 bytes.
 import { randomBytes, randomInt, scryptSync } from "node:crypto";
 import { createClient } from "@libsql/client";
 
-const SLUGS = ["ase-cafe", "bush-cafe", "munchbox", "first-cafe", "second-cafe"];
+const SLUGS = ["ase-cafe", "bush-cafe", "munchbox", "first-cafe", "second-cafe", "third-cafe", "ggs", "machana", "mac-d"];
 
 if (process.argv.includes("--generate")) {
   const codes = SLUGS.map((s) => `${s}:${String(randomInt(0, 1_000_000)).padStart(6, "0")}`).join(",");

@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { buildLeaderboard, MIN_MEMBERS, weekStartIso, type LbMeal, type LbUser } from "@/lib/leaderboard";
+import { buildLeaderboard, MIN_MEMBERS, rankMembers, weekStartIso, type LbMeal, type LbUser } from "@/lib/leaderboard";
 
 // Thursday 19 Nov 2026, 12:00 Lagos (11:00 UTC). Week began Mon 16 Nov 00:00 Lagos = Sun 15 Nov 23:00 UTC.
 const NOW = new Date("2026-11-19T11:00:00Z");
@@ -91,5 +91,46 @@ describe("buildLeaderboard", () => {
     const big = buildLeaderboard(manyUsers, manyMeals, NOW);
     expect(performance.now() - t).toBeLessThan(1000);
     expect(big.ranked).toHaveLength(40);
+  });
+});
+
+describe("rankMembers (inside one group)", () => {
+  const now = new Date("2026-11-20T12:00:00Z"); // Friday; the Lagos week started Mon 16 Nov
+  const at = (iso: string) => new Date(iso);
+  const members = [
+    { userId: 1, nickname: "TolaEats" },
+    { userId: 2, nickname: "JollofJudge" },
+    { userId: 3, nickname: "Kemi_K" },
+    { userId: 4, nickname: "Quiet_Q" },
+  ];
+  const meals = [
+    { userId: 1, createdAt: at("2026-11-17T12:00:00Z"), groups: ["Soy", "Staple"] },
+    { userId: 1, createdAt: at("2026-11-18T12:00:00Z"), groups: ["Beans"] },
+    { userId: 2, createdAt: at("2026-11-17T12:00:00Z"), groups: ["Soy"] },
+    { userId: 2, createdAt: at("2026-11-19T12:00:00Z"), groups: ["Soy"] },
+    { userId: 3, createdAt: at("2026-11-19T12:00:00Z"), groups: ["Animal"] },
+    { userId: 3, createdAt: at("2026-11-10T12:00:00Z"), groups: ["Soy", "Beans", "Egusi"] }, // last week: doesn't count
+  ];
+
+  it("ranks by distinct protein groups this week, then plant meals, and gives everyone a row", () => {
+    const rows = rankMembers(members, meals, now);
+    expect(rows.map((r) => [r.nickname, r.diversity, r.plantMeals, r.rank])).toEqual([
+      ["TolaEats", 2, 2, 1],
+      ["JollofJudge", 1, 2, 2],
+      ["Kemi_K", 1, 0, 3], // animal protein counts for variety, but isn't a plant meal
+      ["Quiet_Q", 0, 0, 4],
+    ]);
+  });
+
+  it("lets members with the same score share a rank", () => {
+    const rows = rankMembers(
+      [{ userId: 1, nickname: "A" }, { userId: 2, nickname: "B" }],
+      [
+        { userId: 1, createdAt: at("2026-11-17T12:00:00Z"), groups: ["Soy"] },
+        { userId: 2, createdAt: at("2026-11-17T12:00:00Z"), groups: ["Beans"] },
+      ],
+      now,
+    );
+    expect(rows.map((r) => r.rank)).toEqual([1, 1]);
   });
 });

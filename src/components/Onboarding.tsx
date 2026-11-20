@@ -153,14 +153,14 @@ export default function Onboarding() {
         </label>
 
         <label className="flex flex-col gap-2">
-          <span className="text-lg font-bold">Your group</span>
-          <span className="-mt-1 text-sm text-muted">Hall, department or squad. You&apos;ll compete on the leaderboard.</span>
+          <span className="text-lg font-bold">Your crew</span>
+          <span className="-mt-1 text-sm text-muted">Start a crew with a name your friends will join, or pick one below. Your crew competes on the leaderboard, and you compete inside it.</span>
           <input
             value={group}
             onChange={(e) => setGroup(e.target.value)}
             maxLength={GROUP_MAX}
             list="group-options"
-            placeholder="e.g. Hall B, Microbiology"
+            placeholder="e.g. Jollof Mafia, Soya Squad"
             className="min-h-14 rounded-2xl border-2 border-line bg-paper px-4 text-lg transition-colors focus:border-leaf-dark"
           />
           <datalist id="group-options">
