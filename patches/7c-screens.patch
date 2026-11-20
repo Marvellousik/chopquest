@@ -1,6 +1,6 @@
 diff --git a/src/app/game-preview/page.tsx b/src/app/game-preview/page.tsx
 new file mode 100644
-index 0000000..7ebe5a3
+index 0000000..729402a
 --- /dev/null
 +++ b/src/app/game-preview/page.tsx
 @@ -0,0 +1,71 @@
@@ -36,12 +36,12 @@ index 0000000..7ebe5a3
 +  return (
 +    // Breaks out of the layout's phone-width column so wide screens can be previewed too.
 +    <div className="relative left-1/2 flex w-screen max-w-5xl -translate-x-1/2 flex-col gap-4 px-4">
-+      <nav className="flex gap-1 self-center rounded-full bg-white p-1 shadow-sm" aria-label="Preview screens">
++      <nav className="flex gap-1 self-center rounded-full bg-paper p-1 shadow-sm" aria-label="Preview screens">
 +        {TABS.map((t) => (
 +          <button
 +            key={t}
 +            onClick={() => setTab(t)}
-+            className={`min-h-12 rounded-full px-5 font-bold transition ${tab === t ? "bg-leaf text-white" : "text-stone-600 hover:bg-stone-100"}`}
++            className={`min-h-12 rounded-full px-5 font-bold transition ${tab === t ? "bg-leaf text-white" : "text-muted hover:bg-mist"}`}
 +          >
 +            {t}
 +          </button>
@@ -57,7 +57,7 @@ index 0000000..7ebe5a3
 +          totalPoints={265}
 +          weeklyDiversity={3}
 +          quests={
-+            <div className="rounded-3xl border-2 border-dashed border-stone-300 p-4 text-center text-sm text-stone-500">
++            <div className="rounded-3xl border-2 border-dashed border-line/50 p-4 text-center text-sm text-muted">
 +              QuestCards slot (Dev 2, task 6b)
 +            </div>
 +          }
@@ -67,7 +67,7 @@ index 0000000..7ebe5a3
 +      {tab === "Rewards" && (
 +        <div className="flex flex-col gap-3">
 +          <RewardsBanner key={replay} rewards={FAKE_REWARDS} />
-+          <button onClick={() => setReplay((n) => n + 1)} className="min-h-12 self-center rounded-full bg-white px-5 font-bold shadow-sm active:scale-95">
++          <button onClick={() => setReplay((n) => n + 1)} className="min-h-12 self-center rounded-full bg-paper px-5 font-bold shadow-sm active:scale-95">
 +            Replay animation
 +          </button>
 +        </div>
@@ -77,7 +77,7 @@ index 0000000..7ebe5a3
 +}
 diff --git a/src/components/game/DexGrid.tsx b/src/components/game/DexGrid.tsx
 new file mode 100644
-index 0000000..440b136
+index 0000000..ba6e797
 --- /dev/null
 +++ b/src/components/game/DexGrid.tsx
 @@ -0,0 +1,76 @@
@@ -98,10 +98,10 @@ index 0000000..440b136
 +      <div className="flex items-end justify-between">
 +        <h2 className="text-2xl font-black">Protein Dex</h2>
 +        <p className="font-bold text-leaf-dark">
-+          {found} <span className="font-semibold text-stone-500">of {DEX.length} found</span>
++          {found} <span className="font-semibold text-muted">of {DEX.length} found</span>
 +        </p>
 +      </div>
-+      <div className="h-2 overflow-hidden rounded-full bg-stone-200" aria-hidden>
++      <div className="h-2 overflow-hidden rounded-full bg-mist" aria-hidden>
 +        <div className="h-full rounded-full bg-leaf transition-all" style={{ width: `${(found / DEX.length) * 100}%` }} />
 +      </div>
 +
@@ -110,12 +110,12 @@ index 0000000..440b136
 +          const count = counts.get(d.group);
 +          if (count === undefined) {
 +            return (
-+              <li key={d.group} className="flex min-h-36 flex-col gap-2 rounded-3xl border-2 border-dashed border-stone-300 bg-stone-100 p-3">
-+                <span className="flex size-11 items-center justify-center rounded-2xl bg-stone-300 text-xl font-black text-stone-500" aria-hidden>
++              <li key={d.group} className="flex min-h-36 flex-col gap-2 rounded-3xl border-2 border-dashed border-line/50 bg-mist p-3">
++                <span className="flex size-11 items-center justify-center rounded-2xl bg-line/40 text-xl font-black text-muted" aria-hidden>
 +                  ?
 +                </span>
-+                <span className="font-extrabold text-stone-500">{d.group}</span>
-+                <span className="text-sm leading-snug text-stone-500">{d.hint}</span>
++                <span className="font-extrabold text-muted">{d.group}</span>
++                <span className="text-sm leading-snug text-muted">{d.hint}</span>
 +              </li>
 +            );
 +          }
@@ -137,15 +137,15 @@ index 0000000..440b136
 +              <span className="text-sm font-bold" style={{ color: d.color }}>
 +                {d.trait ? `${d.trait} · ${d.blurb}` : d.blurb}
 +              </span>
-+              <span className="text-sm text-stone-600">
++              <span className="text-sm text-muted">
 +                {count} {count === 1 ? "meal" : "meals"}
 +              </span>
 +              {next && (
 +                <div className="mt-auto">
-+                  <div className="h-1.5 overflow-hidden rounded-full bg-white/80" aria-hidden>
++                  <div className="h-1.5 overflow-hidden rounded-full bg-paper/80" aria-hidden>
 +                    <div className="h-full rounded-full" style={{ width: `${next.progress * 100}%`, background: d.color }} />
 +                  </div>
-+                  <span className="text-xs text-stone-500">
++                  <span className="text-xs text-muted">
 +                    {next.at - count} more for {MEDAL_STYLE[next.medal].label}
 +                  </span>
 +                </div>
@@ -159,16 +159,17 @@ index 0000000..440b136
 +}
 diff --git a/src/components/game/HomeScreen.tsx b/src/components/game/HomeScreen.tsx
 new file mode 100644
-index 0000000..c0e01dd
+index 0000000..bab8e65
 --- /dev/null
 +++ b/src/components/game/HomeScreen.tsx
-@@ -0,0 +1,112 @@
+@@ -0,0 +1,113 @@
 +// Home = pet screen (task 7c). Pure presentational: data comes from GET /api/users/[id]/game.
 +// Grams, calories and price never appear here as score: points and diversity only.
 +
 +import Link from "next/link";
 +import type { ReactNode } from "react";
-+import Pet, { type PetMood, type PetStage } from "@/components/pet/Pet";
++import Pet from "@/components/pet/Pet";
++import type { PetMood, PetStage } from "@/lib/rewards";
 +
 +export type HomeProps = {
 +  nickname: string;
@@ -182,7 +183,7 @@ index 0000000..c0e01dd
 +  quests?: ReactNode;
 +};
 +
-+// 7a: stage thresholds (egg < 100, young 100–399, evolved 400+).
++// Mirrors petStage() in src/lib/rewards.ts (egg < 100, young 100–399, evolved 400+).
 +const NEXT_STAGE: Record<PetStage, { at: number; name: string } | null> = {
 +  egg: { at: 100, name: "hatch" },
 +  young: { at: 400, name: "evolve" },
@@ -206,10 +207,10 @@ index 0000000..c0e01dd
 +    <div className="@container flex flex-col gap-4">
 +      <header className="flex items-center justify-between">
 +        <div>
-+          <p className="text-sm font-semibold text-stone-500">Hi, {nickname}</p>
++          <p className="text-sm font-semibold text-muted">Hi, {nickname}</p>
 +          <h1 className="text-2xl font-black text-leaf-dark">ChopQuest</h1>
 +        </div>
-+        <span className="rounded-full bg-white px-3 py-1.5 text-sm font-bold shadow-sm">{groupName}</span>
++        <span className="rounded-full bg-paper px-3 py-1.5 text-sm font-bold shadow-sm">{groupName}</span>
 +      </header>
 +
 +      <div className="grid gap-4 @2xl:grid-cols-2 @2xl:items-start">
@@ -220,11 +221,11 @@ index 0000000..c0e01dd
 +          <span className="font-black">{petName}</span> {MOOD_LINE[mood]}
 +        </p>
 +        <div className="mt-3 w-full">
-+          <div className="flex justify-between text-xs font-bold text-stone-500">
++          <div className="flex justify-between text-xs font-bold text-muted">
 +            <span className="capitalize">{stage}</span>
 +            <span>{next ? `${next.at - totalPoints} pts to ${next.name}` : "Fully grown"}</span>
 +          </div>
-+          <div className="mt-1 h-2.5 overflow-hidden rounded-full bg-stone-200" aria-hidden>
++          <div className="mt-1 h-2.5 overflow-hidden rounded-full bg-mist" aria-hidden>
 +            <div className="h-full rounded-full bg-palm" style={{ width: `${stagePct}%` }} />
 +          </div>
 +        </div>
@@ -233,19 +234,19 @@ index 0000000..c0e01dd
 +      <div className="flex flex-col gap-4">
 +      {/* Stats */}
 +      <section className="grid grid-cols-2 gap-3">
-+        <div className="rounded-3xl bg-white p-3 shadow-sm">
-+          <p className="text-xs font-bold uppercase tracking-wide text-stone-500">Points</p>
++        <div className="rounded-3xl bg-paper p-3 shadow-sm">
++          <p className="text-xs font-bold uppercase tracking-wide text-muted">Points</p>
 +          <p className="text-3xl font-black tabular-nums">{totalPoints}</p>
 +        </div>
-+        <div className="rounded-3xl bg-white p-3 shadow-sm">
-+          <p className="text-xs font-bold uppercase tracking-wide text-stone-500">This week</p>
++        <div className="rounded-3xl bg-paper p-3 shadow-sm">
++          <p className="text-xs font-bold uppercase tracking-wide text-muted">This week</p>
 +          <p className="text-3xl font-black tabular-nums">
 +            {weeklyDiversity}
-+            <span className="ml-1 text-sm font-bold text-stone-500">{weeklyDiversity === 1 ? "group" : "groups"}</span>
++            <span className="ml-1 text-sm font-bold text-muted">{weeklyDiversity === 1 ? "group" : "groups"}</span>
 +          </p>
 +          <div className="mt-1 flex gap-1" aria-label={`${weeklyDiversity} of ${GOAL} protein groups for a happy pet`}>
 +            {Array.from({ length: Math.max(GOAL, weeklyDiversity) }, (_, i) => (
-+              <span key={i} className={`h-2 flex-1 rounded-full ${i < weeklyDiversity ? "bg-leaf" : "bg-stone-200"}`} />
++              <span key={i} className={`h-2 flex-1 rounded-full ${i < weeklyDiversity ? "bg-leaf" : "bg-mist"}`} />
 +            ))}
 +          </div>
 +        </div>
@@ -271,7 +272,7 @@ index 0000000..c0e01dd
 +      </div>
 +      </div>
 +
-+      <p className="text-center text-xs text-stone-500">Protein figures are estimates, not medical advice.</p>
++      <p className="text-center text-xs text-muted">Protein figures are estimates, not medical advice.</p>
 +    </div>
 +  );
 +}
@@ -296,10 +297,10 @@ index 0000000..ea3609e
 +}
 diff --git a/src/components/game/RewardsBanner.tsx b/src/components/game/RewardsBanner.tsx
 new file mode 100644
-index 0000000..a30f611
+index 0000000..3434315
 --- /dev/null
 +++ b/src/components/game/RewardsBanner.tsx
-@@ -0,0 +1,108 @@
+@@ -0,0 +1,109 @@
 +"use client";
 +// RewardsBanner (task 7c) for Dev 1's /meal/[id] slot.
 +// Shows what this meal earned: a counted-up total, then one row per reward.
@@ -309,7 +310,8 @@ index 0000000..a30f611
 +import { dexEntry, type Medal as MedalKind } from "./dex";
 +import Medal from "./Medal";
 +
-+export type Reward = { reason: string; points: number; dexGroup?: string };
++import type { Reward } from "@/lib/rewards";
++export type { Reward };
 +
 +const css = `
 +@keyframes cq-rise { from { opacity: 0; transform: translateY(12px) scale(.96); } to { opacity: 1; transform: none; } }
@@ -355,7 +357,7 @@ index 0000000..a30f611
 +/** Badge per reward kind: group initials for discovery, a medal for mastery, symbols for the rest. */
 +function Badge({ r }: { r: Reward }) {
 +  const mastery = /(bronze|silver|gold)/i.exec(r.reason)?.[1]?.toLowerCase() as MedalKind | undefined;
-+  if (mastery) return <span className="flex size-9 shrink-0 items-center justify-center rounded-full bg-white/90"><Medal medal={mastery} size={26} /></span>;
++  if (mastery) return <span className="flex size-9 shrink-0 items-center justify-center rounded-full bg-paper"><Medal medal={mastery} size={26} /></span>;
 +  const entry = r.dexGroup ? dexEntry(r.dexGroup) : undefined;
 +  const symbol = /discover/i.test(r.reason) && entry ? entry.group.slice(0, 2)
 +    : /complete/i.test(r.reason) ? "✓"
@@ -446,13 +448,13 @@ index 0000000..5372d37
 +});
 diff --git a/src/components/game/dex.ts b/src/components/game/dex.ts
 new file mode 100644
-index 0000000..6571def
+index 0000000..c82d8df
 --- /dev/null
 +++ b/src/components/game/dex.ts
-@@ -0,0 +1,61 @@
-+// Display catalog for the Protein Dex (task 7c). UI-only: names, traits, colours, hints.
-+// Rule numbers (medal thresholds, trait map) also live in 7a's src/lib/rewards.ts;
-+// at integration, import them from there and delete the copies marked "7a".
+@@ -0,0 +1,56 @@
++// Display catalog for the Protein Dex (task 7c). UI-only: colours, hints, blurbs.
++// The rules (traits, medal thresholds) come from 7a's src/lib/rewards.ts.
++import { MASTERY, medalFor as rulesMedalFor, traitFor } from "@/lib/rewards";
 +
 +export type DexGroup =
 +  | "Beans" | "Soy" | "Bambara" | "Groundnut" | "Egusi"
@@ -467,33 +469,28 @@ index 0000000..6571def
 +  tint: string; // card background once unlocked
 +};
 +
-+export const DEX: DexEntry[] = [
-+  { group: "Beans", trait: "Strength", blurb: "Hits harder", hint: "Try akara, moi moi or ewa", color: "#b45309", tint: "#fef3c7" },
-+  { group: "Soy", trait: "Defense", blurb: "Leaf shield", hint: "Try awara or soy chunks", color: "#ca8a04", tint: "#fef9c3" },
-+  { group: "Bambara", trait: "Stamina", blurb: "Plays longer", hint: "Try okpa", color: "#9a3412", tint: "#ffedd5" },
-+  { group: "Groundnut", trait: "Energy", blurb: "Extra bounce", hint: "Try kuli-kuli or groundnuts", color: "#c2410c", tint: "#ffedd5" },
-+  { group: "Egusi", trait: "Recovery", blurb: "Wakes up faster", hint: "Try egusi soup", color: "#65a30d", tint: "#ecfccb" },
-+  { group: "Mushroom", trait: "Focus", blurb: "Sharp eyes", hint: "Try oyster mushroom", color: "#78716c", tint: "#f5f5f4" },
-+  { group: "Iru", trait: "Wisdom", blurb: "Tiny glasses", hint: "Try iru in your soup", color: "#7c2d12", tint: "#fde68a" },
-+  { group: "Tigernut", trait: "Speed", blurb: "Quick feet", hint: "Try kunun aya", color: "#a16207", tint: "#fef3c7" },
-+  { group: "Pigeon pea", trait: "Agility", blurb: "Nimble leaves", hint: "Try fiofio", color: "#15803d", tint: "#dcfce7" },
-+  { group: "Animal", trait: null, blurb: "Base stats", hint: "Egg, chicken, fish or meat", color: "#be123c", tint: "#ffe4e6" },
++const RAW: Omit<DexEntry, "trait">[] = [
++  { group: "Beans", blurb: "Hits harder", hint: "Try akara, moi moi or ewa", color: "#b45309", tint: "#fef3c7" },
++  { group: "Soy", blurb: "Leaf shield", hint: "Try awara or soy chunks", color: "#ca8a04", tint: "#fef9c3" },
++  { group: "Bambara", blurb: "Plays longer", hint: "Try okpa", color: "#9a3412", tint: "#ffedd5" },
++  { group: "Groundnut", blurb: "Extra bounce", hint: "Try kuli-kuli or groundnuts", color: "#c2410c", tint: "#ffedd5" },
++  { group: "Egusi", blurb: "Wakes up faster", hint: "Try egusi soup", color: "#65a30d", tint: "#ecfccb" },
++  { group: "Mushroom", blurb: "Sharp eyes", hint: "Try oyster mushroom", color: "#78716c", tint: "#f5f5f4" },
++  { group: "Iru", blurb: "Tiny glasses", hint: "Try iru in your soup", color: "#7c2d12", tint: "#fde68a" },
++  { group: "Tigernut", blurb: "Quick feet", hint: "Try kunun aya", color: "#a16207", tint: "#fef3c7" },
++  { group: "Pigeon pea", blurb: "Nimble leaves", hint: "Try fiofio", color: "#15803d", tint: "#dcfce7" },
++  { group: "Animal", blurb: "Base stats", hint: "Egg, chicken, fish or meat", color: "#be123c", tint: "#ffe4e6" },
 +];
++
++export const DEX: DexEntry[] = RAW.map((d) => ({ ...d, trait: traitFor(d.group) }));
 +
 +export const dexEntry = (group: string) => DEX.find((d) => d.group === group);
 +
-+// 7a: mastery thresholds (Bronze 3, Silver 10, Gold 25).
 +export type Medal = "bronze" | "silver" | "gold";
-+const MEDALS: { medal: Medal; at: number }[] = [
-+  { medal: "bronze", at: 3 },
-+  { medal: "silver", at: 10 },
-+  { medal: "gold", at: 25 },
-+];
++const MEDALS = MASTERY.map((m) => ({ medal: m.medal.toLowerCase() as Medal, at: m.at }));
 +
 +export function medalFor(mealCount: number): Medal | null {
-+  let m: Medal | null = null;
-+  for (const t of MEDALS) if (mealCount >= t.at) m = t.medal;
-+  return m;
++  return (rulesMedalFor(mealCount)?.toLowerCase() as Medal | undefined) ?? null;
 +}
 +
 +/** Next medal and how far along the user is, for the progress bar. null once Gold. */
