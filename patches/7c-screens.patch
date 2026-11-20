@@ -1,6 +1,6 @@
 diff --git a/src/app/game-preview/page.tsx b/src/app/game-preview/page.tsx
 new file mode 100644
-index 0000000..729402a
+index 0000000..7ebe5a3
 --- /dev/null
 +++ b/src/app/game-preview/page.tsx
 @@ -0,0 +1,71 @@
@@ -36,12 +36,12 @@ index 0000000..729402a
 +  return (
 +    // Breaks out of the layout's phone-width column so wide screens can be previewed too.
 +    <div className="relative left-1/2 flex w-screen max-w-5xl -translate-x-1/2 flex-col gap-4 px-4">
-+      <nav className="flex gap-1 self-center rounded-full bg-paper p-1 shadow-sm" aria-label="Preview screens">
++      <nav className="flex gap-1 self-center rounded-full bg-white p-1 shadow-sm" aria-label="Preview screens">
 +        {TABS.map((t) => (
 +          <button
 +            key={t}
 +            onClick={() => setTab(t)}
-+            className={`min-h-12 rounded-full px-5 font-bold transition ${tab === t ? "bg-leaf text-white" : "text-muted hover:bg-mist"}`}
++            className={`min-h-12 rounded-full px-5 font-bold transition ${tab === t ? "bg-leaf text-white" : "text-stone-600 hover:bg-stone-100"}`}
 +          >
 +            {t}
 +          </button>
@@ -57,7 +57,7 @@ index 0000000..729402a
 +          totalPoints={265}
 +          weeklyDiversity={3}
 +          quests={
-+            <div className="rounded-3xl border-2 border-dashed border-line/50 p-4 text-center text-sm text-muted">
++            <div className="rounded-3xl border-2 border-dashed border-stone-300 p-4 text-center text-sm text-stone-500">
 +              QuestCards slot (Dev 2, task 6b)
 +            </div>
 +          }
@@ -67,7 +67,7 @@ index 0000000..729402a
 +      {tab === "Rewards" && (
 +        <div className="flex flex-col gap-3">
 +          <RewardsBanner key={replay} rewards={FAKE_REWARDS} />
-+          <button onClick={() => setReplay((n) => n + 1)} className="min-h-12 self-center rounded-full bg-paper px-5 font-bold shadow-sm active:scale-95">
++          <button onClick={() => setReplay((n) => n + 1)} className="min-h-12 self-center rounded-full bg-white px-5 font-bold shadow-sm active:scale-95">
 +            Replay animation
 +          </button>
 +        </div>
@@ -77,7 +77,7 @@ index 0000000..729402a
 +}
 diff --git a/src/components/game/DexGrid.tsx b/src/components/game/DexGrid.tsx
 new file mode 100644
-index 0000000..ba6e797
+index 0000000..440b136
 --- /dev/null
 +++ b/src/components/game/DexGrid.tsx
 @@ -0,0 +1,76 @@
@@ -98,10 +98,10 @@ index 0000000..ba6e797
 +      <div className="flex items-end justify-between">
 +        <h2 className="text-2xl font-black">Protein Dex</h2>
 +        <p className="font-bold text-leaf-dark">
-+          {found} <span className="font-semibold text-muted">of {DEX.length} found</span>
++          {found} <span className="font-semibold text-stone-500">of {DEX.length} found</span>
 +        </p>
 +      </div>
-+      <div className="h-2 overflow-hidden rounded-full bg-mist" aria-hidden>
++      <div className="h-2 overflow-hidden rounded-full bg-stone-200" aria-hidden>
 +        <div className="h-full rounded-full bg-leaf transition-all" style={{ width: `${(found / DEX.length) * 100}%` }} />
 +      </div>
 +
@@ -110,12 +110,12 @@ index 0000000..ba6e797
 +          const count = counts.get(d.group);
 +          if (count === undefined) {
 +            return (
-+              <li key={d.group} className="flex min-h-36 flex-col gap-2 rounded-3xl border-2 border-dashed border-line/50 bg-mist p-3">
-+                <span className="flex size-11 items-center justify-center rounded-2xl bg-line/40 text-xl font-black text-muted" aria-hidden>
++              <li key={d.group} className="flex min-h-36 flex-col gap-2 rounded-3xl border-2 border-dashed border-stone-300 bg-stone-100 p-3">
++                <span className="flex size-11 items-center justify-center rounded-2xl bg-stone-300 text-xl font-black text-stone-500" aria-hidden>
 +                  ?
 +                </span>
-+                <span className="font-extrabold text-muted">{d.group}</span>
-+                <span className="text-sm leading-snug text-muted">{d.hint}</span>
++                <span className="font-extrabold text-stone-500">{d.group}</span>
++                <span className="text-sm leading-snug text-stone-500">{d.hint}</span>
 +              </li>
 +            );
 +          }
@@ -137,15 +137,15 @@ index 0000000..ba6e797
 +              <span className="text-sm font-bold" style={{ color: d.color }}>
 +                {d.trait ? `${d.trait} · ${d.blurb}` : d.blurb}
 +              </span>
-+              <span className="text-sm text-muted">
++              <span className="text-sm text-stone-600">
 +                {count} {count === 1 ? "meal" : "meals"}
 +              </span>
 +              {next && (
 +                <div className="mt-auto">
-+                  <div className="h-1.5 overflow-hidden rounded-full bg-paper/80" aria-hidden>
++                  <div className="h-1.5 overflow-hidden rounded-full bg-white/80" aria-hidden>
 +                    <div className="h-full rounded-full" style={{ width: `${next.progress * 100}%`, background: d.color }} />
 +                  </div>
-+                  <span className="text-xs text-muted">
++                  <span className="text-xs text-stone-500">
 +                    {next.at - count} more for {MEDAL_STYLE[next.medal].label}
 +                  </span>
 +                </div>
@@ -159,7 +159,7 @@ index 0000000..ba6e797
 +}
 diff --git a/src/components/game/HomeScreen.tsx b/src/components/game/HomeScreen.tsx
 new file mode 100644
-index 0000000..bab8e65
+index 0000000..e0ac5c0
 --- /dev/null
 +++ b/src/components/game/HomeScreen.tsx
 @@ -0,0 +1,113 @@
@@ -207,10 +207,10 @@ index 0000000..bab8e65
 +    <div className="@container flex flex-col gap-4">
 +      <header className="flex items-center justify-between">
 +        <div>
-+          <p className="text-sm font-semibold text-muted">Hi, {nickname}</p>
++          <p className="text-sm font-semibold text-stone-500">Hi, {nickname}</p>
 +          <h1 className="text-2xl font-black text-leaf-dark">ChopQuest</h1>
 +        </div>
-+        <span className="rounded-full bg-paper px-3 py-1.5 text-sm font-bold shadow-sm">{groupName}</span>
++        <span className="rounded-full bg-white px-3 py-1.5 text-sm font-bold shadow-sm">{groupName}</span>
 +      </header>
 +
 +      <div className="grid gap-4 @2xl:grid-cols-2 @2xl:items-start">
@@ -221,11 +221,11 @@ index 0000000..bab8e65
 +          <span className="font-black">{petName}</span> {MOOD_LINE[mood]}
 +        </p>
 +        <div className="mt-3 w-full">
-+          <div className="flex justify-between text-xs font-bold text-muted">
++          <div className="flex justify-between text-xs font-bold text-stone-500">
 +            <span className="capitalize">{stage}</span>
 +            <span>{next ? `${next.at - totalPoints} pts to ${next.name}` : "Fully grown"}</span>
 +          </div>
-+          <div className="mt-1 h-2.5 overflow-hidden rounded-full bg-mist" aria-hidden>
++          <div className="mt-1 h-2.5 overflow-hidden rounded-full bg-stone-200" aria-hidden>
 +            <div className="h-full rounded-full bg-palm" style={{ width: `${stagePct}%` }} />
 +          </div>
 +        </div>
@@ -234,19 +234,19 @@ index 0000000..bab8e65
 +      <div className="flex flex-col gap-4">
 +      {/* Stats */}
 +      <section className="grid grid-cols-2 gap-3">
-+        <div className="rounded-3xl bg-paper p-3 shadow-sm">
-+          <p className="text-xs font-bold uppercase tracking-wide text-muted">Points</p>
++        <div className="rounded-3xl bg-white p-3 shadow-sm">
++          <p className="text-xs font-bold uppercase tracking-wide text-stone-500">Points</p>
 +          <p className="text-3xl font-black tabular-nums">{totalPoints}</p>
 +        </div>
-+        <div className="rounded-3xl bg-paper p-3 shadow-sm">
-+          <p className="text-xs font-bold uppercase tracking-wide text-muted">This week</p>
++        <div className="rounded-3xl bg-white p-3 shadow-sm">
++          <p className="text-xs font-bold uppercase tracking-wide text-stone-500">This week</p>
 +          <p className="text-3xl font-black tabular-nums">
 +            {weeklyDiversity}
-+            <span className="ml-1 text-sm font-bold text-muted">{weeklyDiversity === 1 ? "group" : "groups"}</span>
++            <span className="ml-1 text-sm font-bold text-stone-500">{weeklyDiversity === 1 ? "group" : "groups"}</span>
 +          </p>
 +          <div className="mt-1 flex gap-1" aria-label={`${weeklyDiversity} of ${GOAL} protein groups for a happy pet`}>
 +            {Array.from({ length: Math.max(GOAL, weeklyDiversity) }, (_, i) => (
-+              <span key={i} className={`h-2 flex-1 rounded-full ${i < weeklyDiversity ? "bg-leaf" : "bg-mist"}`} />
++              <span key={i} className={`h-2 flex-1 rounded-full ${i < weeklyDiversity ? "bg-leaf" : "bg-stone-200"}`} />
 +            ))}
 +          </div>
 +        </div>
@@ -272,7 +272,7 @@ index 0000000..bab8e65
 +      </div>
 +      </div>
 +
-+      <p className="text-center text-xs text-muted">Protein figures are estimates, not medical advice.</p>
++      <p className="text-center text-xs text-stone-500">Protein figures are estimates, not medical advice.</p>
 +    </div>
 +  );
 +}
@@ -297,7 +297,7 @@ index 0000000..ea3609e
 +}
 diff --git a/src/components/game/RewardsBanner.tsx b/src/components/game/RewardsBanner.tsx
 new file mode 100644
-index 0000000..3434315
+index 0000000..e7c49a5
 --- /dev/null
 +++ b/src/components/game/RewardsBanner.tsx
 @@ -0,0 +1,109 @@
@@ -357,7 +357,7 @@ index 0000000..3434315
 +/** Badge per reward kind: group initials for discovery, a medal for mastery, symbols for the rest. */
 +function Badge({ r }: { r: Reward }) {
 +  const mastery = /(bronze|silver|gold)/i.exec(r.reason)?.[1]?.toLowerCase() as MedalKind | undefined;
-+  if (mastery) return <span className="flex size-9 shrink-0 items-center justify-center rounded-full bg-paper"><Medal medal={mastery} size={26} /></span>;
++  if (mastery) return <span className="flex size-9 shrink-0 items-center justify-center rounded-full bg-white/90"><Medal medal={mastery} size={26} /></span>;
 +  const entry = r.dexGroup ? dexEntry(r.dexGroup) : undefined;
 +  const symbol = /discover/i.test(r.reason) && entry ? entry.group.slice(0, 2)
 +    : /complete/i.test(r.reason) ? "✓"
