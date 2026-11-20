@@ -26,7 +26,9 @@ Use a name from this list in "food" whenever one fits; otherwise write your own 
 ${list}
 
 Weights: give "grams" on the basis shown for that food. For a food listed as dry, give the dry weight that went into the cooked portion (for example 250 g of cooked jollof rice is about 85 g of dry rice). For raw meat, give the raw weight of the piece served.
-Roles: "protein" for meat, fish, egg, beans, soy and other protein foods; "staple" for rice, swallow, bread, yam, noodles; "soup" for soups and stews; "side" for anything else.
+Roles: "protein" for meat, fish, egg, beans, soy and other protein foods; "staple" for rice, swallow, bread, yam, noodles; "soup" for soups, stews and sauces; "side" for anything else.
+List each meat or fish once, as its own "protein" part. A soup, stew or sauce part is the sauce only, without the meat in it.
+Do not list cooking oil, salt, seasoning or spices as parts.
 If you are unsure, give your best estimate and a confidence below 0.6.
 
 Return JSON exactly in this shape:
@@ -48,10 +50,17 @@ export function sanitizeBreakdown(raw: unknown, foods: Food[]): BreakdownPart[] 
     if (!label || !Number.isFinite(grams) || grams <= 0) continue;
     const role = ROLES.has(p.role as DishRole) ? (p.role as DishRole) : "side";
     const conf = Number(p.confidence);
-    const exact = foods.find((f) => f.food.toLowerCase() === label.toLowerCase());
-    let match = exact ?? matchFood(label, null, foods);
-    // A sauce or stew named after a dish ("jollof sauce") is not the staple itself: never count it as rice.
-    if (!exact && match && role === "soup" && match.type === "Staple") match = null;
+    // Exact when the AI used our name, with or without the local name we list after it: "Rice, milled (Rice)".
+    const l = label.toLowerCase();
+    const exact = foods.find((f) => f.food.toLowerCase() === l || (f.local_name && `${f.food} (${f.local_name})`.toLowerCase() === l));
+    // Otherwise match on the name only, never on the AI's note in brackets:
+    // "Vegetable oil (used for frying chicken)" must not become chicken.
+    const head = label.split("(")[0].trim();
+    let match = exact ?? (head ? matchFood(head, null, foods) : null);
+    // A soup or sauce only counts as one of our soups: "Beef stew" is not beef, "jollof sauce" is not rice,
+    // "tomato stew (no meat)" is not egusi soup.
+    if (!exact && match && role === "soup" && !(/soup/i.test(match.food) && head.toLowerCase().includes(match.food.toLowerCase().split(/[\s,(]/)[0])))
+      match = null;
     out.push({
       foodId: match?.id ?? null,
       // Our own name only when the AI used it exactly; otherwise keep the AI's words ("Spaghetti", not "Bread").

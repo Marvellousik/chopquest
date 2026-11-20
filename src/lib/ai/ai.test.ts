@@ -130,6 +130,26 @@ describe("dish breakdown", () => {
     expect(parts[2]).toMatchObject({ foodId: id("Wheat flour (bread)"), label: "Spaghetti" });
   });
 
+  it("accepts our name with its local name, and never matches a soup by shared words alone", () => {
+    const parts = sanitizeBreakdown(
+      {
+        parts: [
+          { food: "Rice, milled (Rice)", grams: 85, role: "staple" },
+          { food: "Tomato pepper stew (no meat)", grams: 100, role: "soup" },
+          { food: "Egusi soup", grams: 120, role: "soup" },
+          { food: "Beef stew (tomato and pepper base, oil)", grams: 90, role: "soup" },
+          { food: "Vegetable oil (used for frying chicken)", grams: 10, role: "side" },
+        ],
+      },
+      FOODS,
+    );
+    expect(parts[3]).toMatchObject({ foodId: null, label: "Beef stew (tomato and pepper base, oil)" });
+    expect(parts[4]).toMatchObject({ foodId: null });
+    expect(parts[0]).toMatchObject({ foodId: id("Rice, milled"), label: "Rice" });
+    expect(parts[1]).toMatchObject({ foodId: null, label: "Tomato pepper stew (no meat)" });
+    expect(parts[2]).toMatchObject({ foodId: id("Egusi soup (no meat)") });
+  });
+
   it("returns an empty list for nonsense instead of crashing", () => {
     expect(sanitizeBreakdown("hello", FOODS)).toEqual([]);
     expect(sanitizeBreakdown({ parts: "x" }, FOODS)).toEqual([]);
