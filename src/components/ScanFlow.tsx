@@ -165,6 +165,7 @@ export default function ScanFlow() {
         return;
       }
       setStage({ name: "saved", scanId: data.scan_id, total: data.total_protein_g, dish: stage.dish });
+      window.dispatchEvent(new Event("chopquest:scan-saved")); // the companion grows right away
     } catch {
       setError("No connection. Your list is still here, so try again.");
       setStage({ name: "confirm", preview: stage.preview, dish: stage.dish, cached: false });

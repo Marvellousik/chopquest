@@ -33,7 +33,9 @@ const mainProtein = (m: MenuItem) => m.breakdown?.find((p) => p.role === "protei
 
 export default function MenuBoard({ slug }: { slug: string }) {
   const { state, retry } = useApi<{ cafeteria: Cafeteria; items: (MenuItem & { convertibility?: Convertibility })[] }>(`/api/cafeterias/${slug}/menu`);
-  useEffect(() => saveKitchen(slug), [slug]);
+  useEffect(() => {
+    saveKitchen(slug);
+  }, [slug]);
 
   return (
     <div className="flex flex-col gap-6">
