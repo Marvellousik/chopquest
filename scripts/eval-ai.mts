@@ -2,7 +2,7 @@
 // Compares the AI breakdown against Jason's hand-weighed dishes (team/market-survey/eval-dishes.csv)
 // and checks how often the kitchen card passes the validator first time.
 //   npm run eval                                   -> uses OPENROUTER_MODEL
-//   npm run eval -- --models anthropic/claude-haiku-4.5,anthropic/claude-sonnet-4.6   -> compares models
+//   npm run eval -- --models anthropic/claude-haiku-5.5,anthropic/claude-sonnet-4.6   -> compares models
 // Writes team/evidence/ai-accuracy.md. Report the real numbers, even when they're bad.
 import "./lib/env.mjs";
 import { existsSync, readFileSync } from "node:fs";

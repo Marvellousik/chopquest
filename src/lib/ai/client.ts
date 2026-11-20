@@ -27,7 +27,7 @@ export type AiJsonResult = { json: unknown; usage: AiUsage };
 // OPENROUTER_BASE_URL is only for tests (a local fake server); leave it unset in real use.
 const endpoint = () => `${process.env.OPENROUTER_BASE_URL || "https://openrouter.ai/api/v1"}/chat/completions`;
 // Claude through OpenRouter (team credits). Both take images and JSON mode; override with env vars.
-export const DEFAULT_MODEL = "anthropic/claude-haiku-4.5";
+export const DEFAULT_MODEL = "anthropic/claude-haiku-5.5";
 export const DEFAULT_FALLBACK_MODEL = "anthropic/claude-sonnet-4.6";
 
 const isClaude = (model: string) => model.startsWith("anthropic/");
@@ -134,7 +134,7 @@ async function callOnce(model: string, req: AiJsonRequest, key: string, fetchImp
 }
 
 /**
- * Ask the model for JSON. Tries the main model (OPENROUTER_MODEL, default Claude Haiku 4.5), retries
+ * Ask the model for JSON. Tries the main model (OPENROUTER_MODEL, default Claude Haiku 5.5), retries
  * once on a server error, then tries the fallback (OPENROUTER_MODEL_FALLBACK, default Claude Sonnet
  * 4.6; set it to "none" to turn the fallback off). Rate limits, credit and key problems are not retried.
  */

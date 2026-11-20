@@ -41,10 +41,10 @@ describe("aiJson (OpenRouter client)", () => {
     expect(body.messages[1].content[1].image_url.url).toBe("data:image/jpeg;base64,QUJD");
   });
 
-  it("defaults to Claude Haiku 4.5, falling back to Claude Sonnet 4.6", async () => {
+  it("defaults to Claude Haiku 5.5, falling back to Claude Sonnet 4.6", async () => {
     vi.stubEnv("OPENROUTER_MODEL", "");
     vi.stubEnv("OPENROUTER_MODEL_FALLBACK", "");
-    expect(DEFAULT_MODEL).toBe("anthropic/claude-haiku-4.5");
+    expect(DEFAULT_MODEL).toBe("anthropic/claude-haiku-5.5");
     expect(DEFAULT_FALLBACK_MODEL).toBe("anthropic/claude-sonnet-4.6");
     const f = vi.fn().mockResolvedValueOnce(errorReply(502)).mockResolvedValueOnce(errorReply(502)).mockResolvedValueOnce(reply('{"ok":1}'));
     await aiJson({ system: "s", text: "t" }, f as unknown as typeof fetch);
