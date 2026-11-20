@@ -6,6 +6,7 @@ import type { Cafeteria, CafeteriaRank, PlantDish } from "@/lib/types";
 import { naira, useApi } from "@/lib/cafe-client";
 import { ArrowLeftIcon, ArrowRightIcon } from "@/components/icons";
 import { EmptyBox, ErrorBox, RankBadge, RISE_CSS, SkeletonRows, Stars } from "./bits";
+import AskPlantVersion from "./AskPlantVersion";
 
 export default function CafeteriaScreen({ slug }: { slug: string }) {
   const { state, retry } = useApi<{ cafeteria: Cafeteria; dishes: PlantDish[] }>(`/api/cafeterias/${slug}/plant-dishes`);
@@ -42,7 +43,7 @@ export default function CafeteriaScreen({ slug }: { slug: string }) {
       <section aria-label="Plant dishes" className="flex flex-col gap-3">
         <h2 className="text-xl font-black text-green-950">Plant dishes</h2>
         {dishes.length === 0 ? (
-          <EmptyBox title="No plant dish yet" body="This cafeteria hasn't added a plant dish yet." action={{ href: "/board", label: "See the board" }} />
+          <EmptyBox title="No plant dish yet" body="This cafeteria hasn't added a plant dish yet. Ask for one below." />
         ) : (
           <ul className="grid gap-3 md:grid-cols-2">
             {dishes.map((d, i) => (
@@ -68,6 +69,8 @@ export default function CafeteriaScreen({ slug }: { slug: string }) {
           </ul>
         )}
       </section>
+
+      <AskPlantVersion slug={slug} publishedItemIds={dishes.map((d) => d.menuItemId)} />
     </div>
   );
 }

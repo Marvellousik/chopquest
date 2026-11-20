@@ -5,7 +5,8 @@ import Link from "next/link";
 import { useEffect } from "react";
 import type { Cafeteria, Convertibility, MenuItem } from "@/lib/types";
 import { naira, saveKitchen, useApi } from "@/lib/cafe-client";
-import { ArrowRightIcon } from "@/components/icons";
+import { ArrowRightIcon, LeafIcon } from "@/components/icons";
+import { demandLabel } from "@/lib/requests";
 import { EmptyBox, ErrorBox, RISE_CSS, ScreenTitle, SkeletonRows } from "./bits";
 
 const METER: Record<Convertibility, { n: number; label: string; color: string; text: string }> = {
@@ -33,7 +34,12 @@ const mainProtein = (m: MenuItem) => m.breakdown?.find((p) => p.role === "protei
 
 export default function MenuBoard({ slug }: { slug: string }) {
   const { state, retry } = useApi<{ cafeteria: Cafeteria; items: (MenuItem & { convertibility?: Convertibility })[] }>(`/api/cafeterias/${slug}/menu`);
-  useEffect(() => saveKitchen(slug), [slug]);
+  const demand = useApi<{ counts: Record<number, number>; total: number }>(`/api/cafeterias/${slug}/requests`);
+  const counts = demand.state.status === "ready" ? demand.state.data.counts : {};
+  const total = demand.state.status === "ready" ? demand.state.data.total : 0;
+  useEffect(() => {
+    saveKitchen(slug);
+  }, [slug]);
 
   return (
     <div className="flex flex-col gap-6">
@@ -56,6 +62,11 @@ export default function MenuBoard({ slug }: { slug: string }) {
               </Link>
             }
           />
+          {total > 0 && (
+            <p className="flex items-center gap-2 rounded-[1.5rem_0.5rem] bg-amber-50 p-3 font-bold text-amber-900 ring-1 ring-amber-200">
+              <LeafIcon size={20} /> {total} plant-version {total === 1 ? "request" : "requests"} from students. Dishes with the most asks are a good place to start.
+            </p>
+          )}
           {state.data.items.length === 0 ? (
             <EmptyBox title="No menu yet" body="This cafeteria's menu hasn't been added. Once it is, your dishes show up here, best sellers first." />
           ) : (
@@ -73,6 +84,11 @@ export default function MenuBoard({ slug }: { slug: string }) {
                           <span className="mb-1 inline-block rounded-full bg-amber-100 px-2 py-0.5 text-xs font-black text-amber-900">Top seller</span>
                         )}
                         <span className="block text-lg font-extrabold leading-tight text-green-950">{m.name}</span>
+                        {demandLabel(counts[m.id] ?? 0) && (
+                          <span className="mb-1 ml-1 inline-flex items-center gap-1 rounded-full bg-green-100 px-2 py-0.5 text-xs font-black text-green-900">
+                            <LeafIcon size={12} /> {demandLabel(counts[m.id] ?? 0)}
+                          </span>
+                        )}
                         <span className="mt-0.5 block text-sm text-stone-600">
                           <b className="text-green-900">{naira(m.priceNgn)}</b>
                           {protein && <> · {protein}</>}

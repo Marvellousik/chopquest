@@ -109,3 +109,18 @@ export function saveKitchen(slug: string) {
     localStorage.setItem(KITCHEN_KEY, slug);
   } catch {}
 }
+
+const ASKED_KEY = "chopquest_asked";
+/** Menu items this browser already asked a plant version of. */
+export function loadAsked(): number[] {
+  try {
+    return JSON.parse(localStorage.getItem(ASKED_KEY) ?? "[]") as number[];
+  } catch {
+    return [];
+  }
+}
+export function saveAsked(ids: number[]) {
+  try {
+    localStorage.setItem(ASKED_KEY, JSON.stringify(ids));
+  } catch {}
+}
