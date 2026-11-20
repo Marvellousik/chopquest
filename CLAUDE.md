@@ -28,7 +28,7 @@ The old student app (pet, quests, Dex, leaderboard, protein scanning game) is **
 
 - Next.js (App Router) + TypeScript + Tailwind, mobile-first, Vercel Hobby
 - Turso (libSQL / SQLite) via `@libsql/client` (`src/lib/db.ts`: `getDb()`, `query()`, `placeholders()`, `isUniqueViolation()`). Local dev can use `file:local.db`.
-- AI through **OpenRouter** (OpenAI-compatible, team credits), a vision-capable model set by `OPENROUTER_MODEL` (e.g. a Gemini Flash), JSON output, results cached by input hash, 429/402 handled. Client in `src/lib/ai/client.ts` (replacing `src/lib/gemini.ts`). See `team/pascal-ai.md`.
+- AI through **OpenRouter** (OpenAI-compatible, team credits), **Claude Haiku 4.5** (`anthropic/claude-haiku-4.5`) with **Claude Sonnet 4.6** as fallback, both set by `OPENROUTER_MODEL` / `OPENROUTER_MODEL_FALLBACK`; no `temperature` sent to Claude, JSON output, results cached by input hash, 429/402 handled. Client in `src/lib/ai/client.ts` (replacing `src/lib/gemini.ts`). See `team/pascal-ai.md`.
 - Node 22.18+ for the `.mts` scripts.
 
 Env vars (`.env.local`, never commit): `TURSO_DATABASE_URL`, `TURSO_AUTH_TOKEN`, `OPENROUTER_API_KEY`, `OPENROUTER_MODEL`, optional `OPENROUTER_MODEL_FALLBACK`.

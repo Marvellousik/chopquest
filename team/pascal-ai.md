@@ -10,8 +10,8 @@ We use **OpenRouter** because the team has credits there. It's one OpenAI-compat
 
 ```
 OPENROUTER_API_KEY=sk-or-...          # from openrouter.ai/keys
-OPENROUTER_MODEL=google/gemini-2.5-flash   # check the exact id on openrouter.ai/models; must support images + JSON
-OPENROUTER_MODEL_FALLBACK=             # optional second vision model if the first fails
+OPENROUTER_MODEL=anthropic/claude-haiku-4.5            # Claude via OpenRouter: images + JSON
+OPENROUTER_MODEL_FALLBACK=anthropic/claude-sonnet-4.6   # used if Haiku fails; "none" to turn off
 ```
 
 `GEMINI_API_KEY` is no longer needed once this lands.
@@ -87,7 +87,7 @@ writeKitchenCard(input: { menuItem: MenuItem; option: SwapOption; foods: Food[] 
   - **Part accuracy:** the share of true parts the model found.
   - **Protein error:** average gap between the protein from the model's breakdown and Jason's, in grams and %.
   - Time and **credits used** (from `usage`).
-- **Bonus that strengthens "AI contribution":** run the same 15 dishes through 2 models on OpenRouter (e.g. a Gemini Flash and a GPT-4o-mini-class vision model) and show which is more accurate per ₦. That's a real model choice made from evidence.
+- **Bonus that strengthens "AI contribution":** run the same 15 dishes through 2 models on OpenRouter (e.g. `anthropic/claude-haiku-4.5` vs `anthropic/claude-sonnet-4.6`, or the cheaper `anthropic/claude-haiku-5.5`) and show which is more accurate per ₦. That's a real model choice made from evidence.
 - Also run the kitchen-card validator on 15 cards and report the share that passed first time.
 - Output a small table for the pitch deck. **Report the real numbers, even if they're bad.** The guide rewards honest limits.
 
